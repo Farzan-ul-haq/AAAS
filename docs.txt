@@ -1,0 +1,34 @@
+1) Landing PAge.
+2) Sign In/ Login
+3) Dashboard
+4) Create API Package[
+	title, 
+	slug, 
+	website url, 
+	api_domain_url, 
+	tags,
+]
+5) Create Endpoints[
+	path, 
+	request_type(GET, POST, etc),
+	request_level(tiny, medium, high),
+	test_data
+	]
+6) Create Package.
+7) Submit for Review.
+
+8) The Admin team review the API and test all the endpoints and has the option to approve to reject. If rejects then user are not allowed to submit for review again for 2 days.
+9) The Admin also offers the EST. price with guaranteed mentioned sales and also show multiple marketing strategies.
+10) User can select or decline offer or can choose any other marketing offer and place their ad on these platform.
+11) User will redirect to stripe checkout page. and fullfill the payment
+12) The server will be notified by the stripe webhook.
+13) After server notification, we will place the user service ad on their platforms.
+14) User can switch to buyer dashboard and also try to buy a package.
+15) User can check his profile, Transaction History and request for withdrawn.
+16) User can switch to buyer profile.
+
+Buyer Profile:
+17) User can search api, view api package
+18) user can see the list of endpoints, and test only endpoints.
+19) User select a package and redirect to payment page. and complete the payment.
+20) After completing the payment, we assign the custom token, which is used to verify the request.
