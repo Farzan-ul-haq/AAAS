@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, \
                                         PermissionsMixin
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
+
 from django.conf import settings
 
 from .managers import UserManager
@@ -52,6 +54,10 @@ class ApiService(models.Model):
         super(ApiService, self).save(*args, **kwargs)
 
 
+    class Meta:
+        db_table = "ApiService"
+
+
 class Endpoints(models.Model):
     path = models.CharField(max_length=5000)
     documentation = models.TextField()
@@ -66,6 +72,10 @@ class Endpoints(models.Model):
     request_level = models.CharField(choices=REQUEST_LEVEL_CHOICES)
     test_data = models.TextField() # TEST json data
 
+    
+    class Meta:
+        db_table = "Endpoints"
+
 
 class ApiPackage(models.Model):
     service = models.ForeignKey(ApiService, on_delete=models.CASCADE)
@@ -75,20 +85,50 @@ class ApiPackage(models.Model):
     tiny_requests = models.IntegerField(default=0)
     normal_requests = models.IntegerField(default=0)
 
+    
+    class Meta:
+        db_table = "ApiPackage"
+
 
 class ClientPackages(models.Model):
-    pass
-    # apipackage
-    # user
-    # tiny_requests_left
-    # normal_requests_left
-    # last_request_used
+    apipackage = models.ForeignKey(ApiPackage, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    token = models.CharField(max_length=255, unique=True)
+
+    tiny_requests_left = models.IntegerField(default=0)
+    normal_requests_left = models.IntegerField(default=0)
+    last_request_used = models.DateTimeField(auto_now=True)
+
+    reactivation = models.IntegerField(0) # show how many times the package is reactivated.
+
+
+    class Meta:
+        db_table = "ClientPackages"
 
 
 class Notification(models.Model):
-    pass
-    # user
-    # notification text
-    # redirect url
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    redirect_url = models.CharField(max_length=1000)
 
 
+    class Meta:
+        db_table = "Notification"
+
+
+class Feedback(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True)
+    apipackage = models.ForeignKey(ApiPackage, on_delete=models.CASCADE)
+    content = models.TextField()
+    rating = models.IntegerField(
+        default=1,
+        validators=[
+            MaxValueValidator(5), 
+            MinValueValidator(1)
+        ]
+    )
+
+
+    class Meta:
+        db_table = "Feedback"
