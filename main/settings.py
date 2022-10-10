@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'seller.apps.SellerConfig',
     'buyer.apps.BuyerConfig',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
