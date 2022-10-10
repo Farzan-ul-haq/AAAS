@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_extensions',
+
     'core.apps.CoreConfig',
 ]
 
@@ -69,9 +71,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'oXut1Rs5ZBn40cfFtnzd',
-        'HOST': 'containers-us-west-97.railway.app',
-        'PORT': '6599',
+        'PASSWORD': 'EK9G1NwjZbDBf1iKsjZb',
+        'HOST': 'containers-us-west-99.railway.app',
+        'PORT': '5475',
     }
 }
 
@@ -119,3 +121,9 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'core.User'
+
+# GRAPHVIZ MODEL
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
