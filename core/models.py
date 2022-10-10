@@ -34,7 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class ApiService(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.CharField(default="")
+    slug = models.CharField(default="", max_length=255)
     website_url = models.CharField(max_length=5000)
     api_domain_url = models.CharField(max_length=5000) # API hosted server domain path
     description = models.TextField()
@@ -69,7 +69,10 @@ class Endpoints(models.Model):
         ('PUT', 'PUT'),
         ('DELETE', 'DELETE'),
     ), default='P', max_length=6)
-    request_level = models.CharField(choices=REQUEST_LEVEL_CHOICES)
+    request_level = models.CharField(choices=(
+        ('tiny', 'tiny'),
+        ('normal', 'normal'),
+    ), max_length=10)
     test_data = models.TextField() # TEST json data
 
     
