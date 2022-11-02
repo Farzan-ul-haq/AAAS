@@ -1,10 +1,8 @@
-from multiprocessing import context
-import re
 from django.shortcuts import render, HttpResponse , redirect
 from django.contrib.auth.forms import UserCreationForm , AuthenticationForm
 from .forms import createuserform
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout as dj_logout, login as dj_login
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
@@ -16,9 +14,7 @@ def base(request):
     return HttpResponse('base')
 
 def register(request):
-    
     form = createuserform()
-    
     if request.method=="POST":
         form = createuserform(request.POST)
         if form.is_valid():
@@ -36,7 +32,7 @@ def login(request):
         user= authenticate(request, username=username, password=password)
         
         if user is not None:
-            login(request, user)
+            dj_login(request, user)
             return redirect('base')
         else:
             messages.info(request,'Username Or Password is incorrect')
@@ -44,6 +40,6 @@ def login(request):
     return render(request,'account/login.html',context)
 
 def logout(request):
-    logout(request)
+    dj_logout(request)
     return redirect('login')    
 

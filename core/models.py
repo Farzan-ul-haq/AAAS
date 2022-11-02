@@ -18,7 +18,7 @@ REQUEST_LEVEL_CHOICES = (
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that suppors using email instead of username"""
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
+    username = models.CharField(max_length=25, unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     wallet = models.PositiveIntegerField(default=0)
@@ -29,7 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
 
 
 class ApiService(models.Model):
