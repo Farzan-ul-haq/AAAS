@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse , redirect
-from django.contrib.auth.forms import UserCreationForm , AuthenticationForm
+#from django.contrib.auth.forms import UserCreationForm , AuthenticationForm
 from .forms import createuserform
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout as dj_logout, login as dj_login
@@ -9,18 +9,22 @@ from django.contrib.auth.decorators import login_required
 def test(request):
     return HttpResponse('HELLo')
 
-login_required(login_url='login')
-def base(request):
-    return HttpResponse('base')
 
+def base(request):
+    if request.user.is_authenticated:
+        return HttpResponse(request.user.username)
+    else:
+        return redirect('login') 
+    
 def register(request):
     form = createuserform()
     if request.method=="POST":
         form = createuserform(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             messages.success(request,' Account Created ')
-            return redirect('login')
+            dj_login(request, user)
+            return redirect('base')
     context={'form':form}
     return render(request,'account/register.html',context)
 
