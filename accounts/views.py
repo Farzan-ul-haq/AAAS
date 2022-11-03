@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def test(request):
-    return HttpResponse('HELLo')
+    return HttpResponse('HELLo test')
 
 
 def base(request):
