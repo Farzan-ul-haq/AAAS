@@ -10,11 +10,6 @@ from django.conf import settings
 from .managers import UserManager
 
 
-REQUEST_LEVEL_CHOICES = (
-        ('tiny', 'tiny'),
-        ('normal', 'normal'),
-    )
-
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that suppors using email instead of username"""
     email = models.EmailField(max_length=255, unique=True)
@@ -32,27 +27,73 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
 
 
-class ApiService(models.Model):
+PRODUCT_TYPES = (
+    ('A', 'API'),
+    ('L', 'Logo'),
+    ('H', 'HTML TEMPLATE'),
+    ('D', 'Downloadable Software'), # desktop or mobile application.
+)
+
+
+class Product(models.Model):
+    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
     title = models.CharField(max_length=255)
     slug = models.CharField(default="", max_length=255)
-    website_url = models.CharField(max_length=5000)
-    api_domain_url = models.CharField(max_length=5000) # API hosted server domain path
     description = models.TextField()
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    thumbnail = models.ImageField('products/', null=True, blank=True)
+
+    product_type = models.CharField(choices=PRODUCT_TYPES, default='A', max_length=1)
+
+    last_approval_request_date = models.DateTimeField(auto_now=True)
     review_count = models.IntegerField(default=0)
+    # Tags
 
     status = models.CharField(choices=(
         ('A', 'approved'),
         ('R', 'rejected'),
         ('P', 'pending'),
+        ('P', 'pending'),
     ), default='P', max_length=1)
-    last_approval_request_date = models.DateTimeField(auto_now=True)
-    # Tags
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "Product"
+
+
+class Logo(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    download_file = models.ImageField('logo', null=True)
+
+    class Meta:
+        db_table = "Logo"
+
+
+class HtmlTemplate(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    download_file = models.FileField('templates', null=True)
+
+    class Meta:
+        db_table = "HtmlTemplate"
+
+
+class DownloadSoftware(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    download_file = models.FileField('templates', null=True)
+
+    class Meta:
+        db_table = "DownloadSoftware"
+
+
+
+class ApiService(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    website_url = models.CharField(max_length=5000) # website, optional
+    api_domain_url = models.CharField(max_length=5000) # API hosted server domain path
 
     def save(self, *args, **kwargs):
         super(ApiService, self).save(*args, **kwargs)
-
 
     class Meta:
         db_table = "ApiService"
@@ -80,21 +121,21 @@ class Endpoints(models.Model):
         db_table = "Endpoints"
 
 
-class ApiPackage(models.Model):
-    service = models.ForeignKey(ApiService, on_delete=models.CASCADE)
+class ProductPackage(models.Model):
+    service = models.ForeignKey(Product, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     price = models.IntegerField(default=0)
 
     tiny_requests = models.IntegerField(default=0)
     normal_requests = models.IntegerField(default=0)
 
-    
+
     class Meta:
-        db_table = "ApiPackage"
+        db_table = "ProductPackage"
 
 
 class ClientPackages(models.Model):
-    apipackage = models.ForeignKey(ApiPackage, on_delete=models.SET_NULL, null=True)
+    package = models.ForeignKey(ProductPackage, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     token = models.CharField(max_length=255, unique=True)
 
@@ -122,7 +163,7 @@ class Notification(models.Model):
 
 class Feedback(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True)
-    apipackage = models.ForeignKey(ApiPackage, on_delete=models.CASCADE)
+    package = models.ForeignKey(ProductPackage, on_delete=models.CASCADE)
     content = models.TextField()
     rating = models.IntegerField(
         default=1,
