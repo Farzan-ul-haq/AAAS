@@ -39,7 +39,7 @@ class Product(models.Model):
     owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
-    slug = models.CharField(default="", max_length=255)
+    slug = models.CharField(default="", max_length=255, blank=True)
     description = models.TextField()
     thumbnail = models.ImageField('products/', null=True, blank=True)
 
@@ -53,14 +53,23 @@ class Product(models.Model):
         ('A', 'approved'),
         ('R', 'rejected'),
         ('P', 'pending'),
-        ('P', 'pending'),
-    ), default='P', max_length=1)
+        ('D', 'draft'),
+    ), default='D', max_length=1)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "Product"
 
+    def __str__(self):
+        return f"{self.product_type} | {self.owner.username} | {self.title}"
+
+    def save(self, *args, **kwargs):
+        self.slug = self.title.replace(' ', '-').lower()
+        return super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return "/{self.user.username}/{self.slug}/"
 
 class Logo(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)

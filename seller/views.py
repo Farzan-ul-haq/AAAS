@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
 
+from core.models import Product
 
 PRODUCT_TYPES = ["API", 'LOGO', "TEMPLATE", "SOFTWARE"]
 
 def seller_dashboard(request):
-    return render(request, 'seller/dashboard.html')
+    return render(request, 'seller/dashboard.html', context={
+        'products': Product.objects.all()
+    })
 
 
 def create_logo(request):

@@ -1,12 +1,37 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} 
+{% load static %} 
 {% block title %}YourSite{% endblock title %}
+
+{% block css %} 
+.main { height: 600px; } 
+{% endblock css %} 
 
 {% block body %}
 <h1>SELLER DASHBOARD</h1>
-{% endblock body %}
 
-{% block js %}
+<div class="main container">
+  <h5>Products</h5>
+  <div class="row">
+    {% for product in products %}
+    <div class="card col-3 mx-3" style="width: 18rem;">
+      <img class="card-img-top p-2" src="https://images.unsplash.com/photo-1544967082-d9d25d867d66?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" alt="Card image cap" />
+      <div class="card-body">
+        <h5 class="card-title">{{product.title}}</h5>
+        <p class="card-text">
+            {{product.description|truncatechars:40}}
+        </p>
+        <div class="dropdown-divider"></div>
+        <div class="">
+            <span class="badge badge-warning float-start p-2">{{product.get_product_type_display.upper}}</span>
+            <span class="badge badge-primary float-right p-2">{{product.get_status_display.upper}}</span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 
+{% endblock body %} 
+
+{% block js %} 
 {% endblock js %}
-
