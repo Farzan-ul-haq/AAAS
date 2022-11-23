@@ -31,7 +31,7 @@ PRODUCT_TYPES = (
     ('A', 'API'),
     ('L', 'Logo'),
     ('H', 'HTML TEMPLATE'),
-    ('D', 'Downloadable Software'), # desktop or mobile application.
+    ('D', 'Software'), # desktop or mobile application.
 )
 
 
