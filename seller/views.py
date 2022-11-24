@@ -3,6 +3,7 @@ from django.http import Http404
 
 from core.models import Product, DownloadSoftware, Logo, \
     HtmlTemplate, ProductPackage
+from seller.utils import create_product
 
 PRODUCT_TYPES = ["API", 'LOGO', "TEMPLATE", "SOFTWARE"]
 
@@ -19,7 +20,22 @@ def create_logo(request):
             'seller/create-logo.html'
             )
     if request.method == 'POST':
-        print('PRODUCT SUBMITTED')
+        p = create_product(
+            owner=request.user,
+            title=request.POST.get('title'),
+            description=request.POST.get('description'),
+            thumbnail=request.FILES.get('thumbnail'),
+            product_type='L',
+        )
+        Logo.objects.create(
+            product=p,
+            download_file=request.FILES.get('downloadable_file')
+        )
+        ProductPackage.objects.create(
+            service=p,
+            title='BASIC',
+            price=int(request.POST.get('price'))
+        )
         return redirect('seller:dashboard')
 
 
@@ -30,7 +46,22 @@ def create_template(request):
             'seller/create-template.html'
             )
     if request.method == 'POST':
-        print('PRODUCT SUBMITTED')
+        p = create_product(
+            owner=request.user,
+            title=request.POST.get('title'),
+            description=request.POST.get('description'),
+            thumbnail=request.FILES.get('thumbnail'),
+            product_type='H',
+        )
+        HtmlTemplate.objects.create(
+            product=p,
+            download_file=request.FILES.get('downloadable_file')
+        )
+        ProductPackage.objects.create(
+            service=p,
+            title='BASIC',
+            price=int(request.POST.get('price'))
+        )
         return redirect('seller:dashboard')
 
 
@@ -41,31 +72,22 @@ def create_software(request):
             'seller/create-software.html'
             )
     if request.method == 'POST':
-        title = request.POST.get('title')
-        description= request.POST.get('description')
-        thumbnail = request.FILES.get('thumbnail')
-        downloadable_file = request.FILES.get('downloadable_file')
-        price = int(request.POST.get('price'))
-
-        p = Product.objects.create(
-            title=title,
-            description=description,
-            thumbnail=thumbnail,
+        p = create_product(
+            owner=request.user,
+            title=request.POST.get('title'),
+            description=request.POST.get('description'),
+            thumbnail=request.FILES.get('thumbnail'),
             product_type='D',
-            owner=request.user
         )
-
-        software = DownloadSoftware.objects.create(
+        DownloadSoftware.objects.create(
             product=p,
-            download_file=downloadable_file
+            download_file=request.FILES.get('downloadable_file')
         )
         ProductPackage.objects.create(
             service=p,
             title='BASIC',
-            price=price
+            price=int(request.POST.get('price'))
         )
-
-        print('PRODUCT SUBMITTED')
         return redirect('seller:dashboard')
 
 

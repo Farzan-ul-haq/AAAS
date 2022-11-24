@@ -4,6 +4,33 @@
 
 {% block body %}
 <h1>CREATE LOGO PAGE</h1>
+<div class="container mt-5">
+    <form action="" id='updateform' method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input name='title' type="text" class="form-control" id="title" placeholder="Enter Logo Title">
+        </div>
+        <div class="form-group">
+            <label for="thumbnail">Thumbnail</label>
+            <input name='thumbnail' type="file" class="form-control-file" id="thumbnail">
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea name='description' class="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="downloadable_file">Downloadable File</label>
+            <input name='downloadable_file' type="file" class="form-control-file" id="downloadable_file">
+            <small id="downloadable_file" class="form-text text-muted">Upload download file.</small>
+        </div>
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input name='price' type="text" class="form-control-file" id="price">
+            <small id="price" class="form-text text-muted">Enter the price in USD.</small>
+        </div>
+        <button type="submit" class="btn btn-primary col-12">Submit For Review</button>
+    </form>
+</div>
 {% endblock body %}
 
 {% block js %}
