@@ -9,3 +9,7 @@ def index(request):
             return redirect('buyer:dashboard')
     else:
         return render(request, 'core/index.html')
+
+
+def project_plan(request): # ONLY FOR DEVs
+    return render(request, 'core/plan.html')
