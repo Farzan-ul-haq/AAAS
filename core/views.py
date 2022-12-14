@@ -8,14 +8,8 @@ def index(request):
         if request.user.mode == 'B':
             return redirect('buyer:dashboard')
     else:
-        debug = settings.DEBUG
-        return render(request, 'core/index.html', {
-            'debug': debug
-        })
+        return render(request, 'core/index.html')
 
 
 def project_plan(request): # ONLY FOR DEVs
-    build = settings.LATEST_BUILD
-    return render(request, 'core/plan.html', {
-        "build": build
-    })
+    return render(request, 'core/plan.html')
