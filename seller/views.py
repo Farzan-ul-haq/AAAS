@@ -5,7 +5,6 @@ from core.models import Product, DownloadSoftware, Logo, \
     HtmlTemplate, ProductPackage
 from seller.utils import create_product
 
-PRODUCT_TYPES = ["API", 'LOGO', "TEMPLATE", "SOFTWARE"]
 
 def seller_dashboard(request):
     return render(request, 'seller/dashboard.html', context={

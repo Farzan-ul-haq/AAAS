@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-
+{% load static %}
+{% block title %} | Project Plan {% endblock title %}
 {% block body %}
 
 <div class="container">
@@ -35,7 +36,9 @@
     <div>
         <h3>M3</h3>
     </div>
-
+    <div>
+        <h5 class="text-warning">Last Build: {{build|timesince}}</h5>
+    </div>
 </div>
 
 {% endblock body %}

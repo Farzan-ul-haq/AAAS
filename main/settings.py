@@ -1,4 +1,5 @@
 import os
+import datetime
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -130,3 +131,10 @@ GRAPH_MODELS = {
   'all_applications': True,
   'group_models': True,
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://aaas-production-5be9.up.railway.app/',
+    'https://aaas-production-5be9.up.railway.app'
+]
+
+from .info_settings import *

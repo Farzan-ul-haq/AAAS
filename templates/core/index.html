@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}YourSite{% endblock title %}
+{% block title %}{% endblock title %}
 
 {% block body %}
-<h1>LANDING PAGE</h1>
+<h1>
+    LANDING PAGE
+    <br>
+    DEBUG: {{debug}}
+</h1>
 {% endblock body %}
 
 {% block js %}
