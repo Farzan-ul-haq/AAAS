@@ -13,5 +13,4 @@ urlpatterns = [
     path('create/software/', views.create_software, name='create-software'),
     path('create/api/', views.create_api, name='create-api'),
 
-    # path('')
 ]

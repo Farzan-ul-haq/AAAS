@@ -3,6 +3,9 @@ from django.shortcuts import render, HttpResponse , redirect
 from .forms import createuserform
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout as dj_logout, login as dj_login
+
+from core.models import User
+
 # Create your views here.
 
 def test(request):
@@ -15,6 +18,7 @@ def base(request):
     else:
         return redirect('login')
 
+
 def register(request):
     form = createuserform()
     if request.method=="POST":
@@ -26,6 +30,7 @@ def register(request):
             return redirect('core:index')
     context={'form':form}
     return render(request,'accounts/register.html',context)
+
 
 def login(request):
     if request.method == "POST":
@@ -42,7 +47,15 @@ def login(request):
     context={}
     return render(request,'accounts/login.html',context)
 
+
 def logout(request):
     dj_logout(request)
-    return redirect('core:index')    
+    return redirect('core:index')
 
+
+def user_profile(request):
+    if request.user.is_authenticated:
+        context={}
+        return render(request, 'accounts/user_profile.html', context)
+    else:
+        return HttpResponse('please login with your credentials to view user profile page ')
