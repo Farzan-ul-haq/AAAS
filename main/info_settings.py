@@ -4,8 +4,16 @@ import datetime
 LATEST_BUILD = datetime.datetime.now()
 
 PRODUCT_TYPES = [
-    "API", 
-    'LOGO', 
-    "TEMPLATE", 
+    "API",
+    'LOGO',
+    "TEMPLATE",
     "SOFTWARE"
 ]
+
+#SMTP Configuration
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER='aaasinc786@gmail.com'
+EMAIL_HOST_PASSWORD='ylpzhjrbdoeqjzrj'

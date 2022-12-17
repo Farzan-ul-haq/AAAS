@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}YourSite{% endblock title %}
+
+{% block body %}
+<h1>User Profile Page</h1>
+
+<div class="container mt-5">
+<h2>want to change your password ?</h2>
+	<a href="{% url 'change_password' %}"><button type="text" class="btn btn-primary">Update Password</button></a>
+</div>
+<br>
+{% endblock body %}
+
+{% block js %}
+
+{% endblock js %}
+
