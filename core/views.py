@@ -18,7 +18,9 @@ def index(request): # landing page
 
 def explore(request): # this contains the list of products
     """This contains the list of products"""
-    return render(request, 'core/explore.html')
+    return render(request, 'core/explore.html', {
+        'products': Product.objects.all()
+    })
 
 
 def search(request, search):

@@ -1,7 +1,7 @@
 from core.models import Product, ApiService, Logo, HtmlTemplate, DownloadSoftware
 
 
-def get_product_object(product, view):
+def get_product_object(product):
     if product.product_type == "A":
         obj = ApiService.objects.get(product=product)
         template_name = "core/view-api.html"
