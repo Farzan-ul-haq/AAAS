@@ -9,5 +9,10 @@ app_name = 'core'
 urlpatterns = [
     path('', views.index, name='index'),
     path('explore/', views.explore, name='explore'),
+    path('billing/', views.billing, name='billing'),
+    path('notifications/', views.notifications, name='notifications'),
+
+    path('product/<str:slug>/', views.view_product, name='product-view'),
+
     path('plan/', views.project_plan, name='project_plan'),
 ]

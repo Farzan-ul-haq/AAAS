@@ -125,7 +125,7 @@ class Endpoints(models.Model):
     ), max_length=10)
     test_data = models.TextField() # TEST json data
 
-    
+
     class Meta:
         db_table = "Endpoints"
 
@@ -177,7 +177,7 @@ class Feedback(models.Model):
     rating = models.IntegerField(
         default=1,
         validators=[
-            MaxValueValidator(5), 
+            MaxValueValidator(5),
             MinValueValidator(1)
         ]
     )
