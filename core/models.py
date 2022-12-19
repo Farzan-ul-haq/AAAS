@@ -185,3 +185,28 @@ class Feedback(models.Model):
 
     class Meta:
         db_table = "Feedback"
+
+
+class Transaction(models.Model):
+    type = models.IntegerField(default=0, choices=(
+        (0, 'ADDED'),
+        (1, 'SUBRACTED'),
+    ))
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    coins = models.IntegerField(default=0)
+    content = models.CharField(max_length=5000, default="")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.type}|{self.coins}|{self.user.username}"
+
+
+    class Meta:
+        db_table = "Transaction"
+
+
+class MarketingPlatforms(models.Model):
+    title = models.CharField(max_length=500)
+    description = models.TextField()
+    supported_products = models. CharField(max_length=500)
+
