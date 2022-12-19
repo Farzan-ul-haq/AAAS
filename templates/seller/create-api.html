@@ -1,12 +1,209 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}YourSite{% endblock title %}
+{% block title %}{% endblock title %}
+
+{% block css %}
+
+
+
+{% endblock css %}
 
 {% block body %}
-<h1>CREATE API PAGE</h1>
+
+<div class="container-fluid top mt-5 px-5">
+    <div class="row">
+
+        <div class="col-4 top-left">
+            <h1 style="text-align:center;font-family:Lobster;"><b>Post your API</b></h1>
+        </div>
+
+        <br>
+
+        <div class="col-11 top-left">
+            <h3>Title:</h3>
+        </div>
+        <div class="col-6 top-left">
+            <input type="title" class="form-control" id="exampleInputtitle" aria-describedby="titleHelp"
+                placeholder="Enter Title">
+        </div>
+
+        <div class="col-11 top-left">
+            <h3>Thumbnail:</h3>
+        </div>
+        <div class="col-6 top-left">
+            <input name='thumbnail' type="file" class="form-control-file" id="thumbnail">
+        </div>
+
+        <div class="col-11 top-left">
+            <h3>Description:</h3>
+        </div>
+        <div class="col-11 top-left">
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                placeholder="Description"></textarea>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="col-4" style="text-align:center;">
+            <h3><u>Endpoints</u></h3>
+            <div class="col-12">
+
+                <button type="button" class="btn btn-outline-info my-2 my-sm-0 mx-1" data-toggle="modal"
+                    data-target="#exampleModal">
+                    Add Endpoints here
+                </button>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Endpoint Details</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="container-fluid top mt-5 px-5">
+                                    <div class="row">
+
+                                        <div class="btn-group col-4">
+                                            <button type="button" class="btn btn-secondary dropdown-toggle top-left"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Select
+                                            </button>
+                                            <br>
+                                            <br>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <button class="dropdown-item" type="button">GET</button>
+                                                <button class="dropdown-item" type="button">POST</button>
+                                                <button class="dropdown-item" type="button">DELETE</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <h6 style="text-align:center;"><b>Name:</b></h6>
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="Endpoint name" class="form-control" id="exampleInputtitle"
+                                                aria-describedby="titleHelp" placeholder="Endpoint Name">
+                                        </div>
+
+                                        <br>
+
+                                        <div class="col-6">
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"
+                                                placeholder="Endpoint Description"></textarea>
+                                        </div>
+                                        <div class="col-6">
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"
+                                                placeholder="Endpoint Testing Data"></textarea>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-4" style="text-align:center;">
+            <h3><u>Endpoint Documentation</u></h3>
+            <div class="col-12">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                    placeholder="Endpoint Documentation"></textarea>
+            </div>
+        </div>
+        <div class="col-4" style="text-align:center;">
+            <h3><u>Testing Data</u></h3>
+        </div>
+
+        <div class="col-12">
+            <hr>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="col-11 mx-5">
+            <h2 style="text-align:center;color:1A3F61;font-family:Lobster;"><b><u>AAAS API Packages</u></b></h2>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="col-4" style="text-align:center;">
+            <h3><u>Basic</u></h3>
+            <br>
+            <div class="col-12">
+                <label for="Name">Enter No of Request:</label>
+                <input type="text" id="Name" name="Name" placeholder="Enter requests">
+            </div>
+            <div class="col-12">
+                <label for="Name">Enter Price:</label>
+                <input type="text" id="Name" name="Name" placeholder="Pricing">
+            </div>
+
+
+        </div>
+
+        <div class="col-4" style="text-align:center;">
+            <h3><u>Standard</u></h3>
+            <br>
+            <div class="col-12">
+                <label for="Name">Enter No of Request:</label>
+                <input type="text" id="Name" name="Name" placeholder="Enter requests">
+            </div>
+            <div class="col-12">
+                <label for="Name">Enter Price:</label>
+                <input type="text" id="Name" name="Name" placeholder="Pricing">
+            </div>
+
+        </div>
+
+        <div class="col-4" style="text-align:center;">
+            <h3><u>Premium</u></h3>
+            <br>
+            <div class="col-12">
+                <label for="Name">Enter No. of Request:</label>
+                <input type="text" id="Name" name="Name" placeholder="Enter requests">
+            </div>
+            <div class="col-12">
+                <label for="Name">Enter Price:</label>
+                <input type="text" id="Name" name="Name" placeholder="Pricing">
+            </div>
+   
+            
+        </div>
+
+        <br>
+        <div class="col-12">
+            <hr>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <button type="button" class="btn btn-info btn-lg">Submit</button>
+                </div>
+             </div>
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock body %}
 
 {% block js %}
 
 {% endblock js %}
-
