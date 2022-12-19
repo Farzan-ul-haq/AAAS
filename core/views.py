@@ -23,8 +23,12 @@ def explore(request): # this contains the list of products
     })
 
 
-def search(request, search):
-    return render(request, 'core/explore.html')
+def search_product(request):
+    query = request.GET.get('query')
+    return render(request, 'core/search.html', {
+        'products': Product.objects.all(),
+        'query': query
+    })
 
 
 def view_product(request, slug):

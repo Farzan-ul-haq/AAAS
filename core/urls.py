@@ -12,6 +12,7 @@ urlpatterns = [
     path('billing/', views.billing, name='billing'),
     path('notifications/', views.notifications, name='notifications'),
 
+    path('product/search/', views.search_product, name='product-search'),
     path('product/<str:slug>/', views.view_product, name='product-view'),
 
     path('plan/', views.project_plan, name='project_plan'),
