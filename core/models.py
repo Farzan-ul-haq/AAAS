@@ -34,6 +34,25 @@ PRODUCT_TYPES = (
     ('D', 'Software'), # desktop or mobile application.
 )
 
+class Category(models.Model):
+    product_type = models.CharField(choices=PRODUCT_TYPES, default='A', max_length=1)
+    name = models.CharField(max_length=500)
+
+    def __str__(self):
+        return f"{self.product_type}: {self.name}"
+
+    class Meta:
+        db_table = "Category"
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = "Tag"
 
 class Product(models.Model):
     owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
@@ -42,12 +61,15 @@ class Product(models.Model):
     slug = models.CharField(default="", max_length=255, blank=True)
     description = models.TextField()
     thumbnail = models.ImageField('products/', null=True, blank=True)
+    source_url = models.CharField(max_length=5000, null=True, blank=True)
 
     product_type = models.CharField(choices=PRODUCT_TYPES, default='A', max_length=1)
 
     last_approval_request_date = models.DateTimeField(auto_now=True)
     review_count = models.IntegerField(default=0)
-    # Tags
+
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     status = models.CharField(choices=(
         ('A', 'approved'),
@@ -73,7 +95,15 @@ class Product(models.Model):
 
 class Logo(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
-    download_file = models.ImageField('logo', null=True)
+    source_file = models.FileField('logo/')
+    source_file_size = models.CharField(max_length=50, null=True, blank=True)
+    width = models.IntegerField(default=0, null=True, blank=True)
+    height = models.IntegerField(default=0, null=True, blank=True)
+    logo_type = models.CharField(choices=(
+        ('PORTAIT', 'POTRAIT'),
+        ('LANDSCAPE', 'LANDSCAPE'),
+        ('SQUARE', 'SQUARE'),
+    ), max_length=100, default='SQUARE')
 
     class Meta:
         db_table = "Logo"
@@ -81,7 +111,10 @@ class Logo(models.Model):
 
 class HtmlTemplate(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
-    download_file = models.FileField('templates', null=True)
+    source_file = models.FileField('templates', null=True)
+    source_file_size = models.CharField(max_length=50, null=True, blank=True)
+    supported_browser = models.CharField(max_length=5000, null=True, blank=True)
+    demo_site = models.CharField(max_length=5000, null=True, blank=True)
 
     class Meta:
         db_table = "HtmlTemplate"
@@ -89,7 +122,16 @@ class HtmlTemplate(models.Model):
 
 class DownloadSoftware(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
-    download_file = models.FileField('templates', null=True)
+    source_file = models.FileField('software', null=True)
+    source_file_size = models.CharField(max_length=50, null=True, blank=True)
+    in_scope = models.TextField(default="", null=True, blank=True)
+    out_scope = models.TextField(default="", null=True, blank=True)
+
+    supported_os = models.CharField(max_length=500, null=True, blank=True)
+    software_type = models.CharField(choices=(
+        ("OFFLINE", "OFFLINE"),
+        ("ONLINE", "ONLINE"),
+    ), max_length=100, default='ONLINE')
 
     class Meta:
         db_table = "DownloadSoftware"
@@ -99,7 +141,9 @@ class DownloadSoftware(models.Model):
 class ApiService(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
     website_url = models.CharField(max_length=5000) # website, optional
-    api_domain_url = models.CharField(max_length=5000) # API hosted server domain path
+    base_url = models.CharField(max_length=5000) # API hosted server domain path
+    in_scope = models.TextField(default="", null=True, blank=True)
+    out_scope = models.TextField(default="", null=True, blank=True)
 
     def save(self, *args, **kwargs):
         super(ApiService, self).save(*args, **kwargs)
