@@ -100,7 +100,7 @@ class Logo(models.Model):
     width = models.IntegerField(default=0, null=True, blank=True)
     height = models.IntegerField(default=0, null=True, blank=True)
     logo_type = models.CharField(choices=(
-        ('PORTAIT', 'POTRAIT'),
+        ('PORTAIT', 'PORTAIT'),
         ('LANDSCAPE', 'LANDSCAPE'),
         ('SQUARE', 'SQUARE'),
     ), max_length=100, default='SQUARE')
