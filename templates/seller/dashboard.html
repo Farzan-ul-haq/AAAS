@@ -10,20 +10,7 @@
   <h5>Products</h5>
   <div class="row">
     {% for product in products %}
-    <div class="card col-3 mx-3 px-4" >
-      <img class="card-img-top p-2" src="https://images.unsplash.com/photo-1544967082-d9d25d867d66?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" alt="Card image cap" />
-      <div class="card-body">
-        <h5 class="card-title">{{product.title}}</h5>
-        <p class="card-text">
-            {{product.description|truncatechars:40}}
-        </p>
-        <div class="dropdown-divider"></div>
-        <div class="">
-            <span class="badge badge-warning float-start p-2">{{product.get_product_type_display.upper}}</span>
-            <span class="badge badge-primary float-right p-2">{{product.get_status_display.upper}}</span>
-        </div>
-      </div>
-    </div>
+      {% include 'components/product/private-product-card.html'%}
     {% endfor %}
   </div>
 </div>

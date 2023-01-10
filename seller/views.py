@@ -9,7 +9,7 @@ from seller.utils import create_product_obj, create_endpoint_obj, \
 
 def seller_dashboard(request):
     return render(request, 'seller/dashboard.html', context={
-        'products': Product.objects.all()
+        'products': Product.objects.filter(owner=request.user)
     })
 
 

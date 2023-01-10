@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
+from django.db.models import Q 
+
 from core.models import Product, ApiService, Logo,  \
     HtmlTemplate, DownloadSoftware
 from core.utils import get_product_object
@@ -25,8 +27,11 @@ def explore(request): # this contains the list of products
 
 def search_product(request):
     query = request.GET.get('query')
+    products = Product.objects.filter(
+        Q(title__icontains=query) | Q(description__icontains=query)
+    )
     return render(request, 'core/search.html', {
-        'products': Product.objects.all(),
+        'products': products,
         'query': query
     })
 

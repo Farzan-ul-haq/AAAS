@@ -30,7 +30,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 PRODUCT_TYPES = (
     ('A', 'API'),
     ('L', 'Logo'),
-    ('H', 'HTML TEMPLATE'),
+    ('H', 'TEMPLATE'),
     ('D', 'Software'), # desktop or mobile application.
 )
 
@@ -249,8 +249,35 @@ class Transaction(models.Model):
         db_table = "Transaction"
 
 
+class BrochureTemplates(models.Model):
+    title = models.CharField(max_length=255)
+    template_text = models.TextField()
+
+
+    class Meta:
+        db_table = "BrochureTemplates"
+
+
+class Brochure(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField("brochure/")
+    marketed_on = models.ManyToManyField('MarketingPlatforms')
+
+    def __str__(self):
+        return f"{self.id} | {self.product}"
+
+
+    class Meta:
+        db_table = "Brochure"
+
+
 class MarketingPlatforms(models.Model):
     title = models.CharField(max_length=500)
     description = models.TextField()
-    supported_products = models. CharField(max_length=500)
+    supported_products = models.CharField(max_length=500)
+    price = models.IntegerField(default=0)
+
+
+    class Meta:
+        db_table = "MarketingPlatforms"
 
