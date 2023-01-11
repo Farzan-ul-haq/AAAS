@@ -12,6 +12,7 @@ urlpatterns = [
     path('', include('core.urls')),
     path('', include('seller.urls')),
     path('', include('buyer.urls')),
+    path('', include('market.urls')),
     path('user/', include('accounts.urls')),
 
     path('api/v1/', include('api.urls')),
