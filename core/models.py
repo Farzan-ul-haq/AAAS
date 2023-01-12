@@ -1,4 +1,6 @@
-from email.policy import default
+import re
+import requests
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, \
                                         PermissionsMixin
@@ -70,6 +72,7 @@ class Product(models.Model):
 
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
+    marketed_on = models.ManyToManyField('MarketingPlatforms', blank=True)
 
     status = models.CharField(choices=(
         ('A', 'approved'),
@@ -259,9 +262,9 @@ class BrochureTemplates(models.Model):
 
 
 class Brochure(models.Model):
+    title = models.CharField(max_length=5000, default="")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField("brochure/")
-    marketed_on = models.ManyToManyField('MarketingPlatforms')
 
     def __str__(self):
         return f"{self.id} | {self.product}"
@@ -277,7 +280,36 @@ class MarketingPlatforms(models.Model):
     supported_products = models.CharField(max_length=500)
     price = models.IntegerField(default=0)
 
-
     class Meta:
         db_table = "MarketingPlatforms"
 
+
+class DribbleProduct(models.Model):
+    product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL)
+    title = models.CharField(max_length=255)
+    views = models.IntegerField()
+    description = models.TextField()
+    dribble_id = models.CharField(max_length=255)
+    # created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'DribbleProduct'
+
+    def get_absolute_url(self):
+        return f"{settings.DRIBBLE_SHOTS_URL}{self.dribble_id}"
+    
+    def get_details(self):
+        html_text = requests.get(self.get_absolute_url()).text
+        views = int(re.search(
+                    r'"viewsCount":\s*([^"]+)',
+                    html_text
+                ).group(1).replace(',', ''))
+        likes = int(re.search(
+                    r'"likesCount":\s*([^"]+)',
+                    html_text
+                ).group(1).replace(',', ''))
+        print(likes)
+        return [
+            [views, 'eye'],
+            [likes, 'thumbs-up']
+        ]

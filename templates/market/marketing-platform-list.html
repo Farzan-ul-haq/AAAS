@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}YourSite{% endblock title %}
+
+{% block body %}
+<div class="main container">
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <h3 class="border-bottom border-gray pb-2 mb-0">Marketing Platforms</h3>
+        {% for mp in market_platforms %}
+        <div class="media m-3 text-muted">
+            <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 32px; height: 32px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2232%22%20height%3D%2232%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_185a16e6a13%20text%20%7B%20fill%3A%23007bff%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A2pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_185a16e6a13%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%23007bff%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2211.541290283203125%22%20y%3D%2216.9%22%3E32x32%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
+            <div class="media-body">
+                <h5 class="mt-0"><strong class="d-block text-gray-dark">{{mp.title}}</strong></h5>
+                {{mp.description}}
+                <li><strong class="text-gray-dark">Best For: {{mp.supported_products}}</strong></li>
+            </div>
+            {% if mp in product.marketed_on.all %}
+            <div class='ml-5 align-self-center px-3' style="text-align: right;">
+                <a href="" class="btn btn-success font-weight-bold disabled">ALREADY<br>LISTED</a>
+            </div>
+            {% else %}
+            <div class='ml-5 align-self-center px-3'>
+                {% if mp.title.lower == 'capterra' %}
+                    <button type="button" class="btn btn-warning font-weight-bold" data-toggle="modal" data-target=".bd-example-modal-lg-capterra">FREE<hr>MARKET NOW</button>
+                    <div class="modal fade bd-example-modal-lg-capterra" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <!-- <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div> -->
+                            <div class="modal-content col-12">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Capterra</h5>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                {% elif mp.title.lower == 'dribble' %}
+                    <button type="button" class="btn btn-warning font-weight-bold" data-toggle="modal" data-target=".bd-example-modal-lg-dribble">FREE<hr>MARKET NOW</button>
+                    <div class="modal fade bd-example-modal-lg-dribble" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content p-3 col-12">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Dribble</h5>
+                                <hr>
+                                {% include 'components/market/dribble-form.html' %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        <hr>
+        {% endfor %}
+    </div>
+</div>
+{% endblock body %}
+
+{% block js %}
+
+{% endblock js %}
+

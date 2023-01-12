@@ -2,14 +2,17 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 
 from core.models import Product, DownloadSoftware, Logo, \
-    HtmlTemplate, ProductPackage, ApiService, Endpoints
+    HtmlTemplate, ProductPackage, ApiService, Endpoints, \
+    Brochure, DribbleProduct
 from seller.utils import create_product_obj, create_endpoint_obj, \
     create_package_obj
 
 
 def seller_dashboard(request):
     return render(request, 'seller/dashboard.html', context={
-        'products': Product.objects.filter(owner=request.user)
+        'products': Product.objects.filter(owner=request.user),
+        'brochures': Brochure.objects.filter(product__owner=request.user),
+        'dribble_product': DribbleProduct.objects.filter(product__owner=request.user)
     })
 
 

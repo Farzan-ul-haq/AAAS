@@ -1,7 +1,6 @@
 import re
 import requests
-from lxml import html
-
+from datetime import datetime
 
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
@@ -24,11 +23,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         DRIBBLE_PRODUCT_ID = '20333170'
-
+        t = datetime.now()
         views_count = self.get_views_count(
             html_text=requests.get(
                 url=self.get_dribble_url(DRIBBLE_PRODUCT_ID)
             ).text
         )
+        print(datetime.now() - t)
         print(views_count)
 
