@@ -1,0 +1,6 @@
+@media only screen and (min-width:768px) {
+    body {
+        background-image: url("/static/bg1.jpg");
+        background-repeat: no-repeat;
+    }
+}
