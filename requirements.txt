@@ -2,6 +2,7 @@ django
 django-extensions
 pyparsing
 pydot
+requests
 gunicorn==20.1.0
 whitenoise==5.3.0
 selenium==4.1.0
