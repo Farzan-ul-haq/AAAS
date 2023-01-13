@@ -1,6 +1,7 @@
 import time
 import chromedriver_autoinstaller
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -36,11 +37,24 @@ def scraper(request):
     options.add_argument('--headless')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--no-sandbox')
-
-    chromedriver_autoinstaller.install()
-    driver = webdriver.Chrome(options=options)
-    driver.get('https://google.com')
-    file = driver.get_screenshot_as_base64()
-    # DribbleProduct.objects.create('')
-    driver.quit()
-    return HttpResponse(format_html(f'<img src="data:;base64,{file}">'))
+    i=1
+    try:
+        # chromedriver_autoinstaller.install()
+        driver = webdriver.Chrome(options=options)
+        driver.get('https://google.com')
+        file = driver.get_screenshot_as_base64()
+        # DribbleProduct.objects.create('')
+        driver.quit()
+        return HttpResponse(format_html(f'<h1>{i}</h1><img src="data:;base64,{file}">'))
+    except Exception as e:
+        print(e)
+    i=2
+    try:
+        driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        driver.get('https://google.com')
+        file = driver.get_screenshot_as_base64()
+        # DribbleProduct.objects.create('')
+        driver.quit()
+        return HttpResponse(format_html(f'<h1>{i}</h1><img src="data:;base64,{file}">'))
+    except Exception as e:
+        print(e)
