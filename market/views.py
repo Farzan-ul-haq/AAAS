@@ -11,6 +11,15 @@ def brochure_detail(request, pk):
     """Returns Brochure Detail"""
     return render(request, 'market/brochure-detail.html')
 
+def brochure_detail2(request, pk):
+    """Returns Brochure Details2"""
+    return render(request, 'market/brochure-details2.html')
+
+def brochure_detail3(request, pk):
+    """Returns Brochure Details3"""
+    return render(request, 'market/brochure-details3.html')
+
+
 def marketing_platform_list(request, pk):
     """Returns Marketing Platforms"""
     product = Product.objects.get(id=pk)
