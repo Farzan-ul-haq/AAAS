@@ -290,6 +290,7 @@ class DribbleProduct(models.Model):
     views = models.IntegerField()
     description = models.TextField()
     dribble_id = models.CharField(max_length=255)
+    image = models.ImageField('market/dribble/', null=True, blank=True)
     # created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

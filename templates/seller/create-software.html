@@ -7,16 +7,16 @@
 <div class="container mt-5">
     <form action="" id='updateform' method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="form-group">
-          <label for="title">Title</label>
-          <input name='title' type="text" class="form-control" id="title" placeholder="Enter Software Title">
+            <label for="title">Title</label>
+            <input name='title' type="text" class="form-control" id="title" placeholder="Enter Software Title">
         </div>
         <div class="form-group">
             <label for="thumbnail">Thumbnail</label>
             <input name='thumbnail' type="file" class="form-control-file" id="thumbnail">
         </div>
         <div class="form-group">
-          <label for="description">Description</label>
-          <textarea name='description' class="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
+            <label for="description">Description</label>
+            <textarea name='description' class="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
         </div>
         <div class="form-group">
             <label for="description">Source URL</label>
@@ -39,17 +39,68 @@
             <input name='downloadable_file' type="file" class="form-control-file" id="downloadable_file">
             <small id="downloadable_file" class="form-text text-muted">Upload download file.</small>
         </div>
+        <hr>
         <div class="form-group">
-            <label for="price">Price</label>
-            <input name='price' type="text" class="form-control" id="price">
-            <small id="price" class="form-text text-muted">Enter the price in USD.</small>
+            <div class="row">
+                <div class="col-6">
+                    <label for="price">Price</label>
+                    <input name='price' type="text" class="form-control" id="price">
+                    <small id="price" class="form-text text-muted">Enter the price in USD.</small>
+                </div>
+                <div class="col-6">
+                    <button type="button" disabled id='btn-analysis' class="btn btn-warning col-12 h-100"><strong class="text-gray-dark">View<br>Statistical Analysis</strong></button>
+
+                </div>
+            </div>
         </div>
         <button type="submit" class="btn btn-primary col-12">Submit For Review</button>
     </form>
 </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock body %}
 
 {% block js %}
+<script>
+$("#title").change(function(){
+    if (!$('#title')[0].value) {
+        $('#btn-analysis').prop('disabled', true)
+    } else {
+        $('#btn-analysis').prop('disabled', false)
+    }
+});
 
+$("#btn-analysis").click(function(){
+    console.log('working')
+    $('#exampleModal').modal('show')
+    $.ajax({
+    type: 'GET',
+    url: "{% url 'api:statistical-analysis' 'D' %}",
+    success: function(data) {
+        console.log(data);
+    },
+    error: function(error) {
+        console.log('Error:', error);
+    }
+});
+});
+
+</script>
 {% endblock js %}
 
