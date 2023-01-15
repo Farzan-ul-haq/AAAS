@@ -3,7 +3,8 @@ from django.conf import settings
 from django.db.models import Q 
 
 from core.models import Product, ApiService, Logo,  \
-    HtmlTemplate, DownloadSoftware
+    HtmlTemplate, DownloadSoftware, ProductPackage, \
+    Feedback, Endpoints
 from core.utils import get_product_object
 
 def index(request): # landing page
@@ -39,11 +40,24 @@ def search_product(request):
 def view_product(request, slug):
     product = get_object_or_404(Product, slug=slug)
     obj, template = get_product_object(product)
-
-    return render(request, template, {
-        'product': product,
-        "obj": obj,
-    })
+    package = ProductPackage.objects.filter(service=product)
+    feedbacks = Feedback.objects.filter(package__service=product)
+    if product.product_type == 'A':
+        endpoints = Endpoints.objects.filter(service=obj)
+        return render(request, template, {
+            'product': product,
+            "obj": obj,
+            "endpoints": endpoints,
+            "packages": package,
+            "feedbacks": feedbacks
+        })
+    else:
+        return render(request, template, {
+            'product': product,
+            "obj": obj,
+            "package": package,
+            "feedbacks": feedbacks
+        })
 
 
 def billing(request): # this contains the list of products

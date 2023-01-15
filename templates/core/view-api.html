@@ -3,10 +3,98 @@
 {% block title %}YourSite{% endblock title %}
 
 {% block body %}
-<h1>VIEW API</h1>
+<div class="container mt-5 ">
+    <div class="row">
+        <div class="col-9">
+            <div class="card p-3 mb-3">
+                <div class="media">
+                    <img class="rounded-circle mr-3" src="https://images.unsplash.com/photo-1544967082-d9d25d867d66?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" style="width:30px; height:30px;" alt=""></h6>
+                    <div class="media-body">
+                        <h3 class="mt-0">{{product.owner.username.title}}</h2>
+                    </div>
+                </div>
+            </div> 
+            <span class="badge badge-primary px-2 py-1">{{product.get_product_type_display}}</span>
+            <h1>{{product.title.title}}</h1>
+            <img class='rounded w-100' src="{{product.thumbnail.url}}" alt="HEHE" w-50>
+            <hr>
+            <p><span><strong>Source URL: </strong></span>{{product.source_url}}</p>
+            <p><span><strong>Base URL: </strong></span>{{obj.base_url}}</p>
+            <h6><strong>Description: </strong></h6>
+            <p>{{product.description}}</p>
+            <h6><strong>In Scope: </strong></h6>
+            <p>{{obj.in_scope}}</p>
+            <h6><strong>Out Scope: </strong></h6>
+            <p>{{obj.out_scope}}</p>
+            <hr>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-3 card">
+                        <h3><u>Endpoint</u></h3><hr>
+                        <table class="table border">
+                            <thead>
+                            </thead>
+                            <tbody id="e_body">
+                                {% for endpoint in endpoints %}
+                                <tr>
+                                    <td onclick="show_endpoint_info(this)">
+                                        <span class="badge badge-primary">{{endpoint.request_type}}</span>
+                                        {{endpoint.path}}
+                                        <input type="text" name="endpoint_request_type" value="{{endpoint.request_type}}" hidden>
+                                        <input type="text" name="endpoint_url" value="{{endpoint.path}}" hidden>
+                                        <textarea hidden name='enpoint_desc'>{{endpoint.documentation}}</textarea>
+                                        <textarea hidden name='enpoint_test_data'>{{endpoint.test_data}}</textarea>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-5 border">
+                        <h3><u>Endpoint Doc.</u></h3><hr>
+                        <p id="e_desc_view">{{endpoints.0.documentation}}
+                        </p>
+                        <!-- <textarea class="form-control mb-2" id="e_desc_view" rows="10"
+                            placeholder="Endpoint Documentation" disabled></textarea> -->
+                    </div>
+                    <div class="col-4 border">
+                        <h3><u>Testing Data</u></h3><hr>
+                        <p id="e_test_data_view">{{endpoints.0.test_data}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="col-3">
+            {% for package in packages %}
+            <div class="card mb-2 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal text-center">{{package.title}}</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title text-center">{{package.price}} USD</h1>
+                    <h5 class="text-center">Number Of Requests: {{package.normal_requests}}</h5>
+                    <ul class="list-unstyled mt-3 mb-4">
+                    </ul>
+                    <button type="button" class="btn btn-lg btn-block btn-success">Buy Now</button>
+                </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-9">
+            {% include 'components/feedback.html' %}
+        </div>
+    </div>
+</div>
 {% endblock body %}
 
 {% block js %}
-
+<script>
+function show_endpoint_info(el) {
+    document.getElementById('e_desc_view').innerHTML = el.childNodes[7].innerHTML
+    document.getElementById('e_test_data_view').innerHTML = el.childNodes[9].innerHTML
+}
+</script>
 {% endblock js %}
 

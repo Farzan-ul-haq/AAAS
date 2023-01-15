@@ -1,5 +1,7 @@
 import re
 import requests
+from datetime import datetime
+
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, \
@@ -228,6 +230,7 @@ class Feedback(models.Model):
             MinValueValidator(1)
         ]
     )
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 
     class Meta:
