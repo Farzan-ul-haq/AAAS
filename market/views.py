@@ -19,7 +19,7 @@ def brochure_detail(request, pk):
     """Returns Brochure Detail"""
     return render(request, 'market/brochure-detail.html')
 
-def brochure_detail2(request, pk):
+def brochure_detail2(request, pk=2):
     """Returns Brochure Details2"""
     return render(request, 'market/brochure-details2.html')
 

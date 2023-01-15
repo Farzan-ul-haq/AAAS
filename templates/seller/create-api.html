@@ -135,57 +135,48 @@
             <br>
             <br>
 
-            <div class="col-11 mx-5">
-                <h2 style="text-align:center;color:1A3F61;font-family:Lobster;"><b><u>AAAS API Packages</u></b></h2>
-            </div>
-
-            <br>
-            <br>
-
-            <div class="col-4" style="text-align:center;">
-                <h3><u>Basic</u></h3>
-                <br>
-                <div class="col-12">
-                    <label for="Name">Enter No of Request:</label>
-                    <input type="text" id="Name" name="package_requests" placeholder="Enter requests">
+            <div class="container">
+                <button  type="button" disabled id='btn-analysis' class="btn btn-warning col-12 my-5"><strong> View Statistical Analysis</strong></button>
+                <div class="card-deck mb-3 text-center">
+                  <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                      <h4 class="my-0 font-weight-normal">Basic</h4>
+                    </div>
+                    <div class="card-body">
+                        <small class="text-muted">API Requests / Price</small>
+                      <h1 class="card-title pricing-card-title">
+                        <input type="number" class="form-control col-4" name="package_requests">
+                        <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
+                        </small></h1>
+                    </div>
+                  </div>
+                  <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                      <h4 class="my-0 font-weight-normal">Standard</h4>
+                    </div>
+                    <div class="card-body">
+                        <small class="text-muted">API Requests / Price</small>
+                      <h1 class="card-title pricing-card-title">
+                        <input type="number" class="form-control col-4" name="package_requests">
+                        <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
+                        </small></h1>
+                    </div>
+                  </div>
+                  <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                      <h4 class="my-0 font-weight-normal">Premium</h4>
+                    </div>
+                    <div class="card-body">
+                        <small class="text-muted">API Requests / Price</small>
+                      <h1 class="card-title pricing-card-title">
+                        <input type="number" class="form-control col-4" name="package_requests">
+                        <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
+                        </small></h1>
+                    </div>
+                  </div>
                 </div>
-                <div class="col-12">
-                    <label for="Name">Enter Price:</label>
-                    <input type="text" id="Name" name="package_pricing" placeholder="Pricing">
-                </div>
 
-
-            </div>
-
-            <div class="col-4" style="text-align:center;">
-                <h3><u>Standard</u></h3>
-                <br>
-                <div class="col-12">
-                    <label for="Name">Enter No of Request:</label>
-                    <input type="text" id="Name" name="package_requests" placeholder="Enter requests">
-                </div>
-                <div class="col-12">
-                    <label for="Name">Enter Price:</label>
-                    <input type="text" id="Name" name="package_pricing" placeholder="Pricing">
-                </div>
-
-            </div>
-
-            <div class="col-4" style="text-align:center;">
-                <h3><u>Premium</u></h3>
-                <br>
-                <div class="col-12">
-                    <label for="Name">Enter No. of Request:</label>
-                    <input type="text" id="Name" name="package_requests" placeholder="Enter requests">
-                </div>
-                <div class="col-12">
-                    <label for="Name">Enter Price:</label>
-                    <input type="text" id="Name" name="package_pricing" placeholder="Pricing">
-                </div>
-    
-                
-            </div>
-
+              </div>
             <br>
             <div class="col-12">
                 <hr>
@@ -205,6 +196,57 @@
 {% endblock body %}
 
 {% block js %}
+<script>
+    $("#title").change(function(){
+    if (!$('#title')[0].value) {
+        $('#btn-analysis').prop('disabled', true)
+    } else {
+        $('#btn-analysis').prop('disabled', false)
+    }
+});
+
+$("#btn-analysis").click(function(){
+    console.log('working')
+    $('#modal-analysis').modal('show')
+    $.ajax({
+    type: 'GET',
+    url: "{% url 'api:statistical-analysis' 'A' %}",
+    success: function(data) {
+        for (product in data) {
+            console.log(data[product]);
+            packages_html = '';
+            for (packaging in data[product].packages) {
+                console.log(data[product].packages)
+                packages_html +=   `<li><strong>${data[product].packages[packaging].title}:</strong> ${data[product].packages[packaging].price} USD/${data[product].packages[packaging].requests} Requests</li>`
+            }
+            product_pricing_html = 
+        $('#analysis-data').append(
+        `                
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="media m-3 text-muted">
+                <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 32px; height: 32px;" src="${data[0].thumbnail}" data-holder-rendered="true">
+                <div class="media-body">
+                    <h5 class="mt-0"><strong class="d-block text-gray-dark">@${data[product].title}</strong></h5>
+                    ${packages_html}
+                </div>
+                <div style="text-align: right;">
+                    <h4>${data[product].price} USD</h4>
+                </div>
+            </div>
+        </div>
+        `
+        )
+        }
+    },
+    error: function(error) {
+        console.log('Error:', error);
+    }
+});
+});
+</script>
 <script>
     // 1. create an empty list
     

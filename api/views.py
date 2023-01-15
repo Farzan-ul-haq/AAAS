@@ -9,19 +9,30 @@ def statistical_analysis(request, product_type):
     products = Product.objects.filter(product_type=product_type)
     data = []
     for product in products:
-        if product_type == 'A': # api products
-            data.append([
-                product.id,
-                product.title,
-                product.thumbnail.url,
-                [[package.price, package.normal_requests, package.title] for package in \
-                    ProductPackage.objects.filter(service=product)]
-                ])
+        if product.thumbnail:
+            thumbnail = product.thumbnail.url
         else:
-            data.append([
-                product.id,
-                product.title,
-                product.thumbnail.url,
-                ProductPackage.objects.filter(service=product).first().price
-            ])
+            thumbnail = ""
+        if product_type == 'A': # api products
+            data.append({
+                "id":product.id,
+                "title":product.title,
+                "thumbnail":thumbnail,
+                "packages":[
+                    {
+                        'price': package.price,
+                        'requests':package.normal_requests,
+                        'title': package.title
+                    } for package in ProductPackage.objects.filter(
+                        service=product
+                    )
+                ]
+                })
+        else:
+            data.append({
+                "id":product.id,
+                "title":product.title,
+                "thumbnail":thumbnail,
+                "price": ProductPackage.objects.filter(service=product).first().price
+            })
         return JsonResponse(data, safe=False)
