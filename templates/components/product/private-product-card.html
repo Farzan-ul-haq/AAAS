@@ -10,5 +10,9 @@
           <span class="badge badge-warning float-start p-2">{{product.get_product_type_display.upper}}</span>
           <span class="badge badge-primary float-right p-2">{{product.get_status_display.upper}}</span>
       </div>
+      <div class="dropdown-divider"></div>
+      <div class="">
+          <a href="{% url 'market:market-list' product.id %}" class="badge badge-danger float-start p-2 col-12">MARKET</a>
+      </div>
     </div>
   </div>

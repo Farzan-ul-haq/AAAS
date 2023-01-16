@@ -7,8 +7,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.html import format_html
 from core.models import Product, MarketingPlatforms, DribbleProduct, \
-    Brochure
-
+    Brochure, Notification
+from market.utils import upload_product_to_dribble
 
 # Create your views here.
 def brochure_list(request):
@@ -33,6 +33,7 @@ def marketing_platform_list(request, pk):
     product = Product.objects.get(id=pk)
     market_platforms = MarketingPlatforms.objects.all()
     brochures = Brochure.objects.filter(product=product)
+    # IMAGES TO SHOW
     images = [[0, product.thumbnail]]
     image_counter = 0
     for brochure in brochures:
@@ -42,16 +43,20 @@ def marketing_platform_list(request, pk):
     if request.method == 'POST':
         platform = request.POST.get('platform')
         if platform == 'Dribble':
-            product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))
+            
             selected_image = images[int(request.POST.get('selected_image'))][1]
-            DribbleProduct.objects.create(
-                product=product,
-                title=request.POST.get('title'),
-                views=0,
-                description=request.POST.get('description'),
-                dribble_id='20334511',
+            Notification.objects.create(
+                user=request.user,
+                content="Your Product will be listed shortly on Dribble",
+            )
+            upload_product_to_dribble(
+                product=product, 
+                title=request.POST.get('title'), 
+                description=request.POST.get('description'), 
+                tags=request.POST.get('tags'),
                 image=selected_image
             )
+            product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))
             return redirect('seller:dashboard')
     else:
         return render(request, 'market/marketing-platform-list.html', {
@@ -68,7 +73,7 @@ def scraper(request):
     options.add_argument('--no-sandbox')
     i=1
     try:
-        # chromedriver_autoinstaller.install()
+        chromedriver_autoinstaller.install()
         driver = webdriver.Chrome(options=options)
         driver.get('https://google.com')
         file = driver.get_screenshot_as_base64()

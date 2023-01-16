@@ -116,9 +116,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 if DEBUG:
-   STATICFILES_DIRS = [
-   os.path.join(BASE_DIR, 'static'),
-   ]
+    STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    ]
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -135,8 +135,8 @@ AUTH_USER_MODEL = 'core.User'
 
 # GRAPHVIZ MODEL
 GRAPH_MODELS = {
-  'all_applications': True,
-  'group_models': True,
+    'all_applications': True,
+    'group_models': True,
 }
 
 CSRF_TRUSTED_ORIGINS = [
