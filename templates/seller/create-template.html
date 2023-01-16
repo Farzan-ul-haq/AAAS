@@ -7,8 +7,8 @@
 <div class="container mt-5">
     <form action="" id='updateform' method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="form-group">
-          <label for="title">Title</label>
-          <input name='title' type="text" class="form-control" id="title" placeholder="Enter HTMLTemplate Title">
+            <label for="title">Title</label>
+            <input name='title' type="text" class="form-control" id="title" placeholder="Enter HTMLTemplate Title">
         </div>
         <div class="form-group">
             <label for="thumbnail">Thumbnail</label>
@@ -16,8 +16,12 @@
             <small id="thumbnail" class="form-text text-muted">Upload Thumbnail File.</small>
         </div>
         <div class="form-group">
-          <label for="description">Description</label>
-          <textarea name='description' class="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
+            <label for="description">Description</label>
+            <textarea name='description' class="form-control" id="description" rows="7"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="technical_instructions">Technical Instructions</label>
+            <textarea name='technical_instructions' class="form-control" id="technical_instructions" rows="3"></textarea>
         </div>
         <div class="form-group">
             <label for="description">Source URL</label>
@@ -25,11 +29,11 @@
         </div>
         <div class="form-group">
             <label for="description">Supported Browser</label>
-            <input name='supported_browser' type="text" class="form-control" id="supported_browser" placeholder="Source URL">
+            <input name='supported_browser' type="text" class="form-control" id="supported_browser" placeholder="Supported Browser">
         </div>
         <div class="form-group">
             <label for="description">Demo Site</label>
-            <input name='demo_site' type="url" class="form-control" id="demo_site" placeholder="Source URL">
+            <input name='demo_site' type="url" class="form-control" id="demo_site" placeholder="Demo Site">
         </div>
         <div class="form-group">
             <label for="downloadable_file">Downloadable File</label>

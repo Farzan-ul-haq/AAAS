@@ -60,15 +60,14 @@
         <div class="form-inline my-2 my-lg-0">
           {% if request.user.is_authenticated %}
           <div class="btn-group mr-2">
-            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications <span class="badge badge-light">4</span></button>
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications <span class="badge badge-light">{{notifications.count}}</span></button>
             <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-              <a class="dropdown-item" href="#">Sell your products now!<br><span><small>11 mins ago</small></span></a>
+              {% for notification in notifications %}
+              <a class="dropdown-item" href="{{notification.redirect_url}}">{{notification.content}}
+                <br><span><small>{{notification.timestamp|timesince}}</small></span>
+              </a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Welcome! you loggedin to AAAS<br><span><small>11 mins ago</small></span></a>
-              
-            
-              
-              <div class="dropdown-divider"></div>
+              {% endfor %}
               <a class="dropdown-item" href="{% url 'core:notifications' %}">Show All Notifications</a>
             </div>
           </div>

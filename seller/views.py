@@ -73,6 +73,7 @@ def create_template(request):
             source_file_size=request.POST.get('source_file_size'),
             supported_browser=request.POST.get('supported_browser'), #
             demo_site=request.POST.get('demo_site'), #
+            technical_instructions=request.POST.get('technical_instructions'), #
         )
         return redirect('seller:dashboard')
 
@@ -100,11 +101,13 @@ def create_software(request):
         DownloadSoftware.objects.create(
             product=p,
             source_file=request.FILES.get('downloadable_file'),
+            trail_version=request.FILES.get('trail_version'),
             source_file_size=request.POST.get('source_file_size'),
             in_scope=request.POST.get('in_scope'),
             out_scope=request.POST.get('out_scope'),
             supported_os=request.POST.get('supported_os'),
             software_type=request.POST.get('software_type'), # online, offline
+            technical_instructions=request.POST.get('technical_instructions'),
         )
         return redirect('seller:dashboard')
 
@@ -137,8 +140,9 @@ def create_api(request):
             product=p,
             website_url='https://google.com',
             base_url="https://api.ipify.org/",
-            in_scope="",
-            out_scope="",
+            in_scope=request.POST.get('in_scope'),
+            out_scope=request.POST.get('out_scope'),
+            technical_instructions=request.POST.get('technical_instructions'),
         )
         for i in range(len(request.POST.getlist('endpoint_url'))):
             create_endpoint_obj(
@@ -149,5 +153,5 @@ def create_api(request):
                 documentation=request.POST.getlist('enpoint_desc')[i],
                 test_data=request.POST.getlist('enpoint_test_data')[i],
             )
-        
+
         return redirect('seller:dashboard')

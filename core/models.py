@@ -120,6 +120,7 @@ class HtmlTemplate(models.Model):
     source_file_size = models.CharField(max_length=50, null=True, blank=True)
     supported_browser = models.CharField(max_length=5000, null=True, blank=True)
     demo_site = models.CharField(max_length=5000, null=True, blank=True)
+    technical_instructions = models.TextField(default="")
 
     class Meta:
         db_table = "HtmlTemplate"
@@ -131,6 +132,9 @@ class DownloadSoftware(models.Model):
     source_file_size = models.CharField(max_length=50, null=True, blank=True)
     in_scope = models.TextField(default="", null=True, blank=True)
     out_scope = models.TextField(default="", null=True, blank=True)
+    technical_instructions = models.TextField(default="")
+    technology = models.CharField(default="", null=True, blank=True, max_length=500)
+    trail_version = models.FileField('software-trail', null=True)
 
     supported_os = models.CharField(max_length=500, null=True, blank=True)
     software_type = models.CharField(choices=(
@@ -149,6 +153,8 @@ class ApiService(models.Model):
     base_url = models.CharField(max_length=5000) # API hosted server domain path
     in_scope = models.TextField(default="", null=True, blank=True)
     out_scope = models.TextField(default="", null=True, blank=True)
+    technology = models.CharField(default="", null=True, blank=True, max_length=500)
+    technical_instructions = models.TextField(default="")
 
     def save(self, *args, **kwargs):
         super(ApiService, self).save(*args, **kwargs)
