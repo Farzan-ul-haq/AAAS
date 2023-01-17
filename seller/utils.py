@@ -2,6 +2,7 @@ from core.models import Product, Endpoints, ProductPackage
 
 
 def create_product_obj(*args, **data):
+    data['status'] = 'A'
     return Product.objects.create(**data)
 
 

@@ -106,8 +106,9 @@ def create_software(request):
             in_scope=request.POST.get('in_scope'),
             out_scope=request.POST.get('out_scope'),
             supported_os=request.POST.get('supported_os'),
-            software_type=request.POST.get('software_type'), # online, offline
+            software_type=request.POST.get('software_type', 'ONLINE'), # online, offline
             technical_instructions=request.POST.get('technical_instructions'),
+            technology=request.POST.get('technology'),
         )
         return redirect('seller:dashboard')
 
