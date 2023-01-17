@@ -12,7 +12,7 @@ def upload_product_to_dribble(product, title, description, tags, image, platform
     options.add_argument('--headless')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--no-sandbox')
-
+    print('0. STARTED')
     driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), options=options)
     print('1. DRIVER OPEN')
     driver.get("https://dribbble.com/session/new") # Login URL
