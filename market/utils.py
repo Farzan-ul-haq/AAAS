@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 import chromedriver_autoinstaller
 
 
-def upload_product_to_dribble(product, title, description, tags, image):
+def upload_product_to_dribble(product, title, description, tags, image, platform):
     options = webdriver.ChromeOptions()
     options.add_argument(' - incognito')
     options.add_argument('--headless')
@@ -57,3 +57,4 @@ def upload_product_to_dribble(product, title, description, tags, image):
         user=product.owner,
         content="Your Product listed successfully on dribble.\n we will keep you updated.",
     )
+    product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))

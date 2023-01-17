@@ -2,6 +2,7 @@ import time
 import chromedriver_autoinstaller
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from threading import Thread
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -49,14 +50,18 @@ def marketing_platform_list(request, pk):
                 user=request.user,
                 content="Your Product will be listed shortly on Dribble",
             )
-            upload_product_to_dribble(
-                product=product, 
-                title=request.POST.get('title'), 
-                description=request.POST.get('description'), 
-                tags=request.POST.get('tags'),
-                image=selected_image
+            t = Thread(
+                target=upload_product_to_dribble,
+                args=(
+                    product,
+                    request.POST.get('title'),
+                    request.POST.get('description'),
+                    request.POST.get('tags'),
+                    selected_image,
+                    platform
+                )
             )
-            product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))
+            t.start()
             return redirect('seller:dashboard')
     else:
         return render(request, 'market/marketing-platform-list.html', {

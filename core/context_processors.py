@@ -9,6 +9,5 @@ def settings(request):
     if request.user.is_authenticated:
         data['notifications'] = Notification.objects.filter(
             user=request.user
-        )
-    print(data)
+        ).order_by('-id')
     return data
