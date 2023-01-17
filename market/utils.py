@@ -10,18 +10,20 @@ def upload_product_to_dribble(product, title, description, tags, image, platform
     options = webdriver.ChromeOptions()
     options.add_argument(' - incognito')
     # options.add_argument('--headless')
-    # options.add_argument('--disable-dev-shm-usage')
-    # options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--no-sandbox')
     chromedriver_autoinstaller.install()
     driver = webdriver.Chrome(options=options)
 
     driver.get("https://dribbble.com/session/new") # Login URL
+    time.sleep(10)
     driver.find_element(By.ID, "login").send_keys('fsiddiqui@students.uit.edu') # add username
     driver.find_element(By.ID, "password").send_keys('faddy3143') # add password
+    time.sleep(5)
     driver.find_element(By.CLASS_NAME, "form-sub").click() # click on submit
 
     driver.get("https://dribbble.com/uploads/new") # upload IMAGE URL
-    time.sleep(5)
+    time.sleep(10)
     driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/div[2]/div/div[2]/div/label/input").send_keys(image.path) # Upload Image
     time.sleep(30) # sleep to fully upload image
     driver.find_element(By.ID, 'title').send_keys(product.title) # ADD TITLE
