@@ -16,81 +16,131 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <title>Brochure</title>
+  <title>Brochure-1</title>
 </head>
 
 <body>
 
-  <link rel="stylesheet" type="text/css" href="{% static 'css/brochure2.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/brochure.css' %}">
 
-  <div class="container-fluid top mt-5 px-5">
-
-    <div class="col-12">
-      <h1 contenteditable="true" align="center">
-        <b style="font-size: 50px; color:#765341" > Title Here </b>
-      </h1>
-    </div>
-
-    <br>
-
+  <div class="container-fluid top mt-5">
     <div class="row">
-      <div class="col-6">
-        <h2 style="font-family: 'Ubuntu', sans-serif; color:#6a4a3a"><u><b>Product Spotlights:</b></u></h2>
-        <br>
-
-        <ol>
-          <li>
-            <h4 contenteditable="true" style="font-family: 'Ubuntu', sans-serif; color:#6a5a3a">Write your Feature 1</h4>
-          </li>
-          <br>
-          <li>
-            <h4 contenteditable="true" style="font-family: 'Ubuntu', sans-serif; color:#6a5a3a">Write your Feature 2</h4>
-          </li>
-          <br>
-          <li>
-            <h4 contenteditable="true" style="font-family: 'Ubuntu', sans-serif; color:#6a5a3a">Write your Feature 3</h4>
-          </li>
-          <br>
-        </ol>
+      <div class="col-4">
 
       </div>
-      <div class="col-6">
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <img id="my-image" src="/static/header.png" align="right" width="600" height="400">
-
+      <div class="col-8">
+        <h1 contenteditable="true" align="center" style="font-family: 'Ariel', cursive;font-size:400%;">
+          <u><strong>Title Here</strong></u>
+        </h1>
+        <br>
+        <br>
+        <br>
         <br>
         <br>
 
-        <form id="my-image" enctype="multipart/form-data" align="right">
-          <input type="file" id="my-image" name="image">
-          <input type="submit" value="Upload">
-        </form>
-        <script>
-          $("#my-image").click(function () {
-            var newSrc = prompt("Enter the new image URL:");
-            $(this).attr("src", newSrc);
-          });
-        </script>
-
-
       </div>
-
-      <div class="col-12">
-        <form>
-          <div class="form-group-fluid">
-            <h3 style="color: #6a4a3a;">Description</h3>
-            <textarea class="form-control" type="text" id="exampleFormControlTextarea1" style="color: white; background-color: #152238;" placeholder="Provide Description of Your Project......." rows="10" ></textarea>
-          </div>
-        </form>
-
-      </div>
-      <div class="col-12">
-        <button type="button" class="btn btn-info btn-lg ">Upload Brochure</button>
-      </div>
-
-
     </div>
+    <div class="row">
+      <div class="col-4">
+
+        <p class="_04xlpA direction-ltr align-start para-style-body"
+          style="color: rgb(0, 0, 0); font-family: &quot;YADXm3pZ1HU 0&quot;, _fb_, auto; font-size:275%; --line-height:1.1; text-transform: none; line-height: 26px;"
+          align="center"><span class="S1PPyQ"
+            style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; text-decoration: none;"><u>Notable</u><span
+              class="S1PPyQ"
+              style="color: rgb(34, 190, 215); font-weight: 700; font-style: normal; text-decoration: none;"><u>Features:</u></span></span>
+        </p>
+
+        <br>
+        <br>
+        <br>
+
+        <div class="col-12">
+          <div class="row"></div>
+          <ol>
+            <li>
+              <h4 contenteditable="true"
+                style="color:#3792cb;font-weight: 700;font-family: &quot;YADXm3pZ1HU 0&quot;, _fb_, auto;font-size:200%;">
+                This is your Feature 1</h4>
+            </li>
+            <br>
+            <li>
+              <h4 contenteditable="true"
+                style="color:rgb(0, 0, 0);font-weight: 700;font-family: &quot;YADXm3pZ1HU 0&quot;, _fb_, auto;font-size:200%;">
+                This is your Feature 2</h4>
+            </li>
+            <br>
+            <li>
+              <h4 contenteditable="true"
+                style="color:#3792cb;font-weight: 700;font-family: &quot;YADXm3pZ1HU 0&quot;, _fb_, auto;font-size:200%;">
+                This is your Feature 3</h4>
+            </li>
+            <br>
+            <li>
+              <h4 contenteditable="true"
+                style="color:rgb(0, 0, 0);font-weight: 700;font-family: &quot;YADXm3pZ1HU 0&quot;, _fb_, auto;font-size:200%;">
+                This is your Feature 4</h4>
+            </li>
+            <br>
+            <li>
+              <h4 contenteditable="true"
+                style="color:#3792cb;font-weight: 700;font-family: &quot;YADXm3pZ1HU 0&quot;, _fb_, auto;font-size:200%;">
+                This is your Feature 5</h4>
+            </li>
+            <br>
+          </ol>
+        </div>
+      </div>
+
+      <div class="col-8">
+
+        <div class="col-12" style="text-align: center;">
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+          <img id="my-image" src="/static/header.png" class="rounded" align="center" width="600" height="400">
+
+
+          <br>
+          <br>
+
+          <script>
+            $("#my-image").click(function () {
+              var newSrc = prompt("Enter the new image URL:");
+              $(this).attr("src", newSrc);
+            });
+          </script>
+        </div>
+
+        <br>
+
+        <div class="col-12">
+          <br>
+          <br>
+          <br>
+          <form>
+            <div class="form-group-fluid">
+              <p class="_04xlpA direction-ltr align-start para-style-body"
+                style="color: rgb(0, 0, 0); font-family: &quot;YADXm3pZ1HU 0&quot;, _fb_, auto; font-size:275%; --line-height:1.1; text-transform: none; line-height: 26px;">
+                <span class="S1PPyQ"
+                  style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; text-decoration: none;"><u>Product</u><span
+                    class="S1PPyQ"
+                    style="color: #020202; font-weight: 700; font-style: normal; text-decoration: none;"><u>Description:</u></span></span>
+              </p>
+              <textarea class="form-control" type="text" id="exampleFormControlTextarea1"
+                style="color: black; background-color: #50aed3;"
+                placeholder="Provide Description of Your Project......." rows="10"></textarea>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-12">
+          <button type="button" class="btn btn-info btn-lg float-right">Upload Brochure</button>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
   </div>
 
 
@@ -108,6 +158,9 @@
 </body>
 
 </html>
+
+
+
 
 {% endblock body %}
 
