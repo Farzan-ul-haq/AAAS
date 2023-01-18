@@ -8,6 +8,7 @@
     }
 }
 
-.rounded {
-    border-radius: 10px;
+.image-container {
+    border-radius: 0%;
+    overflow: hidden;
   }
