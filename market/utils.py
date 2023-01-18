@@ -32,13 +32,15 @@ def upload_product_to_dribble(product, title, description, tags, image, platform
         print('4. Image Uploaded')
         time.sleep(30) # sleep to fully upload image
         driver.find_element(By.ID, 'title').send_keys(product.title) # ADD TITLE
-        time.sleep(30)
+        time.sleep(10)
         driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/div[2]/div/div[3]/div/div/div/div/p").send_keys(
             f"BUY NOW https://google.com"
         ) # ADD DESCRIPTION
         print('5. Details Added')
         time.sleep(60)
-        print(driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/div[1]/div[3]/button[2]").text)
+        continue_btn = driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/div[1]/div[3]/button[2]")
+        print(continue_btn.text)
+        driver.execute_script("arguments[0].scrollIntoView(true);", continue_btn)
         driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/div[1]/div[3]/button[2]").click() # CLICK ON CONTINUE
         print('6. Continue Added')
 
