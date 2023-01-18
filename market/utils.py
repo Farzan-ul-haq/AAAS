@@ -73,4 +73,5 @@ def upload_product_to_dribble(product, title, description, tags, image, platform
 
     except Exception as e:
         print(e)
+        driver.save_screenshot('error.png')
         driver.quit()
