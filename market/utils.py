@@ -13,6 +13,7 @@ def upload_product_to_dribble(product, title, description, tags, image, platform
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--no-sandbox')
     options.add_argument("--start-maximized")
+    options.add_argument("--window-size=1920,1080")
     print('0. STARTED')
     try:
         driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), options=options)
