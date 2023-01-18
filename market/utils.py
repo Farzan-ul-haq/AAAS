@@ -1,6 +1,6 @@
 import time
 
-from core.models import DribbleProduct, Notification
+from core.models import DribbleProduct, Notification, MarketingPlatforms
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import chromedriver_autoinstaller
@@ -12,6 +12,7 @@ def upload_product_to_dribble(product, title, description, tags, image, platform
     options.add_argument('--headless')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--no-sandbox')
+    options.add_argument("--start-maximized")
     print('0. STARTED')
     try:
         driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), options=options)
@@ -53,20 +54,21 @@ def upload_product_to_dribble(product, title, description, tags, image, platform
         dribble_id = driver.current_url.split('/')[-1]
 
         driver.quit()
+
+        DribbleProduct.objects.create(
+            product=product,
+            title=title,
+            views=0,
+            description=description,
+            dribble_id=dribble_id,
+            image=image
+        )
+        Notification.objects.create(
+            user=product.owner,
+            content="Your Product listed successfully on dribble.\n we will keep you updated.",
+        )
+        product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))
+
     except Exception as e:
         print(e)
         driver.quit()
-
-    DribbleProduct.objects.create(
-        product=product,
-        title=title,
-        views=0,
-        description=description,
-        dribble_id=dribble_id,
-        image=image
-    )
-    Notification.objects.create(
-        user=product.owner,
-        content="Your Product listed successfully on dribble.\n we will keep you updated.",
-    )
-    product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))
