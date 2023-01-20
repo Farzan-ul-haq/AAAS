@@ -47,7 +47,7 @@
     <h3 class="border-bottom border-gray pb-2 mb-0">Marketing Results</h3>
     {% for product in products %}
       {% for market in product.marketed_on.all %}
-        {% if market.title.lower == 'dribble' %}
+        {% if market.title.lower == 'dribble' or market.title.lower == 'dribble-pro' %}
           {% for dribble in dribble_product %}
             {% if dribble.product == product and dribble.status == 'A' %}
               <div class="media m-3 text-muted">

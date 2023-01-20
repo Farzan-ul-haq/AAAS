@@ -48,14 +48,14 @@ def upload_product_to_dribble(dp, platform):
         # ADD Tags
         time.sleep(10)
         driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/section/div/div/div/div/div[1]/tags/span").send_keys(dp.tags)
-
+        print('7. Tags Added')
         # click on publish button
         driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/section/div/div/div/div/div[8]/div/button[2]").click()
-
+        print('8. Publish')
         time.sleep(10)
         # GET PRODUCT ID
         dribble_id = driver.current_url.split('/')[-1]
-
+        print(f'9. Driver URL, {dribble_id}')
         driver.close()
 
         dp.dribble_id=dribble_id
