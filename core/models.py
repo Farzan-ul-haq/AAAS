@@ -314,21 +314,27 @@ class DribbleProduct(models.Model):
         return f"{settings.DRIBBLE_SHOTS_URL}{self.dribble_id}"
     
     def get_details(self):
-        if self.status == 'A':
-            html_text = requests.get(self.get_absolute_url()).text
-            views = int(re.search(
-                        r'"viewsCount":\s*([^"]+)',
-                        html_text
-                    ).group(1).replace(',', ''))
-            likes = int(re.search(
-                        r'"likesCount":\s*([^"]+)',
-                        html_text
-                    ).group(1).replace(',', ''))
-            print(likes)
-        else:
-            views = '-'
-            likes = '-'
+        try:
+            if self.status == 'A':
+                html_text = requests.get(self.get_absolute_url()).text
+                views = int(re.search(
+                            r'"viewsCount":\s*([^"]+)',
+                            html_text
+                        ).group(1).replace(',', ''))
+                likes = int(re.search(
+                            r'"likesCount":\s*([^"]+)',
+                            html_text
+                        ).group(1).replace(',', ''))
+                print(likes)
+            else:
+                views = '-'
+                likes = '-'
 
+
+        except Exception as e:
+            print(self.id)
+            views = '--'
+            likes = '--'
         return [
             [views, 'eye'],
             [likes, 'thumbs-up']

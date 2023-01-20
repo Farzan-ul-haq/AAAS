@@ -22,7 +22,7 @@ class Command(BaseCommand):
         ).group(1).replace(',', ''))
 
     def handle(self, *args, **options):
-        DRIBBLE_PRODUCT_ID = '20333170'
+        DRIBBLE_PRODUCT_ID = '20434632-111'
         t = datetime.now()
         views_count = self.get_views_count(
             html_text=requests.get(
