@@ -145,3 +145,5 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 from .info_settings import *
+
+DOMAIN_URL = 'http://139.59.221.126'

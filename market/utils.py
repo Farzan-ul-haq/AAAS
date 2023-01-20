@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 import chromedriver_autoinstaller
 
 
-def upload_product_to_dribble(product, title, description, tags, image, platform):
+def upload_product_to_dribble(dp, platform):
     options = webdriver.ChromeOptions()
     options.add_argument(' - incognito')
     options.add_argument('--headless')
@@ -29,10 +29,10 @@ def upload_product_to_dribble(product, title, description, tags, image, platform
         driver.get("https://dribbble.com/uploads/new") # upload IMAGE URL
         print('3. UPLOAD URL')
         time.sleep(10)
-        driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/div[2]/div/div[2]/div/label/input").send_keys(image.path) # Upload Image
+        driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/div[2]/div/div[2]/div/label/input").send_keys(dp.image.path) # Upload Image
         print('4. Image Uploaded')
         time.sleep(30) # sleep to fully upload image
-        driver.find_element(By.ID, 'title').send_keys(product.title) # ADD TITLE
+        driver.find_element(By.ID, 'title').send_keys(dp.product.title) # ADD TITLE
         time.sleep(10)
         driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/div[2]/div/div[3]/div/div/div/div/p").send_keys(
             f"BUY NOW https://google.com"
@@ -47,7 +47,7 @@ def upload_product_to_dribble(product, title, description, tags, image, platform
 
         # ADD Tags
         time.sleep(10)
-        driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/section/div/div/div/div/div[1]/tags/span").send_keys(tags)
+        driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/section/div/div/div/div/div[1]/tags/span").send_keys(dp.tags)
 
         # click on publish button
         driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/section/div/div/div/div/div[8]/div/button[2]").click()
@@ -56,21 +56,18 @@ def upload_product_to_dribble(product, title, description, tags, image, platform
         # GET PRODUCT ID
         dribble_id = driver.current_url.split('/')[-1]
 
-        driver.quit()
+        driver.close()
 
-        DribbleProduct.objects.create(
-            product=product,
-            title=title,
-            views=0,
-            description=description,
-            dribble_id=dribble_id,
-            image=image
-        )
+        dp.dribble_id=dribble_id
+        dp.status='A'
+        dp.save()
+
         Notification.objects.create(
-            user=product.owner,
+            user=dp.product.owner,
             content="Your Product listed successfully on dribble.\n we will keep you updated.",
         )
-        product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))
+
+        dp.product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))
 
     except Exception as e:
         print(e)

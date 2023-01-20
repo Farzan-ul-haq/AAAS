@@ -1,15 +1,27 @@
 import time
+import stripe
 import chromedriver_autoinstaller
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from threading import Thread
 
+from django.urls import reverse
+from django.conf import settings
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.html import format_html
 from core.models import Product, MarketingPlatforms, DribbleProduct, \
     Brochure, Notification
 from market.utils import upload_product_to_dribble
+
+
+if settings.STRIPE_LIVE_MODE:
+    stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
+else:
+    stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+endpoint_secret = settings.DJSTRIPE_WEBHOOK_SECRET
+
 
 # Create your views here.
 def brochure_list(request):
@@ -44,25 +56,87 @@ def marketing_platform_list(request, pk):
     if request.method == 'POST':
         platform = request.POST.get('platform')
         if platform == 'Dribble':
-            
             selected_image = images[int(request.POST.get('selected_image'))][1]
-            Notification.objects.create(
-                user=request.user,
-                content="Your Product will be listed shortly on Dribble",
+            dp = DribbleProduct.objects.create(
+                product=product,
+                title=request.POST.get('title'),
+                description=request.POST.get('description'),
+                tags=request.POST.get('tags'),
+                image=selected_image,
+                views=0,
+                status='P'
             )
-            t = Thread(
-                target=upload_product_to_dribble,
-                args=(
-                    product,
-                    request.POST.get('title'),
-                    request.POST.get('description'),
-                    request.POST.get('tags'),
-                    selected_image,
-                    platform
+            price = MarketingPlatforms.objects.get(title=platform).price
+            if price:
+                pass
+            else:
+                Notification.objects.create(
+                    user=request.user,
+                    content="Your Product will be listed shortly on Dribble",
                 )
+                messages.warning(request, 'Your Product will be listed shortly on Dribble')
+                t = Thread(
+                    target=upload_product_to_dribble,
+                    args=(
+                        dp,
+                        platform
+                    )
+                )
+                t.start()
+                return redirect('seller:dashboard')
+        elif platform == 'Dribble-PRO':
+            selected_image = images[int(request.POST.get('selected_image'))][1]
+            dp = DribbleProduct.objects.create(
+                product=product,
+                title=request.POST.get('title'),
+                description=request.POST.get('description'),
+                tags=request.POST.get('tags'),
+                image=selected_image,
+                views=0,
+                status='P'
             )
-            t.start()
-            return redirect('seller:dashboard')
+            price = MarketingPlatforms.objects.get(title=platform).price
+            if price:
+                messages.warning(request, 'Your Product will be listed shortly on Dribble-PRO')
+                # payment checkout URL
+                checkout_session = stripe.checkout.Session.create(
+                    line_items = [
+                        {
+                            'price_data': {
+                                'currency': 'usd',
+                                'unit_amount': int(price*100),
+                                'product_data': {
+                                    'name': f'Dribble PRO Listing',
+                                },
+                            },
+                            'quantity': 1,
+                        },
+                    ],
+                    metadata={
+                        "uid": request.user.id,
+                        "dribble_product": dp.id,
+                        "platform": platform
+                    },
+                    mode='payment',
+                    success_url=settings.DOMAIN_URL + reverse('seller:dashboard'),
+                    cancel_url=settings.DOMAIN_URL + reverse('market:market-list', kwargs={'pk': pk}),
+                )
+                print(checkout_session.id)
+                return redirect(checkout_session.url)
+            else:
+                Notification.objects.create(
+                    user=request.user,
+                    content="Your Product will be listed shortly on Dribble-PRO",
+                )
+                t = Thread(
+                    target=upload_product_to_dribble,
+                    args=(
+                        dp,
+                        platform
+                    )
+                )
+                t.start()
+                return redirect('seller:dashboard')
     else:
         return render(request, 'market/marketing-platform-list.html', {
             'product': product,

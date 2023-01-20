@@ -1,0 +1,29 @@
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input name='title' type="text" class="form-control" id="title" placeholder="Enter Title" value="{{product.title}}">
+        <small id="tags" class="form-text text-muted"></small>
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name='description' class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="tags">Tags</label>
+        <input name='tags' type="text" class="form-control" id="tags" placeholder="Enter Tags...">
+        <small id="tags" class="form-text text-muted">Sepereated by " , " Max 12.</small>
+    </div>
+    <hr>
+    <div class="form-group">
+        <label class="mb-3">Select Image</label><br>
+
+        {% for image in images %}
+        <input type="radio" name="selected_image" id="{{image.0}}" value="{{image.0}}" class="input-hidden" {%if not image.0 %} checked {% endif %}/>
+        <label for="{{image.0}}">
+            <img  class='mx-2' src="{{image.1.url}}" alt="I'm sad" />
+        </label>
+        {% endfor %}
+    </div>
+    <input type="text" hidden name="platform" value='Dribble-PRO'>
+    <button type="submit" class="btn btn-danger">Pay & Publish to Dribble</button>
+</form>

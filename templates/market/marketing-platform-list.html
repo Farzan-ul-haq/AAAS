@@ -55,16 +55,14 @@
             </div>
             {% else %}
             <div class='ml-5 align-self-center px-3'>
+                {% if mp.price %}
+                <button type="button" class="btn btn-danger font-weight-bold" data-toggle="modal" data-target=".bd-example-modal-lg-{{mp.title.lower}}">{{mp.price}} USD<hr>MARKET NOW</button>
+                {% else %}
+                <button type="button" class="btn btn-warning font-weight-bold" data-toggle="modal" data-target=".bd-example-modal-lg-{{mp.title.lower}}">FREE<hr>MARKET NOW</button>
+                {% endif %}
                 {% if mp.title.lower == 'capterra' %}
-                    <button type="button" class="btn btn-warning font-weight-bold" data-toggle="modal" data-target=".bd-example-modal-lg-capterra">FREE<hr>MARKET NOW</button>
-                    <div class="modal fade bd-example-modal-lg-capterra" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal fade bd-example-modal-lg-{{mp.title.lower}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <!-- <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div> -->
                             <div class="modal-content col-12">
                                 <h5 class="modal-title" id="exampleModalLongTitle">Capterra</h5>
                                 <hr>
@@ -73,13 +71,22 @@
                         </div>
                     </div>
                 {% elif mp.title.lower == 'dribble' %}
-                    <button type="button" class="btn btn-warning font-weight-bold" data-toggle="modal" data-target=".bd-example-modal-lg-dribble">FREE<hr>MARKET NOW</button>
                     <div class="modal fade bd-example-modal-lg-dribble" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content p-3 col-12">
                                 <h5 class="modal-title" id="exampleModalLongTitle">Dribble</h5>
                                 <hr>
                                 {% include 'components/market/dribble-form.html' %}
+                            </div>
+                        </div>
+                    </div>
+                {% elif mp.title.lower == 'dribble-pro' %}
+                    <div class="modal fade bd-example-modal-lg-dribble-pro" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content p-3 col-12">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Dribble PRO</h5>
+                                <hr>
+                                {% include 'components/market/dribble-pro-form.html' %}
                             </div>
                         </div>
                     </div>

@@ -120,7 +120,6 @@ def create_api(request):
             'seller/create-api.html'
             )
     if request.method == 'POST':
-        print('PRODUCT SUBMITTED')
         p = create_product_obj( # create product
             owner=request.user,
             title=request.POST.get('title'),

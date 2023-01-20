@@ -296,10 +296,15 @@ class MarketingPlatforms(models.Model):
 class DribbleProduct(models.Model):
     product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=255)
-    views = models.IntegerField()
+    views = models.IntegerField(default=0)
     description = models.TextField()
-    dribble_id = models.CharField(max_length=255)
+    dribble_id = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField('market/dribble/', null=True, blank=True)
+    tags = models.CharField(max_length=5000)
+    status = models.CharField(max_length=1, choices=(
+        ('P', 'PENDING'),
+        ('A', 'APPROVED'),
+    ), default='P')
     # created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -309,16 +314,21 @@ class DribbleProduct(models.Model):
         return f"{settings.DRIBBLE_SHOTS_URL}{self.dribble_id}"
     
     def get_details(self):
-        html_text = requests.get(self.get_absolute_url()).text
-        views = int(re.search(
-                    r'"viewsCount":\s*([^"]+)',
-                    html_text
-                ).group(1).replace(',', ''))
-        likes = int(re.search(
-                    r'"likesCount":\s*([^"]+)',
-                    html_text
-                ).group(1).replace(',', ''))
-        print(likes)
+        if self.status == 'A':
+            html_text = requests.get(self.get_absolute_url()).text
+            views = int(re.search(
+                        r'"viewsCount":\s*([^"]+)',
+                        html_text
+                    ).group(1).replace(',', ''))
+            likes = int(re.search(
+                        r'"likesCount":\s*([^"]+)',
+                        html_text
+                    ).group(1).replace(',', ''))
+            print(likes)
+        else:
+            views = '-'
+            likes = '-'
+
         return [
             [views, 'eye'],
             [likes, 'thumbs-up']

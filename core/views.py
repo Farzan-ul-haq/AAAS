@@ -1,11 +1,22 @@
+import stripe
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.db.models import Q 
+from django.shortcuts import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from core.models import Product, ApiService, Logo,  \
     HtmlTemplate, DownloadSoftware, ProductPackage, \
     Feedback, Endpoints
-from core.utils import get_product_object
+from core.utils import get_product_object, fulfill_order
+
+
+if settings.STRIPE_LIVE_MODE:
+    stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
+else:
+    stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+endpoint_secret = settings.DJSTRIPE_WEBHOOK_SECRET
+
 
 def index(request): # landing page
     """Landing Page"""
@@ -72,3 +83,33 @@ def notifications(request): # this contains the list of products
 
 def project_plan(request): # ONLY FOR DEVs
     return render(request, 'core/plan.html')
+
+@csrf_exempt
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+        payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    if event['type'] == 'checkout.session.completed':
+        # Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
+        session = stripe.checkout.Session.retrieve(
+        event['data']['object']['id'],
+        expand=['line_items'],
+        )
+
+        line_items = session.line_items
+        # Fulfill the purchase...
+        fulfill_order(session.metadata)
+    # Passed signature verification
+    return HttpResponse(status=200)

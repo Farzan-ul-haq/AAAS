@@ -16,4 +16,5 @@ urlpatterns = [
     path('product/<str:slug>/', views.view_product, name='product-view'),
 
     path('plan/', views.project_plan, name='project_plan'),
+    path('stripe/webhook/', views.stripe_webhook, name='stripe_webhook'),
 ]
