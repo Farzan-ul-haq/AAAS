@@ -12,7 +12,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.html import format_html
 from core.models import Product, MarketingPlatforms, DribbleProduct, \
-    Brochure, Notification
+    Brochure, Notification , BrochureTemplates
 from market.utils import upload_product_to_dribble
 
 
@@ -30,15 +30,10 @@ def brochure_list(request):
 
 def brochure_detail(request, pk):
     """Returns Brochure Detail"""
-    return render(request, 'market/brochure-detail.html')
-
-def brochure_detail2(request, pk=2):
-    """Returns Brochure Details2"""
-    return render(request, 'market/brochure-details2.html')
-
-def brochure_detail3(request, pk):
-    """Returns Brochure Details3"""
-    return render(request, 'market/brochure-details3.html')
+    brochure_template = BrochureTemplates.objects.get(id=pk)
+    return render(request, 'market/brochure-detail.html', {
+        'brochure': brochure_template
+    })
 
 
 def marketing_platform_list(request, pk):

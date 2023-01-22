@@ -263,7 +263,8 @@ class Transaction(models.Model):
 
 class BrochureTemplates(models.Model):
     title = models.CharField(max_length=255)
-    template_text = models.TextField()
+    template_html_text = models.TextField()
+    template_js_text = models.TextField()
 
 
     class Meta:
