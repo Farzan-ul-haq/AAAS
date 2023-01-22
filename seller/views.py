@@ -11,7 +11,7 @@ from seller.utils import create_product_obj, create_endpoint_obj, \
 def seller_dashboard(request):
     return render(request, 'seller/dashboard.html', context={
         'products': Product.objects.filter(owner=request.user),
-        'brochures': Brochure.objects.filter(product__owner=request.user),
+        'brochures': Brochure.objects.filter(product__owner=request.user).order_by('-id'),
         'dribble_product': DribbleProduct.objects.filter(product__owner=request.user)
     })
 

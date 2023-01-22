@@ -1,16 +1,22 @@
+import io
 import time
 import stripe
 import chromedriver_autoinstaller
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from threading import Thread
+from datetime import datetime
+import base64
+from PIL import Image
 
+from django.core.files.base import ContentFile
 from django.urls import reverse
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.html import format_html
+from django.views.decorators.csrf import csrf_exempt
 from core.models import Product, MarketingPlatforms, DribbleProduct, \
     Brochure, Notification , BrochureTemplates
 from market.utils import upload_product_to_dribble
@@ -26,13 +32,29 @@ endpoint_secret = settings.DJSTRIPE_WEBHOOK_SECRET
 # Create your views here.
 def brochure_list(request):
     """Returns Brochure List"""
+    bt = BrochureTemplates.objects.all()
     return render(request, 'market/brochure-list.html')
 
-def brochure_detail(request, pk):
+@csrf_exempt
+def brochure_detail(request, product_id, brochure_id):
     """Returns Brochure Detail"""
-    brochure_template = BrochureTemplates.objects.get(id=pk)
+    product = Product.objects.get(id=product_id)
+    brochure_template = BrochureTemplates.objects.get(id=brochure_id)
+    if request.method == 'POST':
+        image_data = request.POST['myCanvasData']
+        format, imgstr = image_data.split(';base64,')
+        ext = format.split('/')[-1]
+        c = ContentFile(base64.b64decode(imgstr))
+        filename = "profile-"+datetime.now().strftime("%Y%m%d-%H%M%S")+"." + ext
+        b = Brochure.objects.create(
+            title=product.title, product=product,
+        )
+        b.image.save(filename, c, save=True)
+        
+        return redirect('seller:dashboard')
     return render(request, 'market/brochure-detail.html', {
-        'brochure': brochure_template
+        'brochure': brochure_template,
+        'product': product
     })
 
 
