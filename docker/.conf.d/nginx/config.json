@@ -47,7 +47,7 @@
             "user": "root",
             "processes": 4,
             "path":"/home/aaas/",
-            "module":"framework.wsgi"
+            "module":"main.wsgi"
         }
     }
 }

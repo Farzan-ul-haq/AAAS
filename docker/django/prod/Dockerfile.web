@@ -19,4 +19,4 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 COPY . .
 COPY ./docker/.conf.d/nginx/config.json  /docker-entrypoint.d/config.json
-ENTRYPOINT ["/bin/bash","/home/aaas/docker/entrypoint-prod.sh"]
+ENTRYPOINT ["/bin/bash","/home/aaas/docker/django/entrypoint-prod.sh"]

@@ -21,7 +21,6 @@ WORKDIR ${APP_HOME}
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 COPY . .
-RUN pip3 install opencv-python-headless==4.5.3.56
 COPY ./docker/.conf.d/supervisor/supervisord.celery.conf /etc/supervisor/supervisord.conf
 # create supervisor socket directory
 RUN mkdir -p /home/aaas/env/run/supervisor
