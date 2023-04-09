@@ -1,0 +1,32 @@
+# # pull official base image
+FROM nginx/unit:1.25.0-python3.9
+
+ARG APP_HOME=/home/aaas
+RUN apt-get update \
+  && apt-get install --no-install-recommends --yes supervisor nginx
+
+# accept arguments
+ARG PIP_REQUIREMENTS=requirements.txt
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# install dependencies
+RUN pip install --upgrade pip setuptools
+
+# set work directory
+WORKDIR ${APP_HOME}
+
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt
+COPY . .
+COPY ./docker/.conf.d/supervisor/supervisord.conf.dev /etc/supervisor/supervisord.conf
+COPY ./docker/.conf.d/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/.conf.d/nginx/aaas.conf.dev /etc/nginx/conf.d/default.conf
+# create supervisor socket directory
+RUN mkdir -p /home/aaas/env/run/supervisor
+# COPY ./docker/.conf.d/nginx/config.json  /docker-entrypoint.d/config.json
+
+ENTRYPOINT ["/bin/bash","/home/aaas/docker/entrypoint.sh"]
+

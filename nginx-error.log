@@ -1,0 +1,451 @@
+2023/04/08 15:07:56 [notice] 12#12: using the "epoll" event method
+2023/04/08 15:07:56 [notice] 12#12: nginx/1.18.0
+2023/04/08 15:07:56 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/08 15:07:56 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/08 15:07:56 [notice] 12#12: start worker processes
+2023/04/08 15:07:56 [notice] 12#12: start worker process 13
+2023/04/08 15:07:56 [notice] 12#12: start worker process 14
+2023/04/08 15:07:56 [notice] 12#12: start worker process 15
+2023/04/08 15:07:56 [notice] 12#12: start worker process 16
+2023/04/08 15:07:56 [notice] 12#12: start worker process 17
+2023/04/08 15:07:56 [notice] 12#12: start worker process 18
+2023/04/08 15:07:56 [notice] 12#12: start worker process 19
+2023/04/08 15:07:56 [notice] 12#12: start worker process 20
+2023/04/08 15:07:56 [notice] 12#12: start worker process 21
+2023/04/08 15:07:56 [notice] 12#12: start worker process 22
+2023/04/08 15:07:56 [notice] 12#12: start worker process 23
+2023/04/08 15:07:56 [notice] 12#12: start worker process 24
+2023/04/08 15:12:29 [notice] 12#12: using the "epoll" event method
+2023/04/08 15:12:29 [notice] 12#12: nginx/1.18.0
+2023/04/08 15:12:29 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/08 15:12:29 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/08 15:12:29 [notice] 12#12: start worker processes
+2023/04/08 15:12:29 [notice] 12#12: start worker process 13
+2023/04/08 15:12:29 [notice] 12#12: start worker process 14
+2023/04/08 15:12:29 [notice] 12#12: start worker process 15
+2023/04/08 15:12:29 [notice] 12#12: start worker process 16
+2023/04/08 15:12:29 [notice] 12#12: start worker process 17
+2023/04/08 15:12:29 [notice] 12#12: start worker process 18
+2023/04/08 15:12:29 [notice] 12#12: start worker process 19
+2023/04/08 15:12:29 [notice] 12#12: start worker process 20
+2023/04/08 15:12:29 [notice] 12#12: start worker process 21
+2023/04/08 15:12:29 [notice] 12#12: start worker process 22
+2023/04/08 15:12:29 [notice] 12#12: start worker process 23
+2023/04/08 15:12:29 [notice] 12#12: start worker process 24
+2023/04/08 15:14:10 [notice] 12#12: signal 15 (SIGTERM) received from 1, exiting
+2023/04/08 15:14:10 [notice] 13#13: exiting
+2023/04/08 15:14:10 [notice] 14#14: exiting
+2023/04/08 15:14:10 [notice] 15#15: exiting
+2023/04/08 15:14:10 [notice] 16#16: exiting
+2023/04/08 15:14:10 [notice] 17#17: exiting
+2023/04/08 15:14:10 [notice] 19#19: exiting
+2023/04/08 15:14:10 [notice] 18#18: exiting
+2023/04/08 15:14:10 [notice] 20#20: exiting
+2023/04/08 15:14:10 [notice] 21#21: exiting
+2023/04/08 15:14:10 [notice] 22#22: exiting
+2023/04/08 15:14:10 [notice] 23#23: exiting
+2023/04/08 15:14:10 [notice] 24#24: exiting
+2023/04/08 15:14:10 [notice] 13#13: exit
+2023/04/08 15:14:10 [notice] 14#14: exit
+2023/04/08 15:14:10 [notice] 15#15: exit
+2023/04/08 15:14:10 [notice] 16#16: exit
+2023/04/08 15:14:10 [notice] 17#17: exit
+2023/04/08 15:14:10 [notice] 19#19: exit
+2023/04/08 15:14:10 [notice] 18#18: exit
+2023/04/08 15:14:10 [notice] 20#20: exit
+2023/04/08 15:14:10 [notice] 21#21: exit
+2023/04/08 15:14:10 [notice] 22#22: exit
+2023/04/08 15:14:10 [notice] 23#23: exit
+2023/04/08 15:14:10 [notice] 24#24: exit
+2023/04/08 15:14:10 [notice] 12#12: signal 17 (SIGCHLD) received from 13
+2023/04/08 15:14:10 [notice] 12#12: worker process 13 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 14 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 15 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 16 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 17 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 18 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 19 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 20 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 21 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 22 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 23 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: worker process 24 exited with code 0
+2023/04/08 15:14:10 [notice] 12#12: exit
+2023/04/08 15:14:18 [notice] 13#13: using the "epoll" event method
+2023/04/08 15:14:18 [notice] 13#13: nginx/1.18.0
+2023/04/08 15:14:18 [notice] 13#13: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/08 15:14:18 [notice] 13#13: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/08 15:14:18 [notice] 13#13: start worker processes
+2023/04/08 15:14:18 [notice] 13#13: start worker process 14
+2023/04/08 15:14:18 [notice] 13#13: start worker process 15
+2023/04/08 15:14:18 [notice] 13#13: start worker process 16
+2023/04/08 15:14:18 [notice] 13#13: start worker process 17
+2023/04/08 15:14:18 [notice] 13#13: start worker process 18
+2023/04/08 15:14:18 [notice] 13#13: start worker process 19
+2023/04/08 15:14:18 [notice] 13#13: start worker process 20
+2023/04/08 15:14:18 [notice] 13#13: start worker process 21
+2023/04/08 15:14:18 [notice] 13#13: start worker process 22
+2023/04/08 15:14:18 [notice] 13#13: start worker process 23
+2023/04/08 15:14:18 [notice] 13#13: start worker process 24
+2023/04/08 15:14:18 [notice] 13#13: start worker process 25
+2023/04/08 15:15:13 [notice] 13#13: using the "epoll" event method
+2023/04/08 15:15:13 [notice] 13#13: nginx/1.18.0
+2023/04/08 15:15:13 [notice] 13#13: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/08 15:15:13 [notice] 13#13: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/08 15:15:13 [notice] 13#13: start worker processes
+2023/04/08 15:15:13 [notice] 13#13: start worker process 14
+2023/04/08 15:15:13 [notice] 13#13: start worker process 15
+2023/04/08 15:15:13 [notice] 13#13: start worker process 16
+2023/04/08 15:15:13 [notice] 13#13: start worker process 17
+2023/04/08 15:15:13 [notice] 13#13: start worker process 18
+2023/04/08 15:15:13 [notice] 13#13: start worker process 19
+2023/04/08 15:15:13 [notice] 13#13: start worker process 20
+2023/04/08 15:15:13 [notice] 13#13: start worker process 21
+2023/04/08 15:15:13 [notice] 13#13: start worker process 22
+2023/04/08 15:15:13 [notice] 13#13: start worker process 23
+2023/04/08 15:15:13 [notice] 13#13: start worker process 24
+2023/04/08 15:15:13 [notice] 13#13: start worker process 25
+2023/04/08 15:21:50 [notice] 13#13: signal 15 (SIGTERM) received from 1, exiting
+2023/04/08 15:21:50 [notice] 14#14: exiting
+2023/04/08 15:21:50 [notice] 15#15: exiting
+2023/04/08 15:21:50 [notice] 17#17: exiting
+2023/04/08 15:21:50 [notice] 18#18: exiting
+2023/04/08 15:21:50 [notice] 18#18: exit
+2023/04/08 15:21:50 [notice] 19#19: exiting
+2023/04/08 15:21:50 [notice] 20#20: exiting
+2023/04/08 15:21:50 [notice] 21#21: exiting
+2023/04/08 15:21:50 [notice] 23#23: exiting
+2023/04/08 15:21:50 [notice] 24#24: exiting
+2023/04/08 15:21:50 [notice] 16#16: exiting
+2023/04/08 15:21:50 [notice] 25#25: exiting
+2023/04/08 15:21:50 [notice] 22#22: exiting
+2023/04/08 15:21:50 [notice] 14#14: exit
+2023/04/08 15:21:50 [notice] 15#15: exit
+2023/04/08 15:21:50 [notice] 17#17: exit
+2023/04/08 15:22:00 [notice] 12#12: using the "epoll" event method
+2023/04/08 15:22:00 [notice] 12#12: nginx/1.18.0
+2023/04/08 15:22:00 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/08 15:22:00 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/08 15:22:00 [notice] 12#12: start worker processes
+2023/04/08 15:22:00 [notice] 12#12: start worker process 13
+2023/04/08 15:22:00 [notice] 12#12: start worker process 14
+2023/04/08 15:22:00 [notice] 12#12: start worker process 15
+2023/04/08 15:22:00 [notice] 12#12: start worker process 16
+2023/04/08 15:22:00 [notice] 12#12: start worker process 17
+2023/04/08 15:22:00 [notice] 12#12: start worker process 18
+2023/04/08 15:22:00 [notice] 12#12: start worker process 19
+2023/04/08 15:22:00 [notice] 12#12: start worker process 20
+2023/04/08 15:22:00 [notice] 12#12: start worker process 21
+2023/04/08 15:22:00 [notice] 12#12: start worker process 22
+2023/04/08 15:22:00 [notice] 12#12: start worker process 23
+2023/04/08 15:22:00 [notice] 12#12: start worker process 24
+2023/04/08 15:26:46 [notice] 12#12: using the "epoll" event method
+2023/04/08 15:26:46 [notice] 12#12: nginx/1.18.0
+2023/04/08 15:26:46 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/08 15:26:46 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/08 15:26:46 [notice] 12#12: start worker processes
+2023/04/08 15:26:46 [notice] 12#12: start worker process 13
+2023/04/08 15:26:46 [notice] 12#12: start worker process 14
+2023/04/08 15:26:46 [notice] 12#12: start worker process 15
+2023/04/08 15:26:46 [notice] 12#12: start worker process 16
+2023/04/08 15:26:46 [notice] 12#12: start worker process 17
+2023/04/08 15:26:46 [notice] 12#12: start worker process 18
+2023/04/08 15:26:46 [notice] 12#12: start worker process 19
+2023/04/08 15:26:46 [notice] 12#12: start worker process 20
+2023/04/08 15:26:46 [notice] 12#12: start worker process 21
+2023/04/08 15:26:46 [notice] 12#12: start worker process 22
+2023/04/08 15:26:46 [notice] 12#12: start worker process 23
+2023/04/08 15:26:46 [notice] 12#12: start worker process 24
+2023/04/08 15:27:07 [notice] 13#13: using the "epoll" event method
+2023/04/08 15:27:07 [notice] 13#13: nginx/1.18.0
+2023/04/08 15:27:07 [notice] 13#13: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/08 15:27:07 [notice] 13#13: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/08 15:27:07 [notice] 13#13: start worker processes
+2023/04/08 15:27:07 [notice] 13#13: start worker process 14
+2023/04/08 15:27:07 [notice] 13#13: start worker process 15
+2023/04/08 15:27:07 [notice] 13#13: start worker process 16
+2023/04/08 15:27:07 [notice] 13#13: start worker process 17
+2023/04/08 15:27:07 [notice] 13#13: start worker process 18
+2023/04/08 15:27:07 [notice] 13#13: start worker process 19
+2023/04/08 15:27:07 [notice] 13#13: start worker process 20
+2023/04/08 15:27:07 [notice] 13#13: start worker process 21
+2023/04/08 15:27:07 [notice] 13#13: start worker process 22
+2023/04/08 15:27:07 [notice] 13#13: start worker process 23
+2023/04/08 15:27:07 [notice] 13#13: start worker process 24
+2023/04/08 15:27:07 [notice] 13#13: start worker process 25
+2023/04/08 17:11:27 [notice] 13#13: using the "epoll" event method
+2023/04/08 17:11:27 [notice] 13#13: nginx/1.18.0
+2023/04/08 17:11:27 [notice] 13#13: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/08 17:11:27 [notice] 13#13: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/08 17:11:27 [notice] 13#13: start worker processes
+2023/04/08 17:11:27 [notice] 13#13: start worker process 14
+2023/04/08 17:11:27 [notice] 13#13: start worker process 15
+2023/04/08 17:11:27 [notice] 13#13: start worker process 16
+2023/04/08 17:11:27 [notice] 13#13: start worker process 17
+2023/04/08 17:11:27 [notice] 13#13: start worker process 18
+2023/04/08 17:11:27 [notice] 13#13: start worker process 19
+2023/04/08 17:11:27 [notice] 13#13: start worker process 20
+2023/04/08 17:11:27 [notice] 13#13: start worker process 21
+2023/04/08 17:11:27 [notice] 13#13: start worker process 22
+2023/04/08 17:11:27 [notice] 13#13: start worker process 23
+2023/04/08 17:11:27 [notice] 13#13: start worker process 24
+2023/04/08 17:11:27 [notice] 13#13: start worker process 25
+2023/04/08 18:16:11 [notice] 12#12: using the "epoll" event method
+2023/04/08 18:16:11 [notice] 12#12: nginx/1.18.0
+2023/04/08 18:16:11 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/08 18:16:11 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/08 18:16:11 [notice] 12#12: start worker processes
+2023/04/08 18:16:11 [notice] 12#12: start worker process 13
+2023/04/08 18:16:11 [notice] 12#12: start worker process 14
+2023/04/08 18:16:11 [notice] 12#12: start worker process 15
+2023/04/08 18:16:11 [notice] 12#12: start worker process 16
+2023/04/08 18:16:11 [notice] 12#12: start worker process 17
+2023/04/08 18:16:11 [notice] 12#12: start worker process 18
+2023/04/08 18:16:11 [notice] 12#12: start worker process 19
+2023/04/08 18:16:11 [notice] 12#12: start worker process 20
+2023/04/08 18:16:11 [notice] 12#12: start worker process 21
+2023/04/08 18:16:11 [notice] 12#12: start worker process 22
+2023/04/08 18:16:11 [notice] 12#12: start worker process 23
+2023/04/08 18:16:11 [notice] 12#12: start worker process 24
+2023/04/08 18:19:31 [notice] 15#15: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 20#20: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 18#18: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 14#14: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 22#22: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 12#12: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 17#17: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 24#24: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 21#21: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 13#13: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 23#23: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 19#19: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 16#16: signal 15 (SIGTERM) received, exiting
+2023/04/08 18:19:31 [notice] 15#15: exiting
+2023/04/08 18:19:31 [notice] 20#20: exiting
+2023/04/08 18:19:31 [notice] 18#18: exiting
+2023/04/08 18:19:31 [notice] 14#14: exiting
+2023/04/08 18:19:31 [notice] 22#22: exiting
+2023/04/08 18:19:31 [notice] 17#17: exiting
+2023/04/08 18:19:31 [notice] 24#24: exiting
+2023/04/08 18:19:31 [notice] 21#21: exiting
+2023/04/08 18:19:31 [notice] 13#13: exiting
+2023/04/08 18:19:31 [notice] 23#23: exiting
+2023/04/08 18:19:31 [notice] 19#19: exiting
+2023/04/08 18:19:31 [notice] 16#16: exiting
+2023/04/08 18:19:31 [notice] 15#15: exit
+2023/04/08 18:19:31 [notice] 12#12: signal 15 (SIGTERM) received from 1, exiting
+2023/04/08 18:19:31 [notice] 20#20: exit
+2023/04/08 18:19:31 [notice] 18#18: exit
+2023/04/08 18:19:31 [notice] 14#14: exit
+2023/04/08 18:19:31 [notice] 22#22: exit
+2023/04/08 18:19:31 [notice] 17#17: exit
+2023/04/08 18:19:31 [notice] 24#24: exit
+2023/04/08 18:19:31 [notice] 21#21: exit
+2023/04/08 18:19:31 [notice] 13#13: exit
+2023/04/08 18:19:31 [notice] 23#23: exit
+2023/04/08 18:19:31 [notice] 19#19: exit
+2023/04/08 18:19:31 [notice] 16#16: exit
+2023/04/08 18:19:31 [notice] 12#12: signal 17 (SIGCHLD) received from 15
+2023/04/08 18:19:31 [notice] 12#12: worker process 13 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 14 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 15 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 16 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 17 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 18 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 19 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 20 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 21 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 22 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 23 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: worker process 24 exited with code 0
+2023/04/08 18:19:31 [notice] 12#12: signal 17 (SIGCHLD) received from 20
+2023/04/08 18:19:31 [notice] 12#12: exit
+2023/04/09 10:53:48 [notice] 13#13: using the "epoll" event method
+2023/04/09 10:53:48 [notice] 13#13: nginx/1.18.0
+2023/04/09 10:53:48 [notice] 13#13: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/09 10:53:48 [notice] 13#13: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/09 10:53:48 [notice] 13#13: start worker processes
+2023/04/09 10:53:48 [notice] 13#13: start worker process 14
+2023/04/09 10:53:48 [notice] 13#13: start worker process 15
+2023/04/09 10:53:48 [notice] 13#13: start worker process 16
+2023/04/09 10:53:48 [notice] 13#13: start worker process 17
+2023/04/09 10:53:48 [notice] 13#13: start worker process 18
+2023/04/09 10:53:48 [notice] 13#13: start worker process 19
+2023/04/09 10:53:48 [notice] 13#13: start worker process 20
+2023/04/09 10:53:48 [notice] 13#13: start worker process 21
+2023/04/09 10:53:48 [notice] 13#13: start worker process 22
+2023/04/09 10:53:48 [notice] 13#13: start worker process 23
+2023/04/09 10:53:48 [notice] 13#13: start worker process 24
+2023/04/09 10:53:48 [notice] 13#13: start worker process 25
+2023/04/09 11:01:53 [notice] 12#12: using the "epoll" event method
+2023/04/09 11:01:53 [notice] 12#12: nginx/1.18.0
+2023/04/09 11:01:53 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/09 11:01:53 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/09 11:01:53 [notice] 12#12: start worker processes
+2023/04/09 11:01:53 [notice] 12#12: start worker process 13
+2023/04/09 11:01:53 [notice] 12#12: start worker process 14
+2023/04/09 11:01:53 [notice] 12#12: start worker process 15
+2023/04/09 11:01:53 [notice] 12#12: start worker process 16
+2023/04/09 11:01:53 [notice] 12#12: start worker process 17
+2023/04/09 11:01:53 [notice] 12#12: start worker process 18
+2023/04/09 11:01:53 [notice] 12#12: start worker process 19
+2023/04/09 11:01:53 [notice] 12#12: start worker process 20
+2023/04/09 11:01:53 [notice] 12#12: start worker process 21
+2023/04/09 11:01:53 [notice] 12#12: start worker process 22
+2023/04/09 11:01:53 [notice] 12#12: start worker process 23
+2023/04/09 11:01:53 [notice] 12#12: start worker process 24
+2023/04/09 11:04:07 [notice] 12#12: using the "epoll" event method
+2023/04/09 11:04:07 [notice] 12#12: nginx/1.18.0
+2023/04/09 11:04:07 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/09 11:04:07 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/09 11:04:07 [notice] 12#12: start worker processes
+2023/04/09 11:04:07 [notice] 12#12: start worker process 13
+2023/04/09 11:04:07 [notice] 12#12: start worker process 14
+2023/04/09 11:04:07 [notice] 12#12: start worker process 15
+2023/04/09 11:04:07 [notice] 12#12: start worker process 16
+2023/04/09 11:04:07 [notice] 12#12: start worker process 17
+2023/04/09 11:04:07 [notice] 12#12: start worker process 18
+2023/04/09 11:04:07 [notice] 12#12: start worker process 19
+2023/04/09 11:04:07 [notice] 12#12: start worker process 20
+2023/04/09 11:04:07 [notice] 12#12: start worker process 21
+2023/04/09 11:04:07 [notice] 12#12: start worker process 22
+2023/04/09 11:04:07 [notice] 12#12: start worker process 23
+2023/04/09 11:04:07 [notice] 12#12: start worker process 24
+2023/04/09 11:10:07 [notice] 12#12: using the "epoll" event method
+2023/04/09 11:10:07 [notice] 12#12: nginx/1.18.0
+2023/04/09 11:10:07 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/09 11:10:07 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/09 11:10:07 [notice] 12#12: start worker processes
+2023/04/09 11:10:07 [notice] 12#12: start worker process 13
+2023/04/09 11:10:07 [notice] 12#12: start worker process 14
+2023/04/09 11:10:07 [notice] 12#12: start worker process 15
+2023/04/09 11:10:07 [notice] 12#12: start worker process 16
+2023/04/09 11:10:07 [notice] 12#12: start worker process 17
+2023/04/09 11:10:07 [notice] 12#12: start worker process 18
+2023/04/09 11:10:07 [notice] 12#12: start worker process 19
+2023/04/09 11:10:07 [notice] 12#12: start worker process 20
+2023/04/09 11:10:07 [notice] 12#12: start worker process 21
+2023/04/09 11:10:07 [notice] 12#12: start worker process 22
+2023/04/09 11:10:07 [notice] 12#12: start worker process 23
+2023/04/09 11:10:07 [notice] 12#12: start worker process 24
+2023/04/09 11:12:01 [notice] 12#12: signal 15 (SIGTERM) received from 1, exiting
+2023/04/09 11:12:01 [notice] 13#13: exiting
+2023/04/09 11:12:01 [notice] 14#14: exiting
+2023/04/09 11:12:01 [notice] 14#14: exit
+2023/04/09 11:12:01 [notice] 15#15: exiting
+2023/04/09 11:12:01 [notice] 17#17: exiting
+2023/04/09 11:12:01 [notice] 16#16: exiting
+2023/04/09 11:12:01 [notice] 19#19: exiting
+2023/04/09 11:12:01 [notice] 18#18: exiting
+2023/04/09 11:12:01 [notice] 22#22: exiting
+2023/04/09 11:12:01 [notice] 24#24: exiting
+2023/04/09 11:12:01 [notice] 23#23: exiting
+2023/04/09 11:12:01 [notice] 21#21: exiting
+2023/04/09 11:12:01 [notice] 13#13: exit
+2023/04/09 11:12:01 [notice] 15#15: exit
+2023/04/09 11:12:01 [notice] 17#17: exit
+2023/04/09 11:12:01 [notice] 16#16: exit
+2023/04/09 11:12:01 [notice] 19#19: exit
+2023/04/09 11:12:01 [notice] 12#12: signal 17 (SIGCHLD) received from 14
+2023/04/09 11:12:01 [notice] 12#12: worker process 14 exited with code 0
+2023/04/09 11:12:01 [notice] 12#12: worker process 15 exited with code 0
+2023/04/09 11:12:01 [notice] 12#12: signal 29 (SIGIO) received
+2023/04/09 11:12:01 [notice] 12#12: signal 17 (SIGCHLD) received from 15
+2023/04/09 11:12:01 [notice] 12#12: worker process 16 exited with code 0
+2023/04/09 11:12:01 [notice] 18#18: exit
+2023/04/09 11:12:01 [notice] 22#22: exit
+2023/04/09 11:12:01 [notice] 24#24: exit
+2023/04/09 11:12:01 [notice] 23#23: exit
+2023/04/09 11:12:01 [notice] 21#21: exit
+2023/04/09 11:12:01 [notice] 12#12: worker process 17 exited with code 0
+2023/04/09 11:12:01 [notice] 20#20: exiting
+2023/04/09 11:16:19 [notice] 12#12: using the "epoll" event method
+2023/04/09 11:16:19 [notice] 12#12: nginx/1.18.0
+2023/04/09 11:16:19 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/09 11:16:19 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/09 11:16:19 [notice] 12#12: start worker processes
+2023/04/09 11:16:19 [notice] 12#12: start worker process 13
+2023/04/09 11:16:19 [notice] 12#12: start worker process 14
+2023/04/09 11:16:19 [notice] 12#12: start worker process 15
+2023/04/09 11:16:19 [notice] 12#12: start worker process 16
+2023/04/09 11:16:19 [notice] 12#12: start worker process 17
+2023/04/09 11:16:19 [notice] 12#12: start worker process 18
+2023/04/09 11:16:19 [notice] 12#12: start worker process 19
+2023/04/09 11:16:19 [notice] 12#12: start worker process 20
+2023/04/09 11:16:19 [notice] 12#12: start worker process 21
+2023/04/09 11:16:19 [notice] 12#12: start worker process 22
+2023/04/09 11:16:19 [notice] 12#12: start worker process 23
+2023/04/09 11:16:19 [notice] 12#12: start worker process 24
+2023/04/09 11:46:23 [notice] 12#12: using the "epoll" event method
+2023/04/09 11:46:23 [notice] 12#12: nginx/1.18.0
+2023/04/09 11:46:23 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/09 11:46:23 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/09 11:46:23 [notice] 12#12: start worker processes
+2023/04/09 11:46:23 [notice] 12#12: start worker process 13
+2023/04/09 11:46:23 [notice] 12#12: start worker process 14
+2023/04/09 11:46:23 [notice] 12#12: start worker process 15
+2023/04/09 11:46:23 [notice] 12#12: start worker process 16
+2023/04/09 11:46:23 [notice] 12#12: start worker process 17
+2023/04/09 11:46:23 [notice] 12#12: start worker process 18
+2023/04/09 11:46:23 [notice] 12#12: start worker process 19
+2023/04/09 11:46:23 [notice] 12#12: start worker process 20
+2023/04/09 11:46:23 [notice] 12#12: start worker process 21
+2023/04/09 11:46:23 [notice] 12#12: start worker process 22
+2023/04/09 11:46:23 [notice] 12#12: start worker process 23
+2023/04/09 11:46:23 [notice] 12#12: start worker process 24
+2023/04/09 11:53:26 [notice] 12#12: signal 15 (SIGTERM) received from 1, exiting
+2023/04/09 11:53:27 [notice] 13#13: exiting
+2023/04/09 11:53:27 [notice] 14#14: exiting
+2023/04/09 11:53:27 [notice] 15#15: exiting
+2023/04/09 11:53:27 [notice] 15#15: exit
+2023/04/09 11:53:27 [notice] 16#16: exiting
+2023/04/09 11:53:27 [notice] 17#17: exiting
+2023/04/09 11:53:27 [notice] 19#19: exiting
+2023/04/09 11:53:27 [notice] 18#18: exiting
+2023/04/09 11:53:27 [notice] 20#20: exiting
+2023/04/09 11:53:27 [notice] 21#21: exiting
+2023/04/09 11:53:27 [notice] 22#22: exiting
+2023/04/09 11:53:27 [notice] 23#23: exiting
+2023/04/09 11:53:27 [notice] 24#24: exiting
+2023/04/09 11:53:27 [notice] 13#13: exit
+2023/04/09 11:53:27 [notice] 14#14: exit
+2023/04/09 11:53:27 [notice] 16#16: exit
+2023/04/09 11:53:27 [notice] 17#17: exit
+2023/04/09 11:53:27 [notice] 19#19: exit
+2023/04/09 11:53:27 [notice] 12#12: signal 17 (SIGCHLD) received from 15
+2023/04/09 11:53:27 [notice] 18#18: exit
+2023/04/09 11:53:27 [notice] 20#20: exit
+2023/04/09 11:53:27 [notice] 21#21: exit
+2023/04/09 11:53:27 [notice] 22#22: exit
+2023/04/09 11:53:27 [notice] 23#23: exit
+2023/04/09 11:53:27 [notice] 24#24: exit
+2023/04/09 11:53:27 [notice] 12#12: worker process 13 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 14 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 15 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 16 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 17 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 18 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 19 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 20 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 21 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 22 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 23 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: worker process 24 exited with code 0
+2023/04/09 11:53:27 [notice] 12#12: exit
+2023/04/09 11:53:53 [notice] 12#12: using the "epoll" event method
+2023/04/09 11:53:53 [notice] 12#12: nginx/1.18.0
+2023/04/09 11:53:53 [notice] 12#12: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+2023/04/09 11:53:53 [notice] 12#12: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2023/04/09 11:53:53 [notice] 12#12: start worker processes
+2023/04/09 11:53:53 [notice] 12#12: start worker process 13
+2023/04/09 11:53:53 [notice] 12#12: start worker process 14
+2023/04/09 11:53:53 [notice] 12#12: start worker process 15
+2023/04/09 11:53:53 [notice] 12#12: start worker process 16
+2023/04/09 11:53:53 [notice] 12#12: start worker process 17
+2023/04/09 11:53:53 [notice] 12#12: start worker process 18
+2023/04/09 11:53:53 [notice] 12#12: start worker process 19
+2023/04/09 11:53:53 [notice] 12#12: start worker process 20
+2023/04/09 11:53:53 [notice] 12#12: start worker process 21
+2023/04/09 11:53:53 [notice] 12#12: start worker process 22
+2023/04/09 11:53:53 [notice] 12#12: start worker process 23
+2023/04/09 11:53:53 [notice] 12#12: start worker process 24

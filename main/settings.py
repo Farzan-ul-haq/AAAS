@@ -3,7 +3,7 @@ import ast
 import datetime
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 SECRET_KEY = 'django-insecure-q3@^3&&lhweh#+nk&re7tk=b&(8q48n7(!5x0i$5tzhrof2^$+'
@@ -23,7 +23,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'whitenoise.runserver_nostatic',
+    # 'whitenoise.runserver_nostatic',
+    'whitenoise',
 
     'django_extensions',
 
@@ -76,14 +77,14 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        # "ENGINE": "django.db.backends.postgresql",
-        # "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-        # "NAME": os.environ.get("POSTGRES_NAME", "postgres"),
-        # "USER": os.environ.get("POSTGRES_USER", "postgres"),
-        # "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
-        # "PORT": int(os.environ.get("POSTGRES_PORT", "5432")),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "NAME": os.environ.get("POSTGRES_NAME", "postgres"),
+        "USER": os.environ.get("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
+        "PORT": int(os.environ.get("POSTGRES_PORT", "5432")),
     }
 }
 
@@ -142,15 +143,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
-if DEBUG:
-    STATICFILES_DIRS = [
+STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
-    ]
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
+
+
+STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # 'data' is my media folder
 MEDIA_URL = '/media/'
@@ -179,3 +180,5 @@ DOMAIN_URL = 'http://139.59.221.126'
 
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+
+ASGI_APPLICATION = 'main.asgi.application'

@@ -39,7 +39,6 @@ def brochure_list(request):
 def brochure_detail(request, product_id, brochure_id):
     """Returns Brochure Detail"""
     product = Product.objects.get(id=product_id)
-    brochure_template = BrochureTemplates.objects.get(id=brochure_id)
     if request.method == 'POST':
         image_data = request.POST['myCanvasData']
         format, imgstr = image_data.split(';base64,')
@@ -53,7 +52,6 @@ def brochure_detail(request, product_id, brochure_id):
         
         return redirect('seller:dashboard')
     return render(request, 'market/brochure-detail.html', {
-        'brochure': brochure_template,
         'product': product
     })
 

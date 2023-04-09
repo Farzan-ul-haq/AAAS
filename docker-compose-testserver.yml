@@ -4,12 +4,12 @@ services:
     image: ${CI_REGISTRY_IMAGE:-aaas}/${IMAGE:-web}:${SANITIZED_BRANCH:-latest}
     build:
       context: .
-      dockerfile: ./docker/django/prod/Dockerfile.web
+      dockerfile: ./docker/django/prod/Dockerfile.dev
       args:
         UID: ${UID:-10600}
         GID: ${GID:-10600}
         UNAME: ${UNAME:-aaas}
-    container_name: web
+    container_name: web1
     ports:
       - "8000:80"
     hostname: web
@@ -44,13 +44,14 @@ services:
       - redis
     networks:
       - aaas_net
-
   postgres:
-    image: docker.io/bitnami/postgresql:14 
-    container_name: postgres
+    image: postgres:13.6-alpine3.15
+    container_name: postgres1
     hostname: postgres
+    ports:
+      - "5432:5432"
     volumes:
-      - pg_data:/bitnami/postgresql
+      - postgres_data_recover:/var/lib/postgresql/data
     env_file:
       - ${ENV_FILE}
     networks:
@@ -61,7 +62,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/redis/Dockerfile
-    container_name: redis
+    container_name: redis1
     hostname: redis
     volumes:
       - redis_data:/data
@@ -72,6 +73,6 @@ networks:
   aaas_net:
 
 volumes:
-  pg_data:
+  postgres_data_recover:
   redis_data:
   media_volume:
