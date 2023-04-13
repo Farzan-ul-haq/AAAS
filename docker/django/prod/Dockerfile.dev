@@ -24,9 +24,12 @@ COPY . .
 COPY ./docker/.conf.d/supervisor/supervisord.conf.dev /etc/supervisor/supervisord.conf
 COPY ./docker/.conf.d/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./docker/.conf.d/nginx/aaas.conf.dev /etc/nginx/conf.d/default.conf
-# create supervisor socket directory
+# create supervisor socket direwctory
 RUN mkdir -p /home/aaas/env/run/supervisor
 # COPY ./docker/.conf.d/nginx/config.json  /docker-entrypoint.d/config.json
 
-ENTRYPOINT ["/bin/bash","/home/aaas/docker/entrypoint.sh"]
+
+# RUN python3 manage.py migrate
+
+ENTRYPOINT ["/usr/bin/supervisord"]
 

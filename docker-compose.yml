@@ -9,7 +9,7 @@ services:
         UID: ${UID:-10600}
         GID: ${GID:-10600}
         UNAME: ${UNAME:-aaas}
-    container_name: web
+    container_name: web2
     ports:
       - "8000:80"
     hostname: web
@@ -33,7 +33,7 @@ services:
         UID: ${UID:-10600}
         GID: ${GID:-10600}
         UNAME: ${UNAME:-aaas}
-    container_name: celery
+    container_name: celery2
     hostname: web
     volumes:
       - media_volume:/home/aaas/media
@@ -47,7 +47,7 @@ services:
 
   postgres:
     image: docker.io/bitnami/postgresql:14 
-    container_name: postgres
+    container_name: postgres2
     hostname: postgres
     volumes:
       - pg_data:/bitnami/postgresql
@@ -61,7 +61,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/redis/Dockerfile
-    container_name: redis
+    container_name: redis2
     hostname: redis
     volumes:
       - redis_data:/data
