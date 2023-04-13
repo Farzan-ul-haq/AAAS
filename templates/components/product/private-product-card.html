@@ -1,5 +1,7 @@
 <div class="card col-3 px-1 bg-white rounded box-shadow" >
-    <img class="card-img-top p-2" src="{{product.thumbnail.url}}" style='max-height: 500px;' alt="Card image cap" />
+    {% if product.thumbnail %}
+        <img class="card-img-top p-2" src="{{product.thumbnail.url}}" style='max-height: 500px;' alt="Card image cap" />
+    {% endif %}
     <div class="card-body">
         <h5 class="card-title">{{product.title}}</h5>
         <p class="card-text">
