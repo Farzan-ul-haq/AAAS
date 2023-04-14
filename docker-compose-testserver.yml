@@ -68,7 +68,28 @@ services:
       - redis_data:/data
     networks:
       - aaas_net
+  
+  flask:
+    image: ${CI_REGISTRY_IMAGE:-aaas}/${IMAGE:-flask}:${SANITIZED_BRANCH:-latest}
+    build:
+      context: .
+      dockerfile: ./docker/flask/Dockerfile
+      args:
+        UID: ${UID:-10600}
+        GID: ${GID:-10600}
+        UNAME: ${UNAME:-aaas}
+    container_name: flask1
+    ports:
+      - "5000:5000"
+    hostname: flask1
 
+    env_file:
+      - ${ENV_FILE}
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - aaas_net
 networks:
   aaas_net:
 
