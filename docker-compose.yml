@@ -89,6 +89,16 @@ services:
       - redis
     networks:
       - aaas_net
+
+  chrome:
+      image: selenium/standalone-chrome:latest
+      hostname: chrome
+      networks:
+        - aaas_net
+      privileged: true
+      shm_size: 2g
+
+
 networks:
   aaas_net:
 

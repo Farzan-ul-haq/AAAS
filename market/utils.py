@@ -3,7 +3,8 @@ import time
 from core.models import DribbleProduct, Notification, MarketingPlatforms
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import chromedriver_autoinstaller
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+# import chromedriver_autoinstaller
 
 
 def upload_product_to_dribble(dp, platform):
@@ -15,8 +16,13 @@ def upload_product_to_dribble(dp, platform):
     options.add_argument("--start-maximized")
     options.add_argument("--window-size=1920,1080")
     print('0. STARTED')
+    driver = webdriver.Remote(
+                command_executor='http://chrome:4444/wd/hub',
+                desired_capabilities=DesiredCapabilities.CHROME,
+                options=options
+    )
     try:
-        driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), options=options)
+        # driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), options=options)
         print('1. DRIVER OPEN')
         driver.get("https://dribbble.com/session/new") # Login URL
         time.sleep(10)
