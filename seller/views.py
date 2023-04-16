@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 
 from core.models import Product, DownloadSoftware, Logo, \
@@ -128,7 +128,7 @@ def create_api(request):
             description=request.POST.get('description'),
             thumbnail=request.FILES.get('thumbnail'),
             product_type='A',
-            source_url="https://google.com",
+            source_url=request.POST.get('source_url'),
         )
         for i in range(len(request.POST.getlist('package_requests'))):
             create_package_obj(
@@ -141,7 +141,7 @@ def create_api(request):
         apiservice = ApiService.objects.create( # create apiservice
             product=p,
             website_url='https://google.com',
-            base_url="https://api.ipify.org/",
+            base_url=request.POST.get('base_url'),
             in_scope=request.POST.get('in_scope'),
             out_scope=request.POST.get('out_scope'),
             technical_instructions=request.POST.get('technical_instructions'),
@@ -156,4 +156,18 @@ def create_api(request):
                 test_data=request.POST.getlist('enpoint_test_data')[i],
             )
 
+        return redirect('seller:dashboard')
+
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if product.owner != request.user:
+        raise Http404
+    print(product)
+    if request.method == 'GET':
+        return render(
+            request,
+            'seller/delete-product.html'
+            )
+    elif request.method == 'POST':
+        product.delete()
         return redirect('seller:dashboard')

@@ -16,7 +16,8 @@
         </div>
         <div class="dropdown-divider"></div>
         <div class="">
-            <a href="{% url 'market:market-list' product.id %}" class="badge badge-danger float-start p-2 col-12">MARKET</a>
+            <a href="{% url 'market:market-list' product.id %}" class="badge badge-info float-start p-2 col-12">MARKET</a>
+            <a href="{% url 'seller:delete-product' product.id %}" class="badge badge-danger float-start p-2 col-12 mt-2">DELETE</a>
             {% if product.product_type == 'L' %}
             <a href="{% url 'market:brochure-detail' product.id 3 %}" class="badge badge-success float-start p-2 col-12 mt-2">DESIGN BROCHURE</a>
             {% elif product.product_type == 'H'%}
