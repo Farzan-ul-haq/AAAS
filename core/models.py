@@ -1,6 +1,7 @@
 import re
 import requests
 
+from tinymce.models import HTMLField
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, \
@@ -63,7 +64,7 @@ class Product(models.Model):
 
     title = models.CharField(max_length=255)
     slug = models.CharField(default="", max_length=255, blank=True)
-    description = models.TextField()
+    description = HTMLField()
     thumbnail = models.ImageField('products/', null=True, blank=True)
     source_url = models.CharField(max_length=5000, null=True, blank=True)
 
@@ -120,7 +121,7 @@ class HtmlTemplate(models.Model):
     source_file_size = models.CharField(max_length=50, null=True, blank=True)
     supported_browser = models.CharField(max_length=5000, null=True, blank=True)
     demo_site = models.CharField(max_length=5000, null=True, blank=True)
-    technical_instructions = models.TextField(default="")
+    technical_instructions = HTMLField(default="", null=True, blank=True)
 
     class Meta:
         db_table = "HtmlTemplate"
@@ -130,9 +131,9 @@ class DownloadSoftware(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
     source_file = models.FileField('software', null=True)
     source_file_size = models.CharField(max_length=50, null=True, blank=True)
-    in_scope = models.TextField(default="", null=True, blank=True)
-    out_scope = models.TextField(default="", null=True, blank=True)
-    technical_instructions = models.TextField(default="")
+    in_scope = HTMLField(default="", null=True, blank=True)
+    out_scope = HTMLField(default="", null=True, blank=True)
+    technical_instructions = HTMLField(default="", null=True, blank=True)
     technology = models.CharField(default="", null=True, blank=True, max_length=500)
     trail_version = models.FileField('software-trail', null=True)
 
@@ -151,10 +152,10 @@ class ApiService(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
     website_url = models.CharField(max_length=5000) # website, optional
     base_url = models.CharField(max_length=5000) # API hosted server domain path
-    in_scope = models.TextField(default="", null=True, blank=True)
-    out_scope = models.TextField(default="", null=True, blank=True)
+    in_scope = HTMLField(default="", null=True, blank=True)
+    out_scope = HTMLField(default="", null=True, blank=True)
     technology = models.CharField(default="", null=True, blank=True, max_length=500)
-    technical_instructions = models.TextField(default="")
+    technical_instructions = HTMLField(default="", null=True, blank=True)
 
     def save(self, *args, **kwargs):
         super(ApiService, self).save(*args, **kwargs)
@@ -165,7 +166,7 @@ class ApiService(models.Model):
 
 class Endpoints(models.Model):
     path = models.CharField(max_length=5000)
-    documentation = models.TextField()
+    documentation = HTMLField(default="", null=True, blank=True)
     service = models.ForeignKey(ApiService, on_delete=models.CASCADE)
     request_type = models.CharField(choices=(
         ('GET', 'GET'),

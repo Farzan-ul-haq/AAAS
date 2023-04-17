@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'channels',
     'django_celery_beat',
 
+    'tinymce',
+
 ]
 
 MIDDLEWARE = [

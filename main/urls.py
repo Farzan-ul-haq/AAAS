@@ -17,6 +17,8 @@ urlpatterns = [
 
     path('api/v1/', include('api.urls')),
 
+    path('tinymce/', include('tinymce.urls')),
+
     path(
         'reset_password/',
         auth_views.PasswordResetView.as_view(
