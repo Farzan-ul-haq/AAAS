@@ -77,6 +77,9 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
     marketed_on = models.ManyToManyField('MarketingPlatforms', blank=True)
 
+    impressions = models.IntegerField(default=0)
+    clicks = models.IntegerField(default=0)
+
     status = models.CharField(choices=(
         ('A', 'approved'),
         ('R', 'rejected'),
@@ -202,14 +205,14 @@ class ProductPackage(models.Model):
 class ClientPackages(models.Model):
     package = models.ForeignKey(ProductPackage, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    token = models.CharField(max_length=255, unique=True)
+    token = models.CharField(max_length=255)
 
     tiny_requests_left = models.IntegerField(default=0)
     normal_requests_left = models.IntegerField(default=0)
     last_request_used = models.DateTimeField(auto_now=True)
 
-    reactivation = models.IntegerField(0) # show how many times the package is reactivated.
-
+    reactivation = models.IntegerField(default=0) # show how many times the package is reactivated.
+    timestamp = models.DateField(auto_now_add=True, null=True)
 
     class Meta:
         db_table = "ClientPackages"
@@ -257,6 +260,19 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.type}|{self.coins}|{self.user.username}"
 
+    def save(self, *args, **kwargs):
+        user = self.user
+        if self.type == 0:
+            user.wallet += self.coins
+        else:
+            user.wallet -= self.coins
+        user.save()
+        Notification.objects.create(
+            user=self.user,
+            content=self.content,
+            redirect_url=""
+        )
+        return super().save(*args, **kwargs)
 
     class Meta:
         db_table = "Transaction"

@@ -79,7 +79,7 @@
                     <h5 class="text-center">Number Of Requests: {{package.normal_requests}}</h5>
                     <ul class="list-unstyled mt-3 mb-4">
                     </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-success">Buy Now</button>
+                    <a href="{% url 'buyer:buy-product' package.id %}" type="button" class="btn btn-lg btn-block btn-success">Buy Now</a>
                 </div>
                 </div>
             {% endfor %}

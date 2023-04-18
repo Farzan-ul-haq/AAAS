@@ -3,7 +3,9 @@
 {% block title %}YourSite{% endblock title %}
 
 {% block body %}
-<h1>BILLING</h1>
+<div class="container">
+    {% include 'components/transaction_logs.html' %}
+</div>
 {% endblock body %}
 
 {% block js %}

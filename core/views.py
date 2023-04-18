@@ -1,13 +1,13 @@
 import stripe
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from django.db.models import Q 
+from django.db.models import Q, F
 from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from core.models import Product, ApiService, Logo,  \
     HtmlTemplate, DownloadSoftware, ProductPackage, \
-    Feedback, Endpoints
+    Feedback, Endpoints, Transaction
 from core.utils import get_product_object, fulfill_order
 
 
@@ -32,8 +32,10 @@ def index(request): # landing page
 
 def explore(request): # this contains the list of products
     """This contains the list of products"""
+    products = Product.objects.all()
+    products.update(impressions=F('impressions') + 1)
     return render(request, 'core/explore.html', {
-        'products': Product.objects.all()
+        'products': products
     })
 
 
@@ -50,6 +52,9 @@ def search_product(request):
 
 def view_product(request, slug):
     product = get_object_or_404(Product, slug=slug)
+    product.clicks += 1
+    product.save()
+
     obj, template = get_product_object(product)
     package = ProductPackage.objects.filter(service=product)
     feedbacks = Feedback.objects.filter(package__service=product)
@@ -73,7 +78,10 @@ def view_product(request, slug):
 
 def billing(request): # this contains the list of products
     """This contains all the transaction history of user"""
-    return render(request, 'core/billing.html')
+    transactions = Transaction.objects.filter(user=request.user)
+    return render(request, 'core/billing.html', {
+        'transactions': transactions
+    })
 
 
 def notifications(request): # this contains the list of products
@@ -110,6 +118,9 @@ def stripe_webhook(request):
 
         line_items = session.line_items
         # Fulfill the purchase...
-        fulfill_order(session.metadata)
+        fulfill_order(
+            session.metadata, 
+            line_items['data'][0]['amount_total']/100
+        )
     # Passed signature verification
     return HttpResponse(status=200)

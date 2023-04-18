@@ -130,7 +130,8 @@ def marketing_platform_list(request, pk):
                     metadata={
                         "uid": request.user.id,
                         "dribble_product": dp.id,
-                        "platform": platform
+                        "platform": platform,
+                        'type': 'product_marketing'
                     },
                     mode='payment',
                     success_url=settings.DOMAIN_URL + reverse('seller:dashboard'),

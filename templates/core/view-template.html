@@ -31,7 +31,7 @@
             <div class="card p-3">
                 <div class="pricing text-center ">
                     <h2>{{package.0.price}} USD</h2>
-                    <button class="btn btn-success col-12">Buy Now</button>
+                    <a href="{% url 'buyer:buy-product' package.0.id %}" type="button" class="btn btn-lg btn-block btn-success">Buy Now</a>
                 </div>
             </div>
         </div>

@@ -3,18 +3,20 @@ from django.http import Http404
 
 from core.models import Product, DownloadSoftware, Logo, \
     HtmlTemplate, ProductPackage, ApiService, Endpoints, \
-    Brochure, DribbleProduct
+    Brochure, DribbleProduct, Transaction
 from seller.utils import create_product_obj, create_endpoint_obj, \
     create_package_obj
 
 
 def seller_dashboard(request):
-    # for i in Product.objects.filter(owner=request.user):
-    #     print(i.thumbnail.url)
+    products = Product.objects.filter(owner=request.user)
+    brochures = Brochure.objects.filter(product__owner=request.user).order_by('-id')
+    dribble_product = DribbleProduct.objects.filter(product__owner=request.user)
+
     return render(request, 'seller/dashboard.html', context={
-        'products': Product.objects.filter(owner=request.user),
-        'brochures': Brochure.objects.filter(product__owner=request.user).order_by('-id'),
-        'dribble_product': DribbleProduct.objects.filter(product__owner=request.user)
+        'products': products,
+        'brochures': brochures,
+        'dribble_product': dribble_product,
     })
 
 
