@@ -2,204 +2,628 @@
 {% load static %}
 {% block title %}{% endblock title %}
 
-{% block css %}
-
-
-
-{% endblock css %}
-
 {% block body %}
+<link rel="stylesheet" href="{% static 'css/create-product.css' %}">
+<main class="container mt-3">
+    <h1 style="text-align:center"><b>Post your API</b></h1>
+    <div class="form-progress-bar">
+        <!-- Overview - -->
+        <div class="form-step-item selected" data-step="1">
+            <div class="form-step">1</div>
+            <div class="form-step-title">Overview</div>
+        </div>
+        <span class="gt-sign">></span> 
 
-<div class="container top mt-5">
-    <h1 style="text-align:center;font-family:Lobster;"><b>Post your API</b></h1>
-    <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
-        <div class="row">
-            <div class="col-12">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input name='title' type="text" class="form-control" id="title" placeholder="Enter Logo Title">
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea name='description' class="form-control" id="richtext_field" rows="7"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="technical_instructions">Technical Instructions</label>
-                    <textarea name='technical_instructions' class="form-control" id="technical_instructions" rows="3"></textarea>
-                </div>
-                <div class="form-group row">
-                    <div class="col-6 form-group ">
-                        <label for="source_url">Source URL</label>
-                        <input name='source_url' type="url" class="form-control" id="source_url" placeholder="Source URL">
-                    </div>
-                    <div class="col-6 form-group">
-                        <label for="base_url">Base URL</label>
-                        <input name='base_url' type="url" class="form-control" id="base_url" placeholder="Source URL">
-                    </div>
-                    <div class="col-6 form-group">
-                        <label for="in_scope">In Scope</label>
-                        <textarea name='in_scope' class="form-control" id="in_scope" rows="10"></textarea>
-                    </div>
-                    <div class="col-6 form-group">
-                        <label for="out_scope">Out Scope</label>
-                        <textarea name='out_scope' class="form-control" id="out_scope" rows="10"></textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="thumbnail">Thumbnail</label>
-                    <input name='thumbnail' type="file" class="form-control-file" id="thumbnail" required>
-                </div>
-            </div>
-            <hr>
-            <div class="col-12">
-                <hr>
-            </div>
-            <div class="col-12 mt-3 ">
-                <div class="row">
-                    <div class="col-3 border">
-                        <h3><u>Endpoints</u><button style="right: 0;" type="button" class="btn btn-outline-info my-2 my-sm-0 mx-1" data-toggle="modal"
-                            data-target=".bd-example-modal-lg">
-                            <i class="fa fa-plus" aria-hidden="true"></i>
-                            </button></h3>
-                        <table class="table border">
-                            <thead>
-                            </thead>
-                            <tbody id="e_body">
-                            </tbody>
-                        </table>
-                        <div class="col-12">
-                            <div class="modal fade bd-example-modal-lg" id="e_modal" tabindex="-1" role="dialog"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Endpoint Details</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
+        <!-- Pricing -->
+        <div class="form-step-item" data-step="2">
+            <div class="form-step">2</div>
+            <div class="form-step-title">Pricing</div>
+        </div>
+        <span class="gt-sign">></span>
+        
+        <!-- Description -->
+        <div class="form-step-item" data-step="3">
+            <div class="form-step">3</div>
+            <div class="form-step-title">Description</div>
+        </div>
+        <span class="gt-sign">></span>
+        
+        <!-- Gallery -->
+        <div class="form-step-item" data-step="4">
+            <div class="form-step">4</div>
+            <div class="form-step-title">Gallery</div>
+        </div>
+        <span class="gt-sign">></span>
 
-                                        <div class="modal-body" id="endpoint_modal">
-                                            <div class="container-fluid top mt-5 px-5">
-                                                <div class="row">
+        <!-- Publish -->
+        <div class="form-step-item" data-step="5">
+            <div class="form-step">5</div>
+            <div class="form-step-title">Publish</div>
+        </div>
+    </div>
+    <div class="top mt-5">
+        <form id="updateForm" action="." method="post" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+                <div class="col-12">
+                    <!-- Step 01 - Overview -->
+                    <section class="form-step-inputs" data-triggered="true">
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input name='title' type="text" class="form-control" id="title" placeholder="Enter API Title">
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Tags</label>
+                            <div class="tags-container">
+                                <!-- Tags will be dynamically inserted here -->
+                                <input name='tag-input' class="tag-input" type="text" class="form-control">
+                            </div>
+                            <small class="form-text text-muted">Select minimum 3 tags</small>
+                        </div>
+                        <button class="btn btn-primary form-btn">Continue</button>
+                    </section>
 
-                                                    <div class="btn-group col-3 mb-3">
-                                                        <select class='form-control' id="endpoint_request_type">
-                                                            <option value="GET">GET</option>
-                                                            <option value="POST">POST</option>
-                                                            <option value="DELETE">DELETE</option>
-                                                            <option value="PUT">PUT</option>
-                                                            <option value="PATCH">PATCH</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-9">
-                                                        <input type="Endpoint URL" class="form-control" id="endpoint_url"
-                                                            aria-describedby="titleHelp" placeholder="Endpoint URL">
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <textarea class="form-control" id="endpoint_desc" rows="10"
-                                                            placeholder="Endpoint Description"></textarea>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <textarea class="form-control" id="endpoint_test_data" rows="10"
-                                                            placeholder="Endpoint Testing Data"></textarea>
-                                                    </div>
+                    <!-- Step 02 - Pricing -->
+                    <section class="form-step-inputs hidden" data-triggered="false">
+                        <div class="container">
+                            <button  type="button" disabled id='btn-analysis' class="btn btn-warning col-12 my-5"><strong> View Statistical Analysis</strong></button>
+                            <div class="card-deck mb-3 text-center">
+                            <div class="card mb-4 box-shadow">
+                                <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Basic</h4>
+                                </div>
+                                <div class="card-body">
+                                    <small class="text-muted">API Requests / Price</small>
+                                <h1 class="card-title pricing-card-title">
+                                    <input type="number" class="form-control col-4" name="package_requests">
+                                    <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
+                                    </small></h1>
+                                </div>
+                            </div>
+                            <div class="card mb-4 box-shadow">
+                                <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Standard</h4>
+                                </div>
+                                <div class="card-body">
+                                    <small class="text-muted">API Requests / Price</small>
+                                <h1 class="card-title pricing-card-title">
+                                    <input type="number" class="form-control col-4" name="package_requests">
+                                    <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
+                                    </small></h1>
+                                </div>
+                            </div>
+                            <div class="card mb-4 box-shadow">
+                                <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Premium</h4>
+                                </div>
+                                <div class="card-body">
+                                    <small class="text-muted">API Requests / Price</small>
+                                <h1 class="card-title pricing-card-title">
+                                    <input type="number" class="form-control col-4" name="package_requests">
+                                    <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
+                                    </small></h1>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary form-btn">Continue</button>
+                    </section>
 
+                    <!-- Step 03 - Description -->
+                    <section class="form-step-inputs hidden" data-triggered="false">
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea name='description' class="form-control richtext_field" id="exampleFormControlTextarea1" rows="7"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="technical_instructions">Technical Instructions</label>
+                            <textarea name='technical_instructions' class="form-control richtext_field" id="technical_instructions" rows="3"></textarea>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-6 form-group ">
+                                <label for="source_url">Source URL</label>
+                                <input name='source_url' type="url" class="form-control" id="source_url" placeholder="Source URL">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label for="base_url">Base URL</label>
+                                <input name='base_url' type="url" class="form-control" id="base_url" placeholder="Source URL">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label for="in_scope">In Scope</label>
+                                <textarea name='in_scope' class="form-control richtext_field" id="in_scope" rows="10"></textarea>
+                            </div>
+                            <div class="col-6 form-group">
+                                <label for="out_scope">Out Scope</label>
+                                <textarea name='out_scope' class="form-control richtext_field" id="out_scope" rows="10"></textarea>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary form-btn">Continue</button>
+                    </section>
+
+                    <!-- Step 04 - Gallery -->
+                    <section class="form-step-inputs hidden" data-triggered="false">
+                        <div class="form-group gallery">
+                            <label for="thumbnail">Thumbnails (up to 3)</label>
+                            <div class="thumbnails-container">
+                                <!-- Image 01 -->
+                                <div class="thumbnail active primary">
+                                    <div class="thumbnail-overlay"></div>
+                                    <div class="thumbnail-placeholder">
+                                            <img src="https://eustonclub.com.au/wp-content/plugins/slider/images/slider-icon.png" alt="image-icon">
+                                            <span>Drag & drop a photo or</span>
+                                            <button>Browse</button>
+                                    </div>
+                                    <div class="thumbnail-image">
+                                        <img src="" alt="thumbnail image">
+                                    </div>
+                                    <span class="primary-thumbnail">&#9733 Primary</span>
+                                    <button class="btn-delete-thumbnail">DELETE</button>
+                                </div>
+        
+                                <!-- Image 02 -->
+                                <div class="thumbnail">
+                                    <div class="thumbnail-overlay"></div>
+                                    <div class="thumbnail-placeholder">
+                                        <img src="https://eustonclub.com.au/wp-content/plugins/slider/images/slider-icon.png" alt="image-icon">
+                                        <span>Drag & drop a photo or</span>
+                                        <button>Browse</button>
+                                    </div>
+                                    <div class="thumbnail-image">
+                                        <img src="" alt="thumbnail image">
+                                    </div>
+                                    <span class="primary-thumbnail">&#9733 Primary</span>
+                                    <button class="btn-delete-thumbnail">DELETE</button>
+                                </div>
+        
+                                <!-- Image 03 -->
+                                <div class="thumbnail">
+                                    <div class="thumbnail-overlay"></div>
+                                    <div class="thumbnail-placeholder">
+                                        <img src="https://eustonclub.com.au/wp-content/plugins/slider/images/slider-icon.png" alt="image-icon">
+                                        <span>Drag & drop a photo or</span>
+                                        <button>Browse</button>
+                                    </div>
+                                    <div class="thumbnail-image">
+                                        <img src="" alt="thumbnail image">
+                                    </div>
+                                    <span class="primary-thumbnail">&#9733 Primary</span>
+                                    <button class="btn-delete-thumbnail">DELETE</button>
+                                </div>
+                                <input type="file" name="thumbnail-input" hidden>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary form-btn">Continue</button>
+                    </section>
+                    
+                    <!-- Step 05 - Publish -->
+                    <section class="form-step-inputs hidden" data-triggered="false">
+                        <div class="col-12 mt-3 ">
+                            <div class="row">
+                                <div class="col-3 border">
+                                    <h3><u>Endpoints</u><button style="right: 0;" type="button" class="btn btn-outline-info my-2 my-sm-0 mx-1" data-toggle="modal"
+                                        data-target=".bd-example-modal-lg">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button></h3>
+                                    <table class="table border">
+                                        <thead>
+                                        </thead>
+                                        <tbody id="e_body">
+                                        </tbody>
+                                    </table>
+                                    <div class="col-12">
+                                        <div class="modal fade bd-example-modal-lg" id="e_modal" tabindex="-1" role="dialog"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Endpoint Details</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+        
+                                                    <div class="modal-body" id="endpoint_modal">
+                                                        <div class="container-fluid top mt-5 px-5">
+                                                            <div class="row">
+        
+                                                                <div class="btn-group col-3 mb-3">
+                                                                    <select class='form-control' id="endpoint_request_type">
+                                                                        <option value="GET">GET</option>
+                                                                        <option value="POST">POST</option>
+                                                                        <option value="DELETE">DELETE</option>
+                                                                        <option value="PUT">PUT</option>
+                                                                        <option value="PATCH">PATCH</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-9">
+                                                                    <input type="Endpoint URL" class="form-control" id="endpoint_url"
+                                                                        aria-describedby="titleHelp" placeholder="Endpoint URL">
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <textarea class="form-control richtext_field" id="endpoint_desc" rows="10"
+                                                                        placeholder="Endpoint Description"></textarea>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <textarea class="form-control" id="endpoint_test_data" rows="10"
+                                                                        placeholder="Endpoint Testing Data"></textarea>
+                                                                </div>
+        
+                                                            </div>
+                                                        </div>
+                                                    </div>
+        
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="button" data-dismiss="endpoint_modal" class="btn btn-primary" onclick="create_endpoint()">Save</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" data-dismiss="endpoint_modal" class="btn btn-primary" onclick="create_endpoint()">Save</button>
-                                        </div>
+        
                                     </div>
                                 </div>
+        
+                                <div class="col-5 border">
+                                    <h3><u>Endpoint Documentation</u></h3>
+                                    <textarea class="form-control mb-2" id="e_desc_view" rows="10"
+                                        placeholder="Endpoint Documentation" disabled></textarea>
+                                </div>
+                                <div class="col-4 border">
+                                    <h3><u>Testing Data</u></h3>
+                                    <textarea class="form-control mb-2" id="e_test_data_view" rows="10"
+                                    placeholder="Endpoint Documentation" disabled></textarea>
+                                </div>
                             </div>
-
                         </div>
-                    </div>
-
-                    <div class="col-5 border">
-                        <h3><u>Endpoint Documentation</u></h3>
-                        <textarea class="form-control mb-2" id="e_desc_view" rows="10"
-                            placeholder="Endpoint Documentation" disabled></textarea>
-                    </div>
-                    <div class="col-4 border">
-                        <h3><u>Testing Data</u></h3>
-                        <textarea class="form-control mb-2" id="e_test_data_view" rows="10"
-                        placeholder="Endpoint Documentation" disabled></textarea>
-                    </div>
+                        <button class="btn btn-primary form-btn form-btn-submit">Submit</button>
+                    </section>
                 </div>
             </div>
-            <div class="col-12 mt-3">
-                <hr>
-            </div>
-
-            <br>
-            <br>
-
-            <div class="container">
-                <button  type="button" disabled id='btn-analysis' class="btn btn-warning col-12 my-5"><strong> View Statistical Analysis</strong></button>
-                <div class="card-deck mb-3 text-center">
-                  <div class="card mb-4 box-shadow">
-                    <div class="card-header">
-                      <h4 class="my-0 font-weight-normal">Basic</h4>
-                    </div>
-                    <div class="card-body">
-                        <small class="text-muted">API Requests / Price</small>
-                      <h1 class="card-title pricing-card-title">
-                        <input type="number" class="form-control col-4" name="package_requests">
-                        <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
-                        </small></h1>
-                    </div>
-                  </div>
-                  <div class="card mb-4 box-shadow">
-                    <div class="card-header">
-                      <h4 class="my-0 font-weight-normal">Standard</h4>
-                    </div>
-                    <div class="card-body">
-                        <small class="text-muted">API Requests / Price</small>
-                      <h1 class="card-title pricing-card-title">
-                        <input type="number" class="form-control col-4" name="package_requests">
-                        <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
-                        </small></h1>
-                    </div>
-                  </div>
-                  <div class="card mb-4 box-shadow">
-                    <div class="card-header">
-                      <h4 class="my-0 font-weight-normal">Premium</h4>
-                    </div>
-                    <div class="card-body">
-                        <small class="text-muted">API Requests / Price</small>
-                      <h1 class="card-title pricing-card-title">
-                        <input type="number" class="form-control col-4" name="package_requests">
-                        <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
-                        </small></h1>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            <br>
-            <div class="col-12">
-                <hr>
-            </div>
-
-            <div class="container">
-                <div class="row">
-                    <div class="col text-center">
-                        <button type="submit" class="btn btn-info btn-lg">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-</form>
-</div>
-
+    </form>
+    </div>
+</main>
 {% endblock body %}
 
 {% block js %}
+<script>
+    // Logic related to overall form, steps, progress bar
+    const mainForm = document.querySelector('#updateForm');
+    const forms = [...document.querySelectorAll('.form-step-inputs')];
+    const formSteps = [...document.querySelectorAll('.form-step-item')];
+    const continuteButtons = [...document.querySelectorAll('.form-btn')].slice(0, 4);
+    // const submitButton = document.querySelector('.form-btn-submit');
+
+    let currentStep = 1;
+
+    continuteButtons.forEach((continuteButton) => {
+        continuteButton.addEventListener('click', handleFormContinue);
+    });
+
+    formSteps.forEach((formStep) => {
+        formStep.addEventListener('click', handleStepSelection);
+    });
+
+    mainForm.addEventListener('submit', handleSubmit)
+
+    function handleStepSelection(event) {
+        const step = +event.currentTarget.dataset.step;
+        
+        displayStep(step);
+    }
+
+    function handleFormContinue(event) {
+        event.preventDefault();
+        const isFormValid = validateStep(currentStep - 1);
+
+        if (!isFormValid) {
+            alert('Please fill all the fields');
+            return;
+        }
+
+        currentStep+=1;
+        forms[currentStep-1].dataset.triggered = true;
+
+        displayStep(currentStep);
+    }
+
+    function displayStep(step) {
+        if (forms[step-1].dataset.triggered !== 'true') return;
+
+        removeAllSteps('completed');
+        removeAllSteps('selected');
+
+        currentStep = step;
+
+        formSteps.forEach((formStep) => {
+            // Do not update classList if user has not reached to this step yet
+            if (+formStep.dataset.step > currentStep) return;
+
+            // Add "selected" class only on the step user has clicked on
+            if (+formStep.dataset.step === step) {
+                formStep.classList.add('selected');
+                return;
+            }
+
+            // Add "completed" class to all the other steps
+            formStep.classList.add('completed');
+        })
+
+        formToDisplay(step);
+    }
+
+    function removeAllSteps(status) {
+        formSteps.forEach((formStep) => {
+            if (formStep.classList.contains(status)) {
+                formStep.classList.remove(status);
+            }
+        })
+    }
+
+    function formToDisplay(step) {
+        hideAllForms();
+        forms[step-1].classList.remove('hidden');
+    }
+
+    function hideAllForms() {
+        forms.forEach((form) => {
+            if (!form.classList.contains('hidden')) {
+                form.classList.add('hidden');
+            }
+        })
+    }
+
+    function validateStep(step) {
+        const inputs = [...forms[step].querySelectorAll('input')];
+        const textAreas = [...forms[step].querySelectorAll('textarea')];
+
+        for (let input of inputs) {
+            if (input.classList.contains('tag-input')) {
+                if (tags < 3) return false;
+                continue;
+            }
+            if (!input.value) return false;
+        }
+
+        for (let textArea of textAreas) {
+            if (!textArea.value) return true;
+        }
+
+        return true;
+    }
+
+    // Form Submission
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        if (currentStep < 5) return;
+        const isFormValid = validateStep(currentStep - 1);
+
+        if (!isFormValid) {
+            alert('Please fill all the fields');
+            return;
+        }
+
+        const _images = images.map((image, idx) => {
+            return {
+                data: image,
+                isPrimary: thumbnails[idx].classList.contains('primary'),
+            }
+        })
+
+        const _tags = [...tagsContainer.children].splice(0, tags).map((tag) => {
+            return [...tag.children][0].innerText;
+        });
+
+        const form = event.target;
+        const imagesInput = createNewInput('images', JSON.stringify(_images));
+        const tagsInput = createNewInput('tags', JSON.stringify(_tags));
+        form.appendChild(imagesInput);
+        form.appendChild(tagsInput);
+
+        form.submit();
+    }
+
+    function createNewInput(name, value) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+
+        return input;
+    }
+
+    // Logic related to tags
+    const tagsContainer = document.querySelector('.tags-container');
+    const tagInput = document.querySelector('.tag-input');
+    let tags = 0;
+
+    tagInput.value = '';
+
+    tagInput.addEventListener('input', updateInputWidth);
+    tagInput.addEventListener('keydown', addNewTag);
+    tagsContainer.addEventListener('click', selectTagInput);
+
+    // The width of input field will dynamically
+    // change based on the length of it's value
+    function updateInputWidth(event) {
+        tagInput.style.width = tagInput.value.length * 2 + "vw";
+    }
+
+    function selectTagInput(event) {
+        tagInput.select();
+    }
+
+    function addNewTag(event) {
+        // If key is other than "Enter" --> Return
+        // Enter key code --> 13
+        if (event.keyCode !== 13) return;
+
+        // preventing the form to trigerring the "Continue" button
+        event.preventDefault();
+
+        // If the input field is empty --> Return
+        if (!tagInput.value) return;
+
+        const newTag = createTag(tagInput.value);
+        newTag.addEventListener('click', deleteTag);
+        tagsContainer.insertBefore(newTag, tagInput);
+        tagInput.value = '';
+        tags+=1;
+    }
+
+    function createTag(text) {
+        const tag = document.createElement('div');
+        tag.classList.add('tag');
+        tag.innerHTML = `
+            <span class="tag-text">${text}</span>
+            <span>X</span>
+        `;
+
+        return tag;
+    }
+
+    function deleteTag(event) {
+        event.currentTarget.remove();
+        tags-=1;
+    }
+
+    // Logic relatead to image gallery
+    const imageInput = document.querySelector('[name="thumbnail-input"]');
+    const thumbnails = [...document.querySelectorAll('.thumbnail')];
+    const imageUploadButtons = [...document.querySelectorAll('.thumbnail > .thumbnail-placeholder > button')];
+    const imageDeleteButtons = [...document.querySelectorAll('.btn-delete-thumbnail')];
+    const imageEls = [...document.querySelectorAll('.thumbnail-image > img')];
+    const imageContainers = [...document.querySelectorAll('.thumbnail-image')];
+    const imageDropZones = [...document.querySelectorAll('.thumbnail-placeholder')]
+
+    const images = [];
+
+    imageContainers.forEach((imageContainer, idx) => 
+        imageContainer.addEventListener('click', setPrimaryImage(idx)))
+
+    imageUploadButtons.forEach((btn) =>
+        btn.addEventListener('click', handleSelectImage));
+
+    imageDeleteButtons.forEach((btn, idx) =>
+        btn.addEventListener('click', handleImageDelete(idx)));
+
+    imageInput.addEventListener('change', (event) => {
+        handleImageUpload(event.target.files[0]);
+    });
+
+    imageDropZones.forEach((imageDropZone) =>
+        imageDropZone.addEventListener('drop', (event) => {
+            event.preventDefault();
+            handleImageUpload(event.dataTransfer.files[0]);
+        }));
+
+    imageDropZones.forEach((imageDropZone) =>
+        imageDropZone.addEventListener('dragover', (event) =>
+            event.preventDefault()));
+
+    thumbnails.forEach((thumbnail) =>
+        thumbnail.addEventListener('drop', (event) =>
+            event.preventDefault()));
+
+    thumbnails.forEach((thumbnail) =>
+        thumbnail.addEventListener('dragover', (event) =>
+            event.preventDefault()));
+
+    function handleImageDelete(imageIdx) {
+        return (event) => {
+            event.preventDefault();
+            images.splice(imageIdx, 1);
+            updatePrimaryImage(imageIdx);
+            removeImageSrcs();
+            displayImages();
+            updateThumbnailStates();
+        };
+    }
+
+    function updatePrimaryImage(idx) {
+        if (thumbnails[idx].classList.contains('primary')) {
+            if (idx > 0) {
+                thumbnails[idx].classList.remove('primary');
+                thumbnails[idx-1].classList.add('primary');
+                return;
+            }
+            thumbnails[idx].classList.add('primary');
+            return;
+        }
+
+        const primaryIdx = thumbnails.findIndex((thumbnail) => thumbnail.classList.contains('primary'));
+
+        if (primaryIdx < 1) return;
+
+        thumbnails[primaryIdx].classList.remove('primary');
+        thumbnails[primaryIdx-1].classList.add('primary');
+    }
+
+    function setPrimaryImage(idx) {
+        return (event) => {
+            removeStates('primary', thumbnails);
+            thumbnails[idx].classList.add('primary');
+        };
+    }
+
+    function handleSelectImage(event) {
+        event.preventDefault();
+        imageInput.click();
+    }
+
+    function handleImageUpload(file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            images.push(reader.result);
+            updateThumbnailStates();
+            displayImages();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function displayImages() {
+        if (!images.length) return;
+
+        images.forEach((image, idx) => {
+            imageEls[idx].src = image;
+        })
+    }
+
+    function removeImageSrcs() {
+        imageEls.forEach((img) => {
+            img.src = '';
+        });
+    }
+
+    function updateThumbnailStates() {
+        removeStates('active', thumbnails);
+        removeStates('uploaded', thumbnails);
+
+        if (!images.length) {
+            thumbnails[0].classList.add('active');
+            return;
+        }
+
+        thumbnails.forEach((thumbnail, idx) => {
+            if (idx < images.length) {
+                thumbnail.classList.add('uploaded');
+                return;
+            }
+            if (idx === images.length) {
+                thumbnail.classList.add('active');
+                return;
+            }
+        })
+    }
+
+    function removeStates(state, elements) {
+        elements.forEach((element) => {
+            if (element.classList.contains(state)) {
+                element.classList.remove(state);
+            }
+        });
+    }
+</script>
+
 <script>
     $("#title").change(function(){
     if (!$('#title')[0].value) {
@@ -253,8 +677,6 @@ $("#btn-analysis").click(function(){
 </script>
 <script>
     // 1. create an empty list
-    
-
     function create_endpoint() {
         e_request_type = document.getElementById("endpoint_request_type")
         e_url = document.getElementById("endpoint_url")
@@ -265,7 +687,7 @@ $("#btn-analysis").click(function(){
         document.getElementById('e_body').innerHTML += 
         `<tr>
             <td onclick="show_endpoint_info(this)">
-                <span class="badge badge-primary">${e_request_type.value}</span>
+                <span class="badge badge-primary ${e_request_type.value}">${e_request_type.value}</span>
                 ${e_url.value}
                 <input type="text" name="endpoint_request_type" value="${e_request_type.value}" hidden>
                 <input type="text" name="endpoint_url" value="${e_url.value}" hidden>
@@ -274,6 +696,7 @@ $("#btn-analysis").click(function(){
             </td>
             <td style="text-align:end; padding-top:15px;"> <span><i class=" fa fa-solid fa-trash" onclick='delete_endpoint(this)'></i><span></td>
         </tr>`
+
         // 2. Append details into list
         e_url.value = ""
         e_desc.value = ""

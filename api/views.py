@@ -9,10 +9,7 @@ def statistical_analysis(request, product_type):
     products = Product.objects.filter(product_type=product_type)
     data = []
     for product in products:
-        if product.thumbnail:
-            thumbnail = product.thumbnail.url
-        else:
-            thumbnail = ""
+        thumbnail = product.thumbnail_metadata[0]["data"]
         if product_type == 'A': # api products
             data.append({
                 "id":product.id,

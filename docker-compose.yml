@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/django/prod/Dockerfile.web
-    container_name: web2
+    container_name: web
     ports:
       - "8000:80"
     hostname: web
@@ -36,7 +36,7 @@ services:
       - aaas_net
 
   postgres:
-    image: docker.io/bitnami/postgresql:14 
+    image: postgres:13.6-alpine3.15
     container_name: postgres2
     hostname: postgres
     volumes:
@@ -81,7 +81,6 @@ services:
         - aaas_net
       privileged: true
       shm_size: 2g
-
 
 networks:
   aaas_net:

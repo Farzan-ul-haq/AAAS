@@ -31,5 +31,5 @@ RUN mkdir -p /home/aaas/env/run/supervisor
 
 # RUN python3 manage.py migrate
 
-ENTRYPOINT ["/usr/bin/supervisord"]
+ENTRYPOINT ["/bin/bash","/home/aaas/docker/entrypoint.sh"]
 

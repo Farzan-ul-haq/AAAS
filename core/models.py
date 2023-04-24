@@ -65,7 +65,10 @@ class Product(models.Model):
     title = models.CharField(max_length=255)
     slug = models.CharField(default="", max_length=255, blank=True)
     description = HTMLField()
+    
     thumbnail = models.ImageField('products/', null=True, blank=True)
+    thumbnail_metadata = models.JSONField(null=True, blank=True)
+
     source_url = models.CharField(max_length=5000, null=True, blank=True)
 
     product_type = models.CharField(choices=PRODUCT_TYPES, default='A', max_length=1)
@@ -96,7 +99,7 @@ class Product(models.Model):
         return f"{self.product_type} | {self.owner.username} | {self.title}"
 
     def save(self, *args, **kwargs):
-        self.slug = self.title.replace(' ', '-').lower()
+        self.slug = f"{self.id}-{self.title.replace(' ', '-').lower()}"
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
