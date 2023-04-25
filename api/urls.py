@@ -7,5 +7,5 @@ from . import views
 app_name = 'api'
 
 urlpatterns = [
-    path('statistical-anaylsis/<str:product_type>/', views.statistical_analysis, name='statistical-analysis'),
+    path('statistical-anaylsis/<str:product_type>/<str:title>/', views.statistical_analysis, name='statistical-analysis'),
 ]

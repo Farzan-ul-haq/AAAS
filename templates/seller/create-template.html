@@ -573,7 +573,7 @@
         $('#modal-analysis').modal('show')
         $.ajax({
         type: 'GET',
-        url: "{% url 'api:statistical-analysis' 'H' %}",
+        url: `/api/v1/statistical-anaylsis/H/${$('#title').val()}/`,
         success: function(data) {
             for (product in data) {
                 console.log(data[product]);
