@@ -54,7 +54,7 @@ class Command(BaseCommand):
         )
         Logo.objects.create(
             product=logo1,
-            source_file=self.get_image_data(),
+            source_file=self.get_image_data("01.png"),
             source_file_size="0kb",
             width=10,
             height=10,
@@ -68,8 +68,8 @@ class Command(BaseCommand):
             description="<p>Test Description for Logo 2</p>",
             thumbnail_metadata=[
                 {
-                    'data': self.get_image_data(),
-                    'is_primary': False
+                    'data': self.get_image_data("01.png"),
+                    'is_primary': True
                 }
             ],
             source_url = "https://google.com",
@@ -83,7 +83,7 @@ class Command(BaseCommand):
         )
         Logo.objects.create(
             product=logo1,
-            source_file=self.get_image_data(),
+            source_file=self.get_image_data("01.png"),
             source_file_size="0kb",
             width=10,
             height=10,
