@@ -52,3 +52,6 @@ html {
     box-shadow: none !important;
     outline: 0px !important;
 }
+ul#id_mode li{
+    display: inline-block;
+    }

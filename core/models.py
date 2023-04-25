@@ -1,6 +1,7 @@
 import re
 import requests
 
+from tinymce.models import HTMLField
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, \
@@ -63,8 +64,11 @@ class Product(models.Model):
 
     title = models.CharField(max_length=255)
     slug = models.CharField(default="", max_length=255, blank=True)
-    description = models.TextField()
+    description = HTMLField()
+    
     thumbnail = models.ImageField('products/', null=True, blank=True)
+    thumbnail_metadata = models.JSONField(null=True, blank=True)
+
     source_url = models.CharField(max_length=5000, null=True, blank=True)
 
     product_type = models.CharField(choices=PRODUCT_TYPES, default='A', max_length=1)
@@ -75,6 +79,9 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     marketed_on = models.ManyToManyField('MarketingPlatforms', blank=True)
+
+    impressions = models.IntegerField(default=0)
+    clicks = models.IntegerField(default=0)
 
     status = models.CharField(choices=(
         ('A', 'approved'),
@@ -92,7 +99,7 @@ class Product(models.Model):
         return f"{self.product_type} | {self.owner.username} | {self.title}"
 
     def save(self, *args, **kwargs):
-        self.slug = self.title.replace(' ', '-').lower()
+        self.slug = f"{self.id}-{self.title.replace(' ', '-').lower()}"
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -120,7 +127,7 @@ class HtmlTemplate(models.Model):
     source_file_size = models.CharField(max_length=50, null=True, blank=True)
     supported_browser = models.CharField(max_length=5000, null=True, blank=True)
     demo_site = models.CharField(max_length=5000, null=True, blank=True)
-    technical_instructions = models.TextField(default="")
+    technical_instructions = HTMLField(default="", null=True, blank=True)
 
     class Meta:
         db_table = "HtmlTemplate"
@@ -130,9 +137,9 @@ class DownloadSoftware(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
     source_file = models.FileField('software', null=True)
     source_file_size = models.CharField(max_length=50, null=True, blank=True)
-    in_scope = models.TextField(default="", null=True, blank=True)
-    out_scope = models.TextField(default="", null=True, blank=True)
-    technical_instructions = models.TextField(default="")
+    in_scope = HTMLField(default="", null=True, blank=True)
+    out_scope = HTMLField(default="", null=True, blank=True)
+    technical_instructions = HTMLField(default="", null=True, blank=True)
     technology = models.CharField(default="", null=True, blank=True, max_length=500)
     trail_version = models.FileField('software-trail', null=True)
 
@@ -151,10 +158,10 @@ class ApiService(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
     website_url = models.CharField(max_length=5000) # website, optional
     base_url = models.CharField(max_length=5000) # API hosted server domain path
-    in_scope = models.TextField(default="", null=True, blank=True)
-    out_scope = models.TextField(default="", null=True, blank=True)
+    in_scope = HTMLField(default="", null=True, blank=True)
+    out_scope = HTMLField(default="", null=True, blank=True)
     technology = models.CharField(default="", null=True, blank=True, max_length=500)
-    technical_instructions = models.TextField(default="")
+    technical_instructions = HTMLField(default="", null=True, blank=True)
 
     def save(self, *args, **kwargs):
         super(ApiService, self).save(*args, **kwargs)
@@ -165,7 +172,7 @@ class ApiService(models.Model):
 
 class Endpoints(models.Model):
     path = models.CharField(max_length=5000)
-    documentation = models.TextField()
+    documentation = HTMLField(default="", null=True, blank=True)
     service = models.ForeignKey(ApiService, on_delete=models.CASCADE)
     request_type = models.CharField(choices=(
         ('GET', 'GET'),
@@ -201,14 +208,14 @@ class ProductPackage(models.Model):
 class ClientPackages(models.Model):
     package = models.ForeignKey(ProductPackage, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    token = models.CharField(max_length=255, unique=True)
+    token = models.CharField(max_length=255)
 
     tiny_requests_left = models.IntegerField(default=0)
     normal_requests_left = models.IntegerField(default=0)
     last_request_used = models.DateTimeField(auto_now=True)
 
-    reactivation = models.IntegerField(0) # show how many times the package is reactivated.
-
+    reactivation = models.IntegerField(default=0) # show how many times the package is reactivated.
+    timestamp = models.DateField(auto_now_add=True, null=True)
 
     class Meta:
         db_table = "ClientPackages"
@@ -256,6 +263,19 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.type}|{self.coins}|{self.user.username}"
 
+    def save(self, *args, **kwargs):
+        user = self.user
+        if self.type == 0:
+            user.wallet += self.coins
+        else:
+            user.wallet -= self.coins
+        user.save()
+        Notification.objects.create(
+            user=self.user,
+            content=self.content,
+            redirect_url=""
+        )
+        return super().save(*args, **kwargs)
 
     class Meta:
         db_table = "Transaction"

@@ -1,8 +1,12 @@
 from django.contrib import admin
+# from django.contrib.admin.options import ModelAdmin
 
 from core import models
 
-# Register your models here.
+# @admin.register(models.Product)
+# class ProductAdmin(ModelAdmin):
+#     body = admin.CharField(widget=admin.Textarea(attrs={'id': "richtext_field"}))
+
 
 admin.site.register(models.Product)
 admin.site.register(models.User)
@@ -19,3 +23,4 @@ admin.site.register(models.Brochure)
 admin.site.register(models.BrochureTemplates)
 admin.site.register(models.MarketingPlatforms)
 admin.site.register(models.DribbleProduct)
+admin.site.register(models.Transaction)

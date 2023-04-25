@@ -3,7 +3,25 @@
 {% block title %}YourSite{% endblock title %}
 
 {% block body %}
-<h1>CLIENT DASHBOARD</h1>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-8">
+            <a href="{% url 'core:explore' %}" class="btn btn-success btn-lg col-12 p-3"><h5>Explore Products</h5></a>
+            <div class="my-3 p-3 bg-white rounded box-shadow col-12">
+                <div class="row">
+                    <h3 class="border-bottom border-gray pb-2 mb-0 col-12">Products</h3>
+                    {% for bought_product in bought_products %}
+                        {% include 'components/product/buyer-dashboard-product-card.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-3 border">
+            <h5>Actvitiy Panel</h5>
+        </div>
+    </div>
+</div>
+,<br><br>
 {% endblock body %}
 
 {% block js %}

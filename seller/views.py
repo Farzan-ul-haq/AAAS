@@ -1,20 +1,24 @@
+import json
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 
 from core.models import Product, DownloadSoftware, Logo, \
     HtmlTemplate, ProductPackage, ApiService, Endpoints, \
-    Brochure, DribbleProduct
+    Brochure, DribbleProduct, Transaction
 from seller.utils import create_product_obj, create_endpoint_obj, \
     create_package_obj
 
 
 def seller_dashboard(request):
-    # for i in Product.objects.filter(owner=request.user):
-    #     print(i.thumbnail.url)
+    products = Product.objects.filter(owner=request.user)
+    brochures = Brochure.objects.filter(product__owner=request.user).order_by('-id')
+    dribble_product = DribbleProduct.objects.filter(product__owner=request.user)
+
     return render(request, 'seller/dashboard.html', context={
-        'products': Product.objects.filter(owner=request.user),
-        'brochures': Brochure.objects.filter(product__owner=request.user).order_by('-id'),
-        'dribble_product': DribbleProduct.objects.filter(product__owner=request.user)
+        'products': products,
+        'brochures': brochures,
+        'dribble_product': dribble_product,
     })
 
 
@@ -29,10 +33,11 @@ def create_logo(request):
             owner=request.user,
             title=request.POST.get('title'),
             description=request.POST.get('description'),
-            thumbnail=request.FILES.get('thumbnail'),
             product_type='L',
             source_url=request.POST.get('source_url'),
         )
+        p.thumbnail_metadata = json.loads(request.POST.get('images'))
+        p.save()
         create_package_obj(
             service=p,
             title='BASIC',
@@ -41,7 +46,7 @@ def create_logo(request):
         Logo.objects.create(
             product=p,
             source_file=request.FILES.get('downloadable_file'),
-            source_file_size=request.POST.get('source_file_size'),
+            source_file_size=request.POST.get('source_file_size', '0kb'),
             width=request.POST.get('width'),
             height=request.POST.get('height'),
             logo_type=request.POST.get('logo_type')
@@ -60,10 +65,11 @@ def create_template(request):
             owner=request.user,
             title=request.POST.get('title'),
             description=request.POST.get('description'),
-            thumbnail=request.FILES.get('thumbnail'),
             product_type='H',
-            source_url="https://google.com",
+            source_url=request.POST.get('source_url', ""),
         )
+        p.thumbnail_metadata = json.loads(request.POST.get('images'))
+        p.save()
         create_package_obj(
             service=p,
             title='BASIC',
@@ -91,10 +97,11 @@ def create_software(request):
             owner=request.user,
             title=request.POST.get('title'),
             description=request.POST.get('description'),
-            thumbnail=request.FILES.get('thumbnail'),
             product_type='D',
             source_url="https://google.com",
         )
+        p.thumbnail_metadata = json.loads(request.POST.get('images'))
+        p.save()
         create_package_obj(
             service=p,
             title='BASIC',
@@ -104,7 +111,7 @@ def create_software(request):
             product=p,
             source_file=request.FILES.get('downloadable_file'),
             trail_version=request.FILES.get('trail_version'),
-            source_file_size=request.POST.get('source_file_size'),
+            source_file_size=request.POST.get('source_file_size', '0kb'),
             in_scope=request.POST.get('in_scope'),
             out_scope=request.POST.get('out_scope'),
             supported_os=request.POST.get('supported_os'),

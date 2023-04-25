@@ -25,11 +25,14 @@ def register(request):
         form = createuserform(request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(request,'Account Created ')
+            messages.success(request,'Account Created...')
             dj_login(request, user)
-            return redirect('core:index')
-    context={'form':form}
-    return render(request,'accounts/register.html',context)
+            mode = 'buyer' if user.mode == 'B' else "seller"
+            return redirect(f"{mode}:dashboard")
+
+    return render(request,'accounts/register.html', {
+        'form': form
+    })
 
 
 def login(request):
@@ -41,7 +44,8 @@ def login(request):
 
         if user is not None:
             dj_login(request, user)
-            return redirect('core:index')
+            mode = 'buyer' if user.mode == 'B' else "seller"
+            return redirect(f"{mode}:dashboard")
         else:
             messages.info(request,'Username Or Password is incorrect')
     context={}

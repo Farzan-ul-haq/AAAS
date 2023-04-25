@@ -1,0 +1,25 @@
+<div class="my-3 p-3 bg-white rounded box-shadow col-12">
+    <div class="row">
+        <h3 class="border-bottom border-gray pb-2 mb-3 col-12">Balance: <strong>{{request.user.wallet}}$</strong></h3>
+        {% for transaction in transactions %}
+        <div class="col-12">
+            <div class="media m-3 text-muted">
+                <div class="media-body">
+                    <h4 class="mt-0"><strong class="d-block text-gray-dark">{{transaction.content}}</strong></h4>
+                    <p class="mt-0"></p>
+                    <p class="mt-0 text-dark"><strong>Timestamp: </strong>{{transaction.timestamp|timesince}}</p>
+                </div>
+                <div class="ml-5 align-self-center px-3">
+                    {% if transaction.type == 0 %}
+                    <h1>+ {{transaction.coins}} $</h1>
+                    {% elif transaction.type == 1 %}
+                    <h1>- {{transaction.coins}} $</h1>
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</div>

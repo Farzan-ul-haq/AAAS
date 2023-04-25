@@ -1,10 +1,10 @@
 
 <div class ="col-3 my-3 ">
     <div class="card">
-        {% if product.thumbnail %}
-        <img class="card-img-top p-2" src="{{product.thumbnail.url}}" style='max-height: 325px;' alt="Card image cap">
+        {% if product.thumbnail_metadata %}
+        <img class="card-img-top p-2" src="{{product.thumbnail_metadata.0.data}}" style='max-height: 325px;' alt="Card image cap">
         {% else %}
-        <img class="card-img-top p-2" src="" style='max-height: 325px;' alt="Image Not Found">
+        <img class="card-img-top p-2" src="{{product.thumbnail_metadata.0.data}}" style='max-height: 325px;' alt="Image Not Found">
         {% endif %}
         <div class="card-body col-12">
             <h6 class="card-title mb-3">

@@ -16,7 +16,10 @@
             </div> 
             <span class="badge badge-primary px-2 py-1">{{product.get_product_type_display}}</span>
             <h1>{{product.title.title}}</h1>
-            <img class='rounded w-100' src="{{product.thumbnail.url}}" alt="HEHE" w-50>
+            {% for thumbnail in product.thumbnail_metadata %}
+                <img class='rounded w-100' src="{{thumbnail.data}}" alt="HEHE" w-50 />
+                <hr>
+            {% endfor %}
             <hr>
             <p><span><strong>Source URL: </strong></span>{{product.source_url}}</p>
             <p><span><strong>Base URL: </strong></span>{{obj.base_url}}</p>
@@ -79,7 +82,7 @@
                     <h5 class="text-center">Number Of Requests: {{package.normal_requests}}</h5>
                     <ul class="list-unstyled mt-3 mb-4">
                     </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-success">Buy Now</button>
+                    <a href="{% url 'buyer:buy-product' package.id %}" type="button" class="btn btn-lg btn-block btn-success">Buy Now</a>
                 </div>
                 </div>
             {% endfor %}

@@ -51,7 +51,7 @@
           {% for dribble in dribble_product %}
             {% if dribble.product == product and dribble.status == 'A' %}
               <div class="media m-3 text-muted">
-                <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 32px; height: 32px;" src="{{dribble.product.thumbnail.url}}" data-holder-rendered="true">
+                <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 32px; height: 32px;" src="{{dribble.product.thumbnail_metadata.0.data}}" data-holder-rendered="true">
                 <div class="media-body">
                   <h5 class="mt-0"><strong class="d-block text-gray-dark">@{{market.title.title}}</strong></h5>
                   <li><strong class="text-gray-dark">{{product.title}}</strong>({{product.description|truncatechars:40}})</li>

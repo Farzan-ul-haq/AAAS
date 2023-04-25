@@ -1,4 +1,3 @@
-</html>
 <!doctype html>
 <html lang="en">
     {% load static %}
@@ -33,7 +32,11 @@
         <ul class="navbar-nav mr-auto">
           {% if request.user.is_authenticated %}
           <li class="nav-item">
+            {%if request.user.mode == 'S' %}
             <a class="nav-link" href="{% url 'seller:dashboard' %}">Dashboard</a>
+            {% elif request.user.mode == 'B' %}
+            <a class="nav-link" href="{% url 'buyer:dashboard' %}">Dashboard</a>
+            {% endif %}
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -45,6 +48,9 @@
               <a class="dropdown-item" href="{% url 'seller:create-template' %}">CREATE Template</a>
               <a class="dropdown-item" href="{% url 'seller:create-software' %}">CREATE Software</a>
             </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:billing' %}">Billing</a>
           </li>
           {% endif %}
           <!-- <li class="nav-item">
@@ -66,7 +72,7 @@
               <a class="dropdown-item" href="{{notification.redirect_url}}">{{notification.content}}
                 <br><span><small>{{notification.timestamp|timesince}}</small></span>
               </a>
-              <div class="dropdown-divider"></div>
+              <div clawss="dropdown-divider"></div>
               {% endfor %}
               <a class="dropdown-item" href="{% url 'core:notifications' %}">Show All Notifications</a>
             </div>
@@ -90,14 +96,14 @@
 
     {% block body %}
     {% endblock body %}
-    <footer class="page-footer font-small blue bg-dark">
-      <div class="footer-copyright text-center py-4 text-white">
-        © 2022 Copyright: All Rights Reserved.
-        <br>
-        <h4><a href="{% url 'core:project_plan' %}" class="text text-danger">PROJECT PLAN ONLY FOR DEVs</a></h4>
-        <h5 class="text-warning">Last Build: {{build|timesince}}</h5>
-        <h5 class="text-warning">DEBUG: {{debug}}</h5>
-      </div>
+    <footer class="page-footer font-small blue bg-dark">	
+      <div class="footer-copyright text-center py-4 text-white">	
+        © 2022 Copyright: All Rights Reserved.	
+        <br>	
+        <h4><a href="{% url 'core:project_plan' %}" class="text text-danger">PROJECT PLAN ONLY FOR DEVs</a></h4>	
+        <h5 class="text-warning">Last Build: {{build|timesince}}</h5>	
+        <h5 class="text-warning">DEBUG: {{debug}}</h5>	
+      </div>	
     </footer>
     <div class="modal fade" id="modal-analysis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog  modal-lg" role="document">
@@ -124,4 +130,21 @@ crossorigin="anonymous"></script>
   </body>
   {% block js %}
   {% endblock js %}
+  <script src="https://cdn.tiny.cloud/1/cjb79ugu717829e6z3xuubd4o8s98in5vsytb7lp9fnzfw8d/tinymce/6/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <script>
+
+    tinymce.init({
+      selector: '.richtext_field',
+      toolbar: 'undo redo | bold italic underline strikethrough | link | align | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+      tinycomments_mode: 'embedded',
+      tinycomments_author: 'Author name',
+      statusbar: false,
+      menubar: false,
+      mergetags_list: [
+        { value: 'First.Name', title: 'First Name' },
+        { value: 'Email', title: 'Email' },
+      ]
+    });
+    </script>
 </html>

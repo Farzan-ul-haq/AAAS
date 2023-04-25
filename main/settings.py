@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'channels',
     'django_celery_beat',
 
+    'tinymce',
+
 ]
 
 MIDDLEWARE = [
@@ -106,25 +108,33 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [ast.literal_eval(os.environ.get('REDIS_CHANNEL_BACKEND', ('127.0.0.1', 6379)))],
+try:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [ast.literal_eval(os.environ.get('REDIS_CHANNEL_BACKEND', ('127.0.0.1', 6379)))],
+            },
         },
-    },
-}
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.environ.get('REDIS_CACHE_URL', 'redis://127.0.0.1:6379/1'),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        },
-        "KEY_PREFIX": "example"
     }
-}
+except Exception as e:
+    print(e)
+    print('CHANNEL LAYER NOT STARTED')
+
+try:
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": os.environ.get('REDIS_CACHE_URL', 'redis://127.0.0.1:6379/1'),
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient"
+            },
+            "KEY_PREFIX": "example"
+        }
+    }
+except Exception as e:
+    print(e)
+    print('CACHE NOT STARTED')
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

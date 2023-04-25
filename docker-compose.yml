@@ -1,15 +1,10 @@
 version: "3.7"
 services:
   web:
-    image: ${CI_REGISTRY_IMAGE:-aaas}/${IMAGE:-web}:${SANITIZED_BRANCH:-latest}
     build:
       context: .
       dockerfile: ./docker/django/prod/Dockerfile.web
-      args:
-        UID: ${UID:-10600}
-        GID: ${GID:-10600}
-        UNAME: ${UNAME:-aaas}
-    container_name: web2
+    container_name: web
     ports:
       - "8000:80"
     hostname: web
@@ -25,14 +20,9 @@ services:
       - aaas_net
 
   celery:
-    image: ${CI_REGISTRY_IMAGE:-aaas}/${IMAGE:-celery}:${SANITIZED_BRANCH:-latest}
     build:
       context: .
       dockerfile: ./docker/django/prod/Dockerfile.celery
-      args:
-        UID: ${UID:-10600}
-        GID: ${GID:-10600}
-        UNAME: ${UNAME:-aaas}
     container_name: celery2
     hostname: web
     volumes:
@@ -46,7 +36,7 @@ services:
       - aaas_net
 
   postgres:
-    image: docker.io/bitnami/postgresql:14 
+    image: postgres:13.6-alpine3.15
     container_name: postgres2
     hostname: postgres
     volumes:
@@ -57,7 +47,6 @@ services:
       - aaas_net
 
   redis:
-    image: ${CI_REGISTRY_IMAGE:-aaas}/${IMAGE:-redis}:${SANITIZED_BRANCH:-latest}
     build:
       context: .
       dockerfile: ./docker/redis/Dockerfile
@@ -69,14 +58,9 @@ services:
       - aaas_net
   
   flask:
-    image: ${CI_REGISTRY_IMAGE:-aaas}/${IMAGE:-flask}:${SANITIZED_BRANCH:-latest}
     build:
       context: .
       dockerfile: ./docker/flask/Dockerfile
-      args:
-        UID: ${UID:-10600}
-        GID: ${GID:-10600}
-        UNAME: ${UNAME:-aaas}
     container_name: flask2
     ports:
       - "5000:5000"
@@ -97,7 +81,6 @@ services:
         - aaas_net
       privileged: true
       shm_size: 2g
-
 
 networks:
   aaas_net:
