@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 
 from django.conf import settings
 from seller.utils import create_package_obj
-from core.models import Product, User, Logo
+from core.models import Product, User, Logo, MarketingPlatforms
 
 REGEX_QUERY = r'"viewsCount":\s*([^"]+)'
 
@@ -21,6 +21,19 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         Product.objects.all().delete()
+
+        MarketingPlatforms.objects.create(
+            title="Dribble",
+            description="",
+            supported_products="Logo, Web Template, Software",
+            price=0
+        )
+        MarketingPlatforms.objects.create(
+            title="Dribble-PRO",
+            description="",
+            supported_products="Logo, Web Template, Software",
+            price=0
+        )
 
         user = User.objects.first()
         # logo Product
