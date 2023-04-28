@@ -4,11 +4,19 @@
         <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{bought_product.package.service.thumbnail_metadata.0.data}}" data-holder-rendered="true">
         <div class="media-body">
             <h5 class="mt-0"><strong class="d-block text-gray-dark">{{bought_product.package.service.title}}</strong></h5>
-            <p class="mt-0">{{bought_product.package.service.description}}</p>
+            <p class="mt-0">{{bought_product.package.service.description|safe}}</p>
             <p class="mt-0"><strong>Purchased: </strong>{{bought_product.timestamp}}</p>
+            {% if bought_product.package.service.product_type == 'A' %}
+            <p class="mt-0"><strong>Token: </strong>{{bought_product.token}}</p>
+            <p class="mt-0"><strong>Requests Left: </strong>{{bought_product.normal_requests_left}}</p>
+            {% endif %}
         </div>
         <div class="ml-5 align-self-center px-3">
+            {% if bought_product.package.service.product_type == 'A' %}
+            <button type="button" class="btn btn-warning font-weight-bold"><b>Reactivate<br>Package</b></button>
+            {% else %}
             <button type="button" class="btn btn-warning font-weight-bold"><b>DOWNLOAD<br>PRODUCT</b></button>
+            {% endif %}
         </div>
     </div>
 </div>

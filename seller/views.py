@@ -129,6 +129,7 @@ def create_api(request):
             'seller/create-api.html'
             )
     if request.method == 'POST':
+        print(request.POST)
         p = create_product_obj( # create product
             owner=request.user,
             title=request.POST.get('title'),
@@ -158,7 +159,7 @@ def create_api(request):
                 service=apiservice,
                 path=request.POST.getlist('endpoint_url')[i],
                 request_type=request.POST.getlist('endpoint_request_type')[i],
-                request_level='tiny',
+                request_level='normal',
                 documentation=request.POST.getlist('enpoint_desc')[i],
                 test_data=request.POST.getlist('enpoint_test_data')[i],
             )
