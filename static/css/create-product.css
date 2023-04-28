@@ -256,7 +256,8 @@ main {
 
 /* Publish section */
 .btn-upload-file,
-.btn-upload-trail-file {
+.btn-upload-trail-file,
+.create-endpoint-btn  {
     color: #1DBF73;
     background-color: transparent;
     border: 1px solid #1DBF73;
@@ -267,7 +268,8 @@ main {
 }
 
 .btn-upload-file:hover,
-.btn-upload-trail-file:hover {
+.btn-upload-trail-file:hover,
+.create-endpoint-btn  {
     color: white;
     background-color: #1DBF73;
 }

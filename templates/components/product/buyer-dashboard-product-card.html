@@ -13,7 +13,7 @@
         </div>
         <div class="ml-5 align-self-center px-3">
             {% if bought_product.package.service.product_type == 'A' %}
-            <button type="button" class="btn btn-warning font-weight-bold"><b>Reactivate<br>Package</b></button>
+            <a href="{% url 'buyer:buy-product' bought_product.package.id %}" type="button" class="btn btn-warning font-weight-bold"><b>Reactivate<br>Package</b></a>
             {% else %}
             <button type="button" class="btn btn-warning font-weight-bold"><b>DOWNLOAD<br>PRODUCT</b></button>
             {% endif %}

@@ -11,15 +11,17 @@ def complete_product_purchase(data):
     seller = product_package.service.owner
     
     if product_package.service.product_type == 'A':
-        cp = ClientPackages.objects.create(
+        cp = ClientPackages.objects.get_or_create(
             package=product_package,
             user=buyer,
-            normal_requests_left=product_package.normal_requests
         )
-        cp.token = generate_buyer_token(
-            cp,
-            buyer,
-        )
+        cp = cp[0]
+        print(cp)
+        cp.normal_requests_left = cp.normal_requests_left + product_package.normal_requests
+        cp.token=generate_buyer_token(
+                cp,
+                buyer,
+            )
         cp.save()
     else:
         ClientPackages.objects.create(

@@ -2,8 +2,12 @@ import psycopg2, os, requests, json, io
 from time import time
 
 from flask import Flask, request
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
+limiter = Limiter(get_remote_address, app=app)
+
 
 conn = psycopg2.connect(
     database=os.environ.get("POSTGRES_NAME", "postgres"), 
@@ -15,12 +19,32 @@ conn = psycopg2.connect(
 
 print('DB CONNECTED')
 
+BLOCKED_URL_LISTS = ['favicon.ico',]
+
 @app.route('/')
 def hello():
     return 'Flask(WEB PROXY) Server is Running....'
 
+
+@app.route('/test/<path:endpoint_path>')
+@limiter.limit("1 per minute")
+def test_api_requests(endpoint_path):
+    return endpoint_path
+
+
 @app.route('/<path:endpoint_path>')
-def endpoint(endpoint_path):
+def handle_api_requests(endpoint_path):
+    """
+    CHECKED BLOCKED URLS FIRST
+    CHECK AAAS-TOKEN EXISTS
+    DB QUERY TO FETCH BASE_URL & NO_OF_REQUESTS_LEFT
+    CHECK IF REQUESTS AVAILABLE
+    EXECUTE THE REQUEST TO SELLER SERVER
+    DB QUERY TO DECREASE NUMBER OF REQUEST
+    RETURN SELLER SERVER RESPONSE
+    """
+    if endpoint_path in BLOCKED_URL_LISTS:
+        return "BLOCKED URL"
     t = time()
     token = request.headers.get('aaas-token', "")
     if token:
@@ -37,24 +61,30 @@ def endpoint(endpoint_path):
             INNER JOIN 
                 "Product" P ON(PP.service_id=P.id) 
             INNER JOIN 
-                "ApiService" APIS ON(P.id=APIS.product_id);
+                "ApiService" APIS ON(P.id=APIS.product_id)
+            WHERE token = '{token}';
         """)
         try:
             data = c.fetchall()[0]
             base_url = data[8]
-
         except Exception as e:
             print(e)
-            return f"INVALID TOKEN"
-        print(time() - t)
-        r = requests.get(
-            base_url+endpoint_path,
-        )
-        # print(json.loads(r.content))
-        headers = dict(r.headers)
-        headers.pop("Transfer-Encoding")
-        print(headers)
-        return json.loads(r.content), r.status_code
+            return f"INVALID AAAS-TOKEN"
+        print(data)
+        if data[2] > 0:
+            r = requests.get(
+                base_url+endpoint_path,
+            )
+            c.execute(f"""
+            UPDATE "ClientPackages"
+            SET normal_requests_left = {data[2]-1}
+            WHERE token = '{token}';
+            """)
+            conn.commit()
+            print(time() - t)
+            return (json.loads(r.content), r.status_code)
+        else:
+            return f"No Requests Available. Please Reactivate the package."
     else:
         return f"NO TOKEN FOUND"
 

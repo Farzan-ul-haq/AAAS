@@ -94,6 +94,10 @@ function validateStep(step) {
             if (tags < 3) return false;
             continue;
         }
+        if (input.getAttribute('name') === 'thumbnail-input') {
+            if (images.length < 1) return false;
+            continue;
+       }
         if (!input.value) return false;
     }
 
@@ -109,12 +113,12 @@ function handleSubmit(event) {
     event.preventDefault();
 
     if (currentStep < 5) return;
-    const isFormValid = validateStep(currentStep - 1);
+    // const isFormValid = validateStep(currentStep - 1);
 
-    if (!isFormValid) {
-        alert('Please fill all the fields');
-        return;
-    }
+    // if (!isFormValid) {
+    //     alert('Please fill all the fields');
+    //     return;
+    // }
 
     const _images = images.map((image, idx) => {
         return {
