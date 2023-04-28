@@ -8,6 +8,7 @@ from core.models import Product, ProductPackage
 
 
 def statistical_analysis(request, product_type, title=""):
+    print(title)
     products = Product.objects.filter(
         product_type=product_type
     ).annotate(
@@ -19,7 +20,6 @@ def statistical_analysis(request, product_type, title=""):
 
     data = []
     for product in products:
-        thumbnail = product.thumbnail_metadata[0]["data"]
         if product_type == 'A': # api products
             data.append({
                 "id":product.id,
@@ -42,4 +42,5 @@ def statistical_analysis(request, product_type, title=""):
                 "review_count": product.review_count,
                 "price": ProductPackage.objects.filter(service=product).first().price
             })
+    print(data)
     return JsonResponse(data, safe=False)
