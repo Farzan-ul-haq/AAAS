@@ -8,4 +8,5 @@ app_name = 'buyer'
 urlpatterns = [
     path('client_dashboard/', views.client_dashboard, name='dashboard'),
     path('buy_product/<int:price_package_id>/', views.buy_product, name='buy-product'),
+    path('feedback/<int:bought_package_id>/', views.give_feedback, name='give-feedback'),
 ]

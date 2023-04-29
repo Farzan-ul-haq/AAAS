@@ -57,7 +57,7 @@ def view_product(request, slug):
 
     obj, template = get_product_object(product)
     package = ProductPackage.objects.filter(service=product)
-    feedbacks = Feedback.objects.filter(package__service=product)
+    feedbacks = Feedback.objects.filter(package__service=product).order_by('-id')
     if product.product_type == 'A':
         endpoints = Endpoints.objects.filter(service=obj)
         return render(request, template, {
@@ -79,9 +79,15 @@ def view_user(request, username):
     user = User.objects.get(username=username)
     print(user)
     products = Product.objects.filter(owner__username=username)
+    product_ids = products.values_list('id', flat=True)
+    feedbacks = Feedback.objects.filter(
+        package__service__id__in=product_ids
+    ).order_by('-id')
+
     return render(request, "core/view-user.html", {
         "user": user,
-        "products": products
+        "products": products,
+        "feedbacks": feedbacks
     })
 
 def billing(request): # this contains the list of products

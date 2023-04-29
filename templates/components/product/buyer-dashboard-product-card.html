@@ -1,5 +1,4 @@
 <div class="col-12">
-
     <div class="media m-3 text-muted">
         <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{bought_product.package.service.thumbnail_metadata.0.data}}" data-holder-rendered="true">
         <div class="media-body">
@@ -16,6 +15,10 @@
             <a href="{% url 'buyer:buy-product' bought_product.package.id %}" type="button" class="btn btn-warning font-weight-bold"><b>Reactivate<br>Package</b></a>
             {% else %}
             <button type="button" class="btn btn-warning font-weight-bold"><b>DOWNLOAD<br>PRODUCT</b></button>
+            {% endif %}
+            <br><br>
+            {% if not bought_product.is_feedback_given %}
+            <a href="{% url 'buyer:give-feedback' bought_product.id %}" type="button" class="btn btn-dark font-weight-bold"><b>PROVIDE<br>FEEDBACK</b></a>
             {% endif %}
         </div>
     </div>

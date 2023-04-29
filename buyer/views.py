@@ -5,7 +5,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
 
-from core.models import ProductPackage, ClientPackages, Transaction
+from core.models import ProductPackage, ClientPackages, Transaction, \
+    Feedback
 # Create your views here.
 
 def client_dashboard(request):
@@ -48,3 +49,38 @@ def buy_product(request, price_package_id):
         ),
     )
     return redirect(checkout_session.url)
+
+
+def give_feedback(request, bought_package_id):
+    client_package = get_object_or_404(
+        ClientPackages, 
+        pk=bought_package_id, 
+        is_feedback_given=False,
+        user=request.user
+    )
+
+    if request.method == 'GET':
+        return render(request, 'buyer/give-feedback.html', {
+            "client_package": client_package
+        })
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        rating = int(request.POST.get('rate'))
+        f = Feedback.objects.create(
+            user=request.user,
+            package=client_package.package,
+            content=content,
+            rating=rating
+        )
+
+        client_package.is_feedback_given = True
+        client_package.save()
+
+        product = client_package.package.service
+        product.review_count = product.review_count + 1
+        product.review_average = (
+            product.review_average + f.rating
+        )/product.review_count
+        product.save()
+        
+        return redirect('buyer:dashboard')

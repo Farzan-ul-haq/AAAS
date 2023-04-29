@@ -60,6 +60,7 @@ class Tag(models.Model):
     class Meta:
         db_table = "Tag"
 
+
 class Product(models.Model):
     owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
@@ -76,6 +77,7 @@ class Product(models.Model):
 
     last_approval_request_date = models.DateTimeField(auto_now=True)
     review_count = models.IntegerField(default=0)
+    review_average = models.FloatField(default=0)
 
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
@@ -105,6 +107,7 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return "/{self.user.username}/{self.slug}/"
+
 
 class Logo(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
@@ -152,7 +155,6 @@ class DownloadSoftware(models.Model):
 
     class Meta:
         db_table = "DownloadSoftware"
-
 
 
 class ApiService(models.Model):
@@ -217,6 +219,7 @@ class ClientPackages(models.Model):
 
     reactivation = models.IntegerField(default=0) # show how many times the package is reactivated.
     timestamp = models.DateField(auto_now_add=True, null=True)
+    is_feedback_given = models.BooleanField(default=False)
 
     class Meta:
         db_table = "ClientPackages"

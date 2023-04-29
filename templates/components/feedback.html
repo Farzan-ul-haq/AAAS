@@ -1,5 +1,5 @@
 {% for feedback in feedbacks %}
-    <div class="card p-3 mb-3">
+    <div class="card p-3 mb-3 col-12" style="border: none;">
         <div class="media">
             <img class="rounded-circle mr-3" src="https://images.unsplash.com/photo-1544967082-d9d25d867d66?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" style="width:30px; height:30px;" alt=""></h6>
             <div class="media-body">
@@ -8,5 +8,6 @@
                     <strong class="text-muted"><span class="fa fa-star checked float-start p-2">({{feedback.rating}})</span>, {{feedback.timestamp|timesince}}</strong>
             </div>
         </div>
+        <hr>
     </div>
 {% endfor %}
