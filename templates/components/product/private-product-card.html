@@ -23,8 +23,10 @@
             <a href="{% url 'seller:update-logo' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
             <a href="{% url 'market:brochure-detail' product.id 3 %}" class="badge badge-success float-start p-2 col-12 mt-2">DESIGN BROCHURE</a>
             {% elif product.product_type == 'H'%}
+            <a href="{% url 'seller:update-template' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
             <a href="{% url 'market:brochure-detail' product.id 2 %}" class="badge badge-success float-start p-2 col-12 mt-2">DESIGN BROCHURE</a>
             {% elif product.product_type == 'D' %}
+            <a href="{% url 'seller:update-software' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
             <a href="{% url 'market:brochure-detail' product.id 1 %}" class="badge badge-success float-start p-2 col-12 mt-2">DESIGN BROCHURE</a>
             {% endif %}
         </div>

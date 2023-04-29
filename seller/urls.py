@@ -14,8 +14,8 @@ urlpatterns = [
     path('product/create/api/', views.create_api, name='create-api'),
 
     path('product/update/<int:product_id>/logo/', views.update_logo, name='update-logo'),
-    path('product/update/<int:product_id>/template/', views.create_template, name='update-template'),
-    path('product/update/<int:product_id>/software/', views.create_software, name='update-software'),
+    path('product/update/<int:product_id>/template/', views.update_template, name='update-template'),
+    path('product/update/<int:product_id>/software/', views.update_software, name='update-software'),
     path('product/update/<int:product_id>/api/', views.create_api, name='update-api'),
 
     path('product/delete/<int:product_id>/', views.delete_product, name='delete-product'),

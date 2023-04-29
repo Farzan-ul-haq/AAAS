@@ -179,10 +179,10 @@
                     <div class="progress-bar">
                         <div class="progress-bar-inner"></div>
                     </div>
-                    {% if product.source_file %}
-                    <small id="downloadable_file" class="form-text text-muted filename">Upload download file.</small>
-                    {% else %}
+                    {% if obj.source_file %}
                     <small id="downloadable_file" class="form-text text-muted filename">{{obj.source_file}}</small>
+                    {% else %}
+                    <small id="downloadable_file" class="form-text text-muted filename">Upload download file.</small>
                     {% endif %}
                 </div>
                 <div class="form-group">
