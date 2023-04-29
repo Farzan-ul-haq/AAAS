@@ -3,12 +3,24 @@
 {% block title %}YourSite{% endblock title %}
 
 {% block body %}
-<h1>User Profile Page</h1>
-
 <div class="container mt-5">
-<h2>want to change your password ?</h2>
-	<a href="{% url 'change_password' %}"><button type="text" class="btn btn-primary">Update Password</button></a>
+	<div class="col-12 mt-3">
+		<form method="POST">
+			<div class="form-group">
+			  <label for="exampleInputEmail1"><strong>Want to change your password? </strong></label>
+			  <a href="{% url 'change_password' %}" class="btn btn-primary">Update Password</a>
+			</div>
+			<hr>
+			<div class="form-group">
+			  <label for="exampleInputEmail1"><strong>Email address</strong></label>
+			  <input disabled type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value="{{request.user.email}}">
+			  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+			</div>
+			<button disabled type="submit" class="btn btn-primary">Submit</button>
+		  </form>
+	</div>
 </div>
+
 <br>
 {% endblock body %}
 

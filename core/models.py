@@ -28,6 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     ), default='S', max_length=1)
 
     objects = UserManager()
+    joining_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     USERNAME_FIELD = 'username'
 

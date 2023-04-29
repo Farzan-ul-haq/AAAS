@@ -137,6 +137,8 @@ def create_api(request):
             product_type='A',
             source_url=request.POST.get('source_url'),
         )
+        p.thumbnail_metadata = json.loads(request.POST.get('images'))
+        p.save()
         for i in range(len(request.POST.getlist('package_requests'))):
             create_package_obj(
                 service=p,
@@ -275,3 +277,22 @@ def update_software(request, product_id):
         obj.save()
 
         return redirect('seller:dashboard')
+
+
+def update_api(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    obj, template = get_product_object(product)
+    packages = ProductPackage.objects.filter(service=product)
+    endpoints = Endpoints.objects.filter(service=obj)
+    if product.owner != request.user:
+        raise Http404
+    if request.method == 'GET':
+        return render(request, 'seller/create-api.html', {
+            'product': product,
+            'obj': obj,
+            'packages': packages,
+            'endpoints': endpoints
+        })
+    if request.method == "POST":
+        print(request.FILES)
+        product = update_product(product, request)

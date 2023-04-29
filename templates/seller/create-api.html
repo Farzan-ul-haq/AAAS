@@ -52,7 +52,7 @@
                     <section class="form-step-inputs" data-triggered="true">
                         <div class="form-group">
                             <label for="title">Title</label>
-                            <input name='title' type="text" class="form-control" id="title" placeholder="Enter API Title">
+                            <input name='title' type="text" class="form-control" id="title" placeholder="Enter API Title" value="{{product.title}}">
                         </div>
                         <div class="form-group">
                             <label for="title">Tags</label>
@@ -77,8 +77,8 @@
                                 <div class="card-body">
                                     <small class="text-muted">API Requests / Price</small>
                                 <h1 class="card-title pricing-card-title">
-                                    <input type="number" class="form-control col-4" name="package_requests">
-                                    <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
+                                    <input type="number" class="form-control col-4" name="package_requests"  value="{{packages.0.normal_requests}}">
+                                    <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing"  value="{{packages.0.price}}">
                                     </small></h1>
                                 </div>
                             </div>
@@ -89,8 +89,8 @@
                                 <div class="card-body">
                                     <small class="text-muted">API Requests / Price</small>
                                 <h1 class="card-title pricing-card-title">
-                                    <input type="number" class="form-control col-4" name="package_requests">
-                                    <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
+                                    <input type="number" class="form-control col-4" name="package_requests" value="{{packages.1.normal_requests}}">
+                                    <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing" value="{{packages.1.price}}">
                                     </small></h1>
                                 </div>
                             </div>
@@ -101,8 +101,8 @@
                                 <div class="card-body">
                                     <small class="text-muted">API Requests / Price</small>
                                 <h1 class="card-title pricing-card-title">
-                                    <input type="number" class="form-control col-4" name="package_requests">
-                                    <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing">
+                                    <input type="number" class="form-control col-4" name="package_requests" value="{{packages.2.normal_requests}}">
+                                    <small class="text-muted">/ <input type="number" class="form-control col-4" name="package_pricing" value="{{packages.2.price}}">
                                     </small></h1>
                                 </div>
                             </div>
@@ -115,28 +115,28 @@
                     <section class="form-step-inputs hidden" data-triggered="false">
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea name='description' class="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
+                            <textarea name='description' class="form-control richtext_field" id="exampleFormControlTextarea1" rows="7">{{product.description}}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="technical_instructions">Technical Instructions</label>
-                            <textarea name='technical_instructions' class="form-control" id="technical_instructions" rows="3"></textarea>
+                            <textarea name='technical_instructions' class="form-control richtext_field" id="technical_instructions" rows="3">{{obj.technical_instructions}}</textarea>
                         </div>
                         <div class="form-group row">
                             <div class="col-6 form-group ">
                                 <label for="source_url">Source URL</label>
-                                <input name='source_url' type="url" class="form-control" id="source_url" placeholder="Source URL">
+                                <input name='source_url' type="url" class="form-control" id="source_url" placeholder="Source URL" value="{{product.source_url}}">
                             </div>
                             <div class="col-6 form-group">
                                 <label for="base_url">Base URL</label>
-                                <input name='base_url' type="url" class="form-control" id="base_url" placeholder="Source URL">
+                                <input name='base_url' type="url" class="form-control" id="base_url" placeholder="Source URL" value="{{obj.base_url}}">
                             </div>
                             <div class="col-6 form-group">
                                 <label for="in_scope">In Scope</label>
-                                <textarea name='in_scope' class="form-control" id="in_scope" rows="10"></textarea>
+                                <textarea name='in_scope' class="form-control richtext_field" id="in_scope" rows="10">{{obj.in_scope}}</textarea>
                             </div>
                             <div class="col-6 form-group">
                                 <label for="out_scope">Out Scope</label>
-                                <textarea name='out_scope' class="form-control" id="out_scope" rows="10"></textarea>
+                                <textarea name='out_scope' class="form-control richtext_field" id="out_scope" rows="10">{{obj.out_scope}}</textarea>
                             </div>
                         </div>
                         <button class="btn btn-primary form-btn">Continue</button>
@@ -211,6 +211,24 @@
                                         <thead>
                                         </thead>
                                         <tbody id="e_body">
+                                            {% for e in endpoints %}
+                                                <tr data-index="{{forloop.counter0}}" class="endpoint-item {{e.request_type}}">
+                                                    <td onclick="showEndpointInfo({{forloop.counter0}})">
+                                                        <span class="badge badge-primary {{e.request_type}}">{{e.request_type}}</span>
+                                                        {{e.path}}
+                                                        <input type="text" name="endpoint_request_type" value="{{e.request_type}}" hidden>
+                                                        <input type="text" name="endpoint_url" value="{{e.path}}" hidden>
+                                                        <textarea hidden name='enpoint_desc'>{{e.documentation}}</textarea>
+                                                        <textarea hidden name='enpoint_test'>{{e.test_data}}</textarea>
+                                                    </td>
+                                                    <td style="text-align:end; padding-top:15px;">
+                                                        <span><i class="fa fa-solid fa-trash" onclick='deleteEndpoint({{forloop.counter0}})'></i></span>
+                                                        <button class="btn-edit" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='openModal({{forloop.counter0}})'>
+                                                            <span><i class="fa fa-solid fa-pencil"></i></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                     <div class="col-12">
@@ -338,5 +356,15 @@ $("#btn-analysis").click(function(){
     }
 });
 });
+</script>
+<script>
+    {% for e in endpoints %}
+    endpoints[{{forloop.counter0}}] = {
+        "method": "{{e.request_type}}",
+        "description": "{{e.documentation}}",
+        "testData": `{{e.test_data|safe}}`,
+        "url": "{{e.path}}"
+    }
+    {% endfor %}
 </script>
 {% endblock js %}

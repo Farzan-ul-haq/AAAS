@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from core.models import Product, ApiService, Logo,  \
     HtmlTemplate, DownloadSoftware, ProductPackage, \
-    Feedback, Endpoints, Transaction
+    Feedback, Endpoints, Transaction, User
 from core.utils import get_product_object, fulfill_order
 
 
@@ -75,6 +75,14 @@ def view_product(request, slug):
             "feedbacks": feedbacks
         })
 
+def view_user(request, username):
+    user = User.objects.get(username=username)
+    print(user)
+    products = Product.objects.filter(owner__username=username)
+    return render(request, "core/view-user.html", {
+        "user": user,
+        "products": products
+    })
 
 def billing(request): # this contains the list of products
     """This contains all the transaction history of user"""

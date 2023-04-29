@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}YourSite{% endblock title %}
+
+{% block body %}
+<div class="container mt-5 ">
+    <div class="my-3 p-3 bg-white rounded box-shadow col-12">
+        <div class="row">
+            <div class="media">
+                <img class="align-self-center mr-3" src="https://www.w3schools.com/howto/img_avatar.png" alt="User Image" style="border-radius: 50%; width:64px; height:64px;">
+                <div class="media-body">
+                    <h3 class="mt-0">{{user.username|upper}}</h3>
+                    <p><strong>User Since: {{user.joining_date.date}}</strong></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="my-3 p-3 bg-white rounded box-shadow col-12">
+        <div class="row">
+            <h3 class="border-bottom border-gray pb-2 mb-0 col-12">Products</h3>
+            {% for product in products %}
+                {% include 'components/product/public-product-card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block js %}
+
+{% endblock js %}
+
