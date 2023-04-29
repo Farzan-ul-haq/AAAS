@@ -201,7 +201,7 @@ def update_logo(request, product_id):
 
         if "downloadable_file" in request.FILES.keys():
             print('FILE CHANGED')
-            obj.source_file = request.FILES.get('source_file')
+            obj.source_file = request.FILES.get('downloadable_file')
         obj.width = request.POST.get('width')
         obj.height = request.POST.get('height')
         obj.logo_type = request.POST.get('logo_type')
@@ -243,3 +243,35 @@ def update_software(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     obj, template = get_product_object(product)
     package = get_object_or_404(ProductPackage, service=product)
+    if product.owner != request.user:
+        raise Http404
+    if request.method == 'GET':
+        return render(request, 'seller/create-software.html', {
+            'product': product,
+            'obj': obj,
+            'package': package
+        })
+    if request.method == "POST":
+        print(request.FILES)
+        # UPDATE PRODUCT
+        product = update_product(product, request)
+
+        package.price = int(request.POST.get('price'))
+        package.save()
+
+        if "downloadable_file" in request.FILES.keys():
+            obj.source_file = request.FILES.get('downloadable_file')
+
+        if "trail_version" in request.FILES.keys():
+            obj.trail_version = request.FILES.get('trail_version')
+
+        obj.in_scope = request.POST.get('in_scope')
+        obj.out_scope = request.POST.get('out_scope')
+        obj.supported_os = request.POST.get('supported_os')
+        obj.supported_browser = request.POST.get('supported_os')
+        obj.software_type = request.POST.get('software_type', 'ONLINE')
+        obj.technical_instructions = request.POST.get('technical_instructions')
+        obj.technology = request.POST.get('technology')
+        obj.save()
+
+        return redirect('seller:dashboard')

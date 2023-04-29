@@ -47,7 +47,7 @@
             <section class="form-step-inputs" data-triggered="true">
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input name='title' type="text" class="form-control" id="title" placeholder="Enter Software Title">
+                    <input name='title' type="text" class="form-control" id="title" placeholder="Enter Software Title" value="{{product.title}}">
                 </div>
                 <div class="form-group">
                     <label for="title">Tags</label>
@@ -66,7 +66,7 @@
                     <div class="row">
                         <div class="col-6">
                             <label for="price">Price</label>
-                            <input name='price' type="text" class="form-control" id="price">
+                            <input name='price' type="text" class="form-control" id="price" value="{{package.price}}">
                             <small id="price" class="form-text text-muted">Enter the price in USD.</small>
                         </div>
                         <div class="col-6">
@@ -81,15 +81,15 @@
             <section class="form-step-inputs hidden" data-triggered="false">
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea name='description' class="form-control richtext_field" id="exampleFormControlTextarea1" rows="7"></textarea>
+                    <textarea name='description' class="form-control richtext_field" id="exampleFormControlTextarea1" rows="7">{{product.description}}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="technical_instructions">Technical Instructions</label>
-                    <textarea name='technical_instructions' class="form-control richtext_field" id="technical_instructions" rows="3"></textarea>
+                    <textarea name='technical_instructions' class="form-control richtext_field" id="technical_instructions" rows="3">{{obj.technical_instructions}}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="technology">Technologies Used.</label>
-                    <input name='technology' type="text" class="form-control" id="technology" placeholder="Ex: Python, VUE, React etc.">
+                    <input name='technology' type="text" class="form-control" id="technology" placeholder="Ex: Python, VUE, React etc." value="{{obj.technology}}">
                 </div>
                 <button class="btn btn-primary form-btn">Continue</button>
             </section>
@@ -154,7 +154,11 @@
             <section class="form-step-inputs hidden" data-triggered="false">
                 <div class="form-group">
                     <label for="downloadable_file">Downloadable File</label><br>
+                    {% if product %}
+                    <button class="btn-upload-file">Change DOwnloadable FIle</button>
+                    {% else %}
                     <button class="btn-upload-file">Upload</button>
+                    {% endif %}
                     <div id="progressBarContainer" style="display: none;">
                         <div id="progressBar" style="width: 0%;"></div>
                     </div>
@@ -162,11 +166,19 @@
                     <div class="progress-bar">
                         <div class="progress-bar-inner"></div>
                     </div>
+                    {% if obj.source_file %}
+                    <small id="downloadable_file" class="form-text text-muted filename">{{obj.source_file}}</small>
+                    {% else %}
                     <small id="downloadable_file" class="form-text text-muted filename">Upload download file.</small>
+                    {% endif %}
                 </div>
                 <div class="form-group">
                     <label for="trail_version">Trail Version</label><br>
+                    {% if product %}
+                    <button class="btn-upload-trail-file">Change Trial Version File</button>
+                    {% else %}
                     <button class="btn-upload-trail-file">Upload</button>
+                    {% endif  %}
                     <div id="progressBarContainer" style="display: none;">
                         <div id="progressBar" style="width: 0%;"></div>
                     </div>
@@ -174,21 +186,47 @@
                     <div class="progress-bar2">
                         <div class="progress-bar-inner"></div>
                     </div>
+                    {% if obj.trail_version %}
+                    <small id="trail_version" class="form-text text-muted trail-filename">{{obj.trail_version}}</small>
+                    {% else %}
                     <small id="trail_version" class="form-text text-muted trail-filename">Upload Trail Version If Available.</small>
+                    {% endif %}
                 </div> 
                 <div class="form-group">
-                    <label for="description">Source URL</label>
-                    <input name='source_url' type="url" class="form-control" id="source_url" placeholder="Source URL">
+
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="description">Source URL</label>
+                            <input name='source_url' type="url" class="form-control" id="source_url" placeholder="Source URL" value="{{product.source_url}}">
+                        </div>
+                        <div class="col-6">
+                            <label class="logo_type_label" for="logo_type">Software Type</label>
+                            <select name='software_type' class='form-control' id="software_type">
+                                {% if obj.software_type == 'OFFLINE' %}
+                                <option value="OFFLINE" selected>OFFLINE</option>
+                                {% else %}
+                                <option value="OFFLINE">OFFLINE</option>
+                                {% endif %}
+                                {% if obj.software_type == 'ONLINE' %}
+                                <option value="ONLINE" selected>ONLINE</option>
+                                {% else %}
+                                <option value="ONLINE">ONLINE</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-6">
                             <label for="in_scope">In Scope</label>
-                            <textarea name='in_scope' class="form-control richtext_field" id="in_scope" rows="10"></textarea>
+                            <textarea name='in_scope' class="form-control richtext_field" id="in_scope" rows="10">{{obj.in_scope}}</textarea>
                         </div>
                         <div class="col-6">
                             <label for="out_scope">Out Scope</label>
-                            <textarea name='out_scope' class="form-control richtext_field" id="out_scope" rows="10"></textarea>
+                            <textarea name='out_scope' class="form-control richtext_field" id="out_scope" rows="10">{{obj.out_scope}}</textarea>
                         </div>
                     </div>
                 </div>
