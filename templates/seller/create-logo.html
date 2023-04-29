@@ -49,7 +49,7 @@
             <section class="form-step-inputs" data-triggered="true">
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input name='title' type="text" class="form-control" id="title" placeholder="Enter Logo Title" required>
+                    <input name='title' type="text" class="form-control" id="title" placeholder="Enter Logo Title" required value="{{product.title}}">
                 </div>
                 <div class="form-group">
                     <label for="title">Tags</label>
@@ -68,7 +68,7 @@
                     <div class="row">
                         <div class="col-6">
                             <label for="price">Price</label>
-                            <input name='price' type="text" class="form-control" id="price">
+                            <input name='price' type="text" class="form-control" id="price" value="{{package.price}}">
                             <small id="price" class="form-text text-muted">Enter the price in USD.</small>
                         </div>
                         <div class="col-6">
@@ -83,7 +83,7 @@
             <section class="form-step-inputs hidden" data-triggered="false">
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea name='description' class="form-control richtext_field" id="exampleFormControlTextarea1" rows="7"></textarea>
+                    <textarea name='description' class="form-control richtext_field" id="exampleFormControlTextarea1" rows="7">{{product.description}}</textarea>
                 </div>
                 <button class="btn btn-primary form-btn">Continue</button>
             </section>
@@ -97,9 +97,9 @@
                         <div class="thumbnail active primary">
                             <div class="thumbnail-overlay"></div>
                             <div class="thumbnail-placeholder">
-                                    <img src="https://eustonclub.com.au/wp-content/plugins/slider/images/slider-icon.png" alt="image-icon">
-                                    <span>Drag & drop a photo or</span>
-                                    <button>Browse</button>
+                                <img src="https://eustonclub.com.au/wp-content/plugins/slider/images/slider-icon.png" alt="image-icon">
+                                <span>Drag & drop a photo or</span>
+                                <button>Browse</button>
                             </div>
                             <div class="thumbnail-image">
                                 <img src="" alt="thumbnail image">
@@ -117,7 +117,7 @@
                                 <button>Browse</button>
                             </div>
                             <div class="thumbnail-image">
-                                <img src="" alt="thumbnail image">
+                                <img src="{{product.thumbnail_metadata.0.data}}" alt="thumbnail image">
                             </div>
                             <span class="primary-thumbnail">&#9733 Primary</span>
                             <button class="btn-delete-thumbnail">DELETE</button>
@@ -143,9 +143,21 @@
                 <div class="form-group">
                     <label class="logo_type_label" for="logo_type">Logo Orientation</label>
                     <select name='logo_type' class='form-control' id="logo_type">
+                        {% if obj.logo_type == 'PORTAIT' %}
+                        <option value="PORTAIT" selected>PORTAIT</option>
+                        {% else %}
                         <option value="PORTAIT">PORTAIT</option>
+                        {% endif %}
+                        {% if obj.logo_type == 'LANDSCAPE' %}
+                        <option value="LANDSCAPE" selected>LANDSCAPE</option>
+                        {% else %}
                         <option value="LANDSCAPE">LANDSCAPE</option>
+                        {% endif %}
+                        {% if obj.logo_type == 'SQUARE' %}
+                        <option value="SQUARE" selected>SQUARE</option>
+                        {% else %}
                         <option value="SQUARE">SQUARE</option>
+                        {% endif %}
                     </select>
                 </div>
                 <button class="btn btn-primary form-btn">Continue</button>
@@ -155,7 +167,11 @@
             <section class="form-step-inputs hidden" data-triggered="false">
                 <div class="form-group">
                     <label for="downloadable_file">Downloadable File</label><br>
+                    {% if product %}
+                    <button class="btn-upload-file">Change SetupFile</button>
+                    {% else %}
                     <button class="btn-upload-file">Upload</button>
+                    {% endif  %}
                     <div id="progressBarContainer" style="display: none;">
                         <div id="progressBar" style="width: 0%;"></div>
                     </div>
@@ -163,21 +179,25 @@
                     <div class="progress-bar">
                         <div class="progress-bar-inner"></div>
                     </div>
+                    {% if product.source_file %}
                     <small id="downloadable_file" class="form-text text-muted filename">Upload download file.</small>
+                    {% else %}
+                    <small id="downloadable_file" class="form-text text-muted filename">{{obj.source_file}}</small>
+                    {% endif %}
                 </div>
                 <div class="form-group">
                     <label for="source_url">Source URL</label>
-                    <input name='source_url' type="url" class="form-control" id="source_url" placeholder="Source URL">
+                    <input name='source_url' type="url" class="form-control" id="source_url" placeholder="Source URL" value="{{product.source_url}}">
                 </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-6">
                             <label for="width">Width</label>
-                            <input name='width' type="number" class="form-control" id="width" placeholder="Width">
+                            <input name='width' type="number" class="form-control" id="width" placeholder="Width" value="{{obj.width}}">
                         </div>
                         <div class="col-6">
                             <label for="height">Height</label>
-                            <input name='height' type="number" class="form-control" id="height" placeholder="Height">
+                            <input name='height' type="number" class="form-control" id="height" placeholder="Height" value="{{obj.height}}">
                         </div>
                     </div>
                 </div>

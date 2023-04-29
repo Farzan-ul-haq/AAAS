@@ -8,7 +8,7 @@ from core.models import Product, DownloadSoftware, Logo, \
     Brochure, DribbleProduct, Transaction
 from seller.utils import create_product_obj, create_endpoint_obj, \
     create_package_obj
-
+from core.utils import get_product_object
 
 def seller_dashboard(request):
     products = Product.objects.filter(owner=request.user)
@@ -177,4 +177,38 @@ def delete_product(request, product_id):
             )
     elif request.method == 'POST':
         product.delete()
+        return redirect('seller:dashboard')
+
+def update_logo(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    obj, template = get_product_object(product)
+    package = get_object_or_404(ProductPackage, service=product)
+    if product.owner != request.user:
+        raise Http404
+    if request.method == 'GET':
+        return render(request, 'seller/create-logo.html', {
+            'product': product,
+            'obj': obj,
+            'package': package
+        })
+    if request.method == 'POST':
+        print(request.POST.get('width'))
+        # UPDATE PRODUCT
+        product.title = request.POST.get('title')
+        product.description = request.POST.get('description')
+        product.source_url = request.POST.get('source_url')
+        product.thumbnail_metadata = json.loads(request.POST.get('images'))
+        product.save()
+
+        package.price = int(request.POST.get('price'))
+        package.save()
+
+        if "downloadable_file" in request.FILES.keys():
+            print('FILE CHANGED')
+            obj.source_file = request.FILES.get('source_file')
+        obj.width = request.POST.get('width')
+        obj.height = request.POST.get('height')
+        obj.logo_type = request.POST.get('logo_type')
+        obj.save()
+
         return redirect('seller:dashboard')
