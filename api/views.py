@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.postgres.search import SearchQuery, SearchRank, \
                                         SearchVector
 
-from core.models import Product, ProductPackage
+from core.models import Product, ProductPackage, BrochureTemplates
 # Create your views here.
 
 
@@ -43,4 +43,16 @@ def statistical_analysis(request, product_type, title=""):
                 "price": ProductPackage.objects.filter(service=product).first().price
             })
     print(data)
+    return JsonResponse(data, safe=False)
+
+def brochure_templates(request, product_type):
+    bts = BrochureTemplates.objects.filter(product_type=product_type)
+    data = []
+    for bt in bts:
+        data.append({
+            "id": bt.id,
+            "image": bt.image.url,
+            "primary_color": bt.primary_color,
+            "secondary_color": bt.secondary_color
+        })
     return JsonResponse(data, safe=False)

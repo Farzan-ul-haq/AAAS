@@ -282,10 +282,10 @@ class Transaction(models.Model):
 
 
 class BrochureTemplates(models.Model):
-    title = models.CharField(max_length=255)
-    template_html_text = models.TextField()
-    template_js_text = models.TextField()
-
+    image = models.ImageField("brochure-templates/", default="", null=True, blank=True)
+    product_type = models.CharField(choices=PRODUCT_TYPES, default='A', max_length=1)
+    primary_color = models.CharField(max_length=100, default='black')
+    secondary_color = models.CharField(max_length=100, default='black')
 
     class Meta:
         db_table = "BrochureTemplates"

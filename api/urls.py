@@ -8,4 +8,5 @@ app_name = 'api'
 
 urlpatterns = [
     path('statistical-anaylsis/<str:product_type>/<str:title>/', views.statistical_analysis, name='statistical-analysis'),
+    path('brochure-templates/<str:product_type>/', views.brochure_templates, name='brochure-templates'),
 ]
