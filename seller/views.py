@@ -267,3 +267,21 @@ def update_api(request, product_id):
     if request.method == "POST":
         print(request.FILES)
         product = update_product(product, request)
+
+        for package_index in range(len(packages)):
+            packages[package_index].price = request.POST.getlist('package_pricing')[package_index]
+            packages[package_index].normal_requests = request.POST.getlist('package_requests')[package_index]
+            packages[package_index].save()
+        
+        endpoints.delete()
+        for i in range(len(request.POST.getlist('endpoint_url'))):
+            create_endpoint_obj(
+                service=obj,
+                path=request.POST.getlist('endpoint_url')[i],
+                request_type=request.POST.getlist('endpoint_request_type')[i],
+                request_level='normal',
+                documentation=request.POST.getlist('enpoint_desc')[i],
+                test_data=request.POST.getlist('enpoint_test')[i],
+            )
+        
+        return redirect('seller:dashboard')
