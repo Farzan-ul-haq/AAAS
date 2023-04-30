@@ -190,5 +190,6 @@ DOMAIN_URL = 'http://139.59.221.126'
 
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+CELERY_TASK_TIME_LIMIT = 30 * 6000
 
 ASGI_APPLICATION = 'main.asgi.application'
