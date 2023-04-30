@@ -10,7 +10,8 @@ from core.models import Product, ProductPackage, BrochureTemplates
 def statistical_analysis(request, product_type, title=""):
     print(title)
     products = Product.objects.filter(
-        product_type=product_type
+        product_type=product_type,
+        status='A'
     ).annotate(
         rank=SearchRank(
             SearchVector('review_count'),

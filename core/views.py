@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.db.models import Q, F
 from django.shortcuts import HttpResponse
+from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
 
 from core.models import Product, ApiService, Logo,  \
@@ -30,6 +31,7 @@ def index(request): # landing page
     #     return render(request, 'core/index.html')
     return render(request, 'core/index.html')
 
+
 def explore(request): # this contains the list of products
     """This contains the list of products"""
     products = Product.objects.all()
@@ -42,7 +44,7 @@ def explore(request): # this contains the list of products
 def search_product(request):
     query = request.GET.get('query')
     products = Product.objects.filter(
-        Q(title__icontains=query) | Q(description__icontains=query)
+        Q(title__icontains=query) | Q(description__icontains=query) | Q(status='A')
     )
     return render(request, 'core/search.html', {
         'products': products,
@@ -75,10 +77,11 @@ def view_product(request, slug):
             "feedbacks": feedbacks
         })
 
+
 def view_user(request, username):
     user = User.objects.get(username=username)
     print(user)
-    products = Product.objects.filter(owner__username=username)
+    products = Product.objects.filter(owner__username=username, status='A')
     product_ids = products.values_list('id', flat=True)
     feedbacks = Feedback.objects.filter(
         package__service__id__in=product_ids
@@ -88,6 +91,30 @@ def view_user(request, username):
         "user": user,
         "products": products,
         "feedbacks": feedbacks
+    })
+
+
+def admins_product_reivew(request):
+    products = Product.objects.filter(status='P').order_by('-id')
+
+    if not request.user.is_staff:
+        raise Http404
+
+    if request.method == 'POST':
+        print(request.POST)
+        product = Product.objects.get(
+            id=int(
+                request.POST.get('product_id')
+            )
+        )
+        if request.POST.get('action') == 'A':
+            product.status = 'A'
+        elif request.POST.get('action') == 'R':
+            product.status = 'R'
+        product.save()
+
+    return render(request, 'core/admin-product-review.html', {
+        'products': products
     })
 
 def billing(request): # this contains the list of products
@@ -105,6 +132,7 @@ def notifications(request): # this contains the list of products
 
 def project_plan(request): # ONLY FOR DEVs
     return render(request, 'core/plan.html')
+
 
 @csrf_exempt
 def stripe_webhook(request):

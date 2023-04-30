@@ -65,9 +65,16 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'core:explore' %}">About Us</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:explore' %}">About Us</a>
+          </li>
         </ul>
         <div class="form-inline my-2 my-lg-0">
-          {% if request.user.is_authenticated %}
+          {% if request.user.is_staff %}
+          <div class="btn-group mr-2">
+            <a class="nav-link btn btn-danger" href="{% url 'core:admin-product-review' %}">ADMIN</a>
+          </div>
+          {% endif %}
           <div class="btn-group mr-2">
             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications <span class="badge badge-light">{{notifications.count}}</span></button>
             <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">

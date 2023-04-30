@@ -19,4 +19,6 @@ urlpatterns = [
 
     path('plan/', views.project_plan, name='project_plan'),
     path('stripe/webhook/', views.stripe_webhook, name='stripe_webhook'),
+
+    path('admins/product/review/', views.admins_product_reivew, name='admin-product-review'),
 ]

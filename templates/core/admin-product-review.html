@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}YourSite{% endblock title %}
+
+{% block body %}
+<div class="container mt-5 ">
+    <div class="my-3 p-3 bg-white rounded box-shadow col-12">
+        <div class="row">
+            {%for product in products %}
+            <div class="col-12">
+                <div class="media m-3 text-muted">
+                    <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{product.thumbnail_metadata.0.data}}" data-holder-rendered="true">
+                    <div class="media-body">
+                        <a href="{% url 'core:product-view' product.slug %}" target=”_blank” ><h5 class="mt-0"><strong class="d-block text-gray-dark">{{product.title}}</strong></h5></a>
+                        <p class="mt-0">{{product.description|safe}}</p>
+                        <p class="mt-0"><strong>Created: </strong>{{product.created_at|timesince}}</p>
+                        <p>
+                        {% if product.product_type == 'A' %}
+                        <span style="background-color: tomato;" class="badge text-white p-2">{{product.get_product_type_display.upper}}</span>
+                        {% elif product.product_type == 'L' %}
+                        <span style="background-color:darkgreen;" class="badge text-white p-2">{{product.get_product_type_display.upper}}</span>
+                        {% elif product.product_type == 'H' %}
+                        <span style="background-color:darkslateblue;" class="badge text-white p-2">{{product.get_product_type_display.upper}}</span>
+                        {% elif product.product_type == 'D' %}
+                        <span style="background-color:darkorange;"  class="badge text-white p-2">{{product.get_product_type_display.upper}}</span>
+                        {% endif %}
+                        </p>
+                    </div>
+                    <div class="ml-5 align-self-center px-3">
+                        <form action="." method="post">{% csrf_token %}
+                            <input hidden type="text" value="{{product.id}}" name="product_id">
+                            <input hidden type="text" value="A" name="action">
+                            <button type="submit" class="btn btn-warning font-weight-bold" style="width:100px;"><b>APPROVE</b></button>
+                        </form><br>
+                        <form action="." method="post">{% csrf_token %}
+                            <input hidden type="text" value="{{product.id}}" name="product_id">
+                            <input hidden type="text" value="R" name="action">
+                            <button type="submit" class="btn btn-danger font-weight-bold" style="width:100px;"><b>REJECT</b></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block js %}
+
+{% endblock js %}
+

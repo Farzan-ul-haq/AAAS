@@ -36,7 +36,7 @@ def create_product(request, request_type):
     return p
 
 def create_product_obj(*args, **data):
-    data['status'] = 'A'
+    data['status'] = 'P'
     return Product.objects.create(**data)
 
 
