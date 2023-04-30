@@ -1,154 +1,427 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
-{% block title %}{% endblock title %}
+{% block title %} | Project Plan {% endblock title %}
+
+
 {% block css %}
-<!-- #myCanvas {
+body {
+  background-color: #f8f9fa !important;
+}
+.brochure-container {
+  position: relative;
+}
+
+#myCanvas {
   width: 100%;
   height: 100%;
-} -->
-{% endblock css%}
+  position: relative;
+}
+
+#background-canvas {
+  width: 98%;
+  height: 100%;
+  position: absolute;
+}
+
+.color-picker {
+  margin-bottom: 0.75rem;
+}
+
+.colors {
+  display: flex;
+  gap: 7px;
+}
+
+.color {
+  --size: 15px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.05s;
+  border: 1px solid black;
+}
+
+.color:hover {
+  transform: scale(1.1);
+}
+
+.color-blue {
+  background-color: blue;
+}
+.color-black {
+  background-color: black;
+}
+.color-green {
+  background-color: green;
+}
+
+.selected {
+  outline: 2px solid seagreen;
+  outline-offset: 2px;
+}
+{% endblock css %}
 
 {% block body %}
 
 <div class="container-fluid">
-  <div class="row  mx-5">
+  <div class="row mx-5">
     <div class="col-3 pt-3 border">
       <h2>Enter Details...</h2>
+      <div class="color-picker">
+        <label for="title" class="font-weight-bold">Select color</label>
+        <div class="colors">
+          <div class="color color-blue selected"></div>
+          <div class="color color-black"></div>
+          <div class="color color-green"></div>
+        </div>
+      </div>
       <div class="form-group">
         <label for="title" class="font-weight-bold">Title</label>
-        <input name='title' type="text" class="form-control" id="title" placeholder="Product Title">
+        <input
+          name="title"
+          type="text"
+          class="form-control"
+          id="title"
+          placeholder="Product Title"
+        />
       </div>
       <div class="form-group">
         <label for="thumbnail" class="font-weight-bold">Thumbnail</label>
-        <input name='thumbnail' type="file" class="form-control-file" id="thumbnail" required>
+        <input
+          name="thumbnail"
+          type="file"
+          class="form-control-file"
+          id="thumbnail"
+          required
+        />
       </div>
       <div class="form-group">
-        <label for="description" class="font-weight-bold">Description</label>
-        <textarea name='description' class="form-control" id="description-field" rows="5"></textarea>
+        <label for="description" class="font-weight-bold"
+          >Description</label
+        >
+        <textarea
+          name="description"
+          class="form-control"
+          id="description-field"
+          rows="5"
+        ></textarea>
       </div>
       <div class="form-group">
         <label for="description" class="font-weight-bold">Features</label>
-        <textarea name='description' class="form-control" id="features-field" rows="7"></textarea>
+        <textarea
+          name="description"
+          class="form-control"
+          id="features-field"
+          rows="7"
+        ></textarea>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary col-12" onclick="generate_brochure()">Generate Brochure</button>
+        <button class="btn btn-primary col-12" onclick="generateBrochure()">
+          Generate Brochure
+        </button>
       </div>
       <form action="" method="post">
         <div class="form-group">
-          <input type="text" hidden name="myCanvasData" id="myCanvasData">
-          <button class="btn btn-primary col-12" type="submit">Save Brochure</button>
+          <input type="text" hidden name="myCanvasData" id="myCanvasData" />
+          <button class="btn btn-primary col-12" type="submit">
+            Save Brochure
+          </button>
         </div>
       </form>
     </div>
     <div class="col-9 border">
-      <canvas name='myCanvas' id="myCanvas" width="2000" height="1500"></canvas>
+      <canvas id="background-canvas" width="2000" height="1500"></canvas>
+      <canvas
+        name="myCanvas"
+        id="myCanvas"
+        width="2000"
+        height="1500"
+      ></canvas>
     </div>
   </div>
 </div>
-
 {% endblock body %}
 
 {% block js %}
-<script src="{% static 'js/brochure.js' %}"></script>
-
 <script>
-  var canvas = document.getElementById("myCanvas");
-  var ctx = canvas.getContext("2d");
-  let newImage = new Image();
-  newImage.src = '/static/b1.png'
+// BROCHURE JS
+const canvas = document.getElementById("myCanvas");
+const backgroundCanvas = document.getElementById("background-canvas");
+const ctx = canvas.getContext("2d");
+const backgroundCtx = backgroundCanvas.getContext("2d");
+const thumbImgInput = document.getElementById("thumbnail");
+const colorOptions = [...document.getElementsByClassName("color")];
+
+const title = document.getElementById("title");
+const description = document.getElementById("description-field");
+const features = document.getElementById("features-field");
+
+const bgImage = {
+  blue: "./b3-blue.png",
+  black: "./b3-black.png",
+};
+let currentbgColor = "blue";
+let bgImageSrc = getBgImageSrc(currentbgColor);
+let thumbImage = null;
+let throttleTimer;
+
+title.addEventListener("keydown", () => throttle(generateBrochure, 300));
+description.addEventListener("keydown", () => throttle(generateBrochure, 300));
+features.addEventListener("keydown", () => throttle(generateBrochure, 300));
+
+// Add an event listener to the thumbImage input element
+// To read and save image eveytime a new one is uploaded
+thumbImgInput.addEventListener("change", handleFileChange);
+
+colorOptions.forEach((colorOption) => {
+  colorOption.addEventListener("click", handleColorSelection);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // calling functions on page load
+  generateBrochure();
+  generateStaticBg();
+});
+
+function generateStaticBg(imgSrc = "./b3-blue.png") {
+  backgroundCtx.clearRect(
+    0,
+    0,
+    backgroundCanvas.width,
+    backgroundCanvas.height
+  );
+  const backgroundImage = new Image();
+  backgroundImage.src = imgSrc;
+  backgroundImage.onload = () => {
+    backgroundCtx.drawImage(backgroundImage, 0, 0, 2000, 1500);
+  };
+}
+
+function handleColorSelection(event) {
+  const newColor = event.target.classList[1].split("-")[1];
+  const newBgImageSrc = getBgImageSrc(newColor);
+  if (newBgImageSrc) {
+    bgImageSrc = newBgImageSrc;
+    currentbgColor = newColor;
+  }
+  clearColorSelection();
+  event.target.classList.add("selected");
+  generateBrochure();
+  generateStaticBg(bgImageSrc);
+}
+
+function clearColorSelection() {
+  colorOptions.forEach((colorOption) => {
+    if (colorOption.classList.contains("selected")) {
+      colorOption.classList.remove("selected");
+    }
+  });
+}
+
+function getBgImageSrc(color) {
+  return bgImage[color];
+}
+
+function handleFileChange(event) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => {
+      thumbImage = img;
+      generateBrochure();
+    };
+    img.src = event.target.result;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+// Add gradient
+// More text
+// Writing TITLE
+
+function generateBrochure() {
+  refreshCanvas();
+
+  const newImage = new Image();
+  newImage.src = bgImageSrc;
   newImage.onload = () => {
-  // Draw the image onto the context with cropping
-  ctx.drawImage(newImage, 0, 0, 2000, 1500);
-  // ctx.wrapText("The Project Title", 100, 100, 500,z 500);
+    // Draw the image onto the context with cropping
+    ctx.drawImage(newImage, 0, 0, 2000, 1500);
+
+    drawTitle(title.value);
+    drawThumbnail(thumbImage);
+    drawDescription(description.value);
+    drawFeatures(features.value);
+  };
+}
+
+function refreshCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawTitle(title) {
+  ctx.font = "900 95px sans-serif";
+  ctx.fillStyle = "black";
+  const wrappedtitle = wrapText(ctx, title, 1350, 950, 500, 110);
+  for (let i = 0; i < wrappedtitle.length; i++) {
+    if (i % 2 == 0) {
+      ctx.fillStyle = currentbgColor === "blue" ? "#22bed7" : "black";
+    } else {
+      ctx.fillStyle = "black";
+    }
+    ctx.fillText(wrappedtitle[i][0], wrappedtitle[i][1], wrappedtitle[i][2]);
+  }
+}
+
+function drawThumbnail(thumbImage) {
+  if (thumbImage) {
+    drawCircularImage(ctx, thumbImage, 1020, 220, 630, 630);
+    // document.getElementById("myCanvasData").value = document
+      // .getElementById("myCanvas")
+      // .toDataURL("image/png");
+  }
+}
+
+function drawDescription(description) {
+  ctx.font = "100 34px sans-serif";
+  ctx.fillStyle = "black";
+  const wrappedDescription = wrapText(ctx, description, 750, 1000, 550, 45);
+  wrappedDescription.forEach((item) => {
+    description_text_line = item[0];
+    if (description_text_line.slice(0, 2) == "\n ") {
+      description_text_line = description_text_line.slice(2, 100);
+    }
+    ctx.fillText(description_text_line, item[1], item[2]);
+  });
+}
+
+function drawFeatures(features) {
+  ctx.font = "300 38px sans-serif";
+  ctx.fillStyle = "black";
+  const wrappedFeatures = wrapText(ctx, features, 100, 200, 550, 60);
+  wrappedFeatures.forEach((item) => {
+    features_text_line = item[0];
+    if (features_text_line.slice(0, 2) == "\n ") {
+      features_text_line = features_text_line.slice(2, 100);
+    }
+    ctx.fillStyle = currentbgColor === "blue" ? "#22bed7" : "black";
+    ctx.fillText("✔ ", item[1], item[2]);
+    ctx.fillStyle = "black";
+    ctx.fillText(features_text_line, item[1] + 40, item[2]);
+  });
+}
+
+
+</script>
+<script>
+  // UTILS.JS
+  const wrapText = function (ctx, text, x, y, maxWidth, lineHeight) {
+  // First, start by splitting all of our text into words, but splitting it into an array split by spaces
+  text = text.replaceAll("\n", " \n ");
+  let words = text.split(" ");
+  let line = ""; // This will store the text of the current line
+  let testLine = ""; // This will store the text when we add a word, to test if it's too long
+  let lineArray = []; // This is an array of lines, which the function will return
+  // Lets iterate over each word
+  for (var n = 0; n < words.length; n++) {
+    // Create a test line, and measure it..
+    testLine += `${words[n]} `;
+    let metrics = ctx.measureText(testLine);
+    let testWidth = metrics.width;
+    // If the width of this test line is more than the max width
+    if ((testWidth > maxWidth && n > 0) || words[n] == "\n") {
+      // Then the line is finished, push the current line into "lineArray"
+      lineArray.push([line, x, y]);
+      // Increase the line height, so a new line is started
+      y += lineHeight;
+      // Update line and test line to use this word as the first word on the next line
+      line = `${words[n]} `;
+      testLine = `${words[n]} `;
+    } else {
+      // If the test line is still less than the max width, then add the word to the current line
+      line += `${words[n]} `;
+    }
+    // If we never reach the full max width, then there is only one line.. so push it into the lineArray so we return something
+    if (n === words.length - 1) {
+      lineArray.push([line, x, y]);
+    }
+  }
+  // Return the line array
+  return lineArray;
+};
+
+function roundRect(ctx, x, y, width, height, radius) {
+  const cornerRadius = {
+    upperLeft: 0,
+    upperRight: 0,
+    lowerLeft: 0,
+    lowerRight: 0,
+  };
+  if (typeof radius === "object") {
+    Object.assign(cornerRadius, radius);
+  } else {
+    cornerRadius.upperLeft =
+      cornerRadius.upperRight =
+      cornerRadius.lowerLeft =
+      cornerRadius.lowerRight =
+        radius;
+  }
+  ctx.beginPath();
+  ctx.moveTo(x + cornerRadius.upperLeft, y);
+  ctx.lineTo(x + width - cornerRadius.upperRight, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + cornerRadius.upperRight);
+  ctx.lineTo(x + width, y + height - cornerRadius.lowerRight);
+  ctx.quadraticCurveTo(
+    x + width,
+    y + height,
+    x + width - cornerRadius.lowerRight,
+    y + height
+  );
+  ctx.lineTo(x + cornerRadius.lowerLeft, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - cornerRadius.lowerLeft);
+  ctx.lineTo(x, y + cornerRadius.upperLeft);
+  ctx.quadraticCurveTo(x, y, x + cornerRadius.upperLeft, y);
+  ctx.closePath();
+}
+
+function drawCircularImage(ctx, image, x, y, width, height) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x + width / 2, y + height / 2, width / 2, 0, 2 * Math.PI);
+  ctx.closePath();
+  ctx.clip();
+  ctx.drawImage(image, x, y, width, height);
+  ctx.restore();
+}
+
+function throttle(callback, time) {
+  if (throttleTimer) {
+    return;
   }
 
-  // Add gradient
-      // More text
-      // Writing TITLE
-  function generate_brochure() {
-  var title = document.getElementById('title').value
-  var description = document.getElementById('description-field').value
-  var features = document.getElementById('features-field').value
+  throttleTimer = setTimeout(() => {
+    callback();
+    throttleTimer = null;
+  }, time);
+}
 
-  ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-  let newImage = new Image();
-  newImage.src = '/static/b3.png'
-  newImage.onload = () => {
-  // Draw the image onto the context with cropping
-      ctx.drawImage(newImage, 0, 0, 2000, 1500);
-      // ctx.wrapText("The Project Title", 100, 100, 500, 500);
-      ctx.font = '900 95px sans-serif';
-      ctx.fillStyle = 'black';
-      let wrappedtitle = wrapText(ctx, title, 1350, 950, 500, 110);
-      for (let i = 0; i < wrappedtitle.length; i++) {
-      if(i % 2 == 0) {
-          ctx.fillStyle = '#22bed7';
-      }
-      else {
-          ctx.fillStyle = 'black';
-      }
-      ctx.fillText(wrappedtitle[i][0], wrappedtitle[i][1], wrappedtitle[i][2]); 
-      }
-      // Writing DESCRIPTION
-      ctx.font = '100 34px sans-serif';
-      ctx.fillStyle = 'black';
-      let wrappedDescription = wrapText(
-      ctx,
-      description,
-      750, 1000,
-      550, 45
-      );
-      wrappedDescription.forEach(function(item) {
-      description_text_line = item[0]
-      if (description_text_line.slice(0, 2) == "\n ") {
-          description_text_line = description_text_line.slice(2, 100)
-      }
-          ctx.fillText(description_text_line, item[1], item[2]); 
-      })
+</script>
+<script>
+  // FARZAN CODE TO CHECK API
+  $.ajax({
+    type: 'GET',
+    url: `/api/v1/brochure-templates/H/`,
+    success: function(data) {
+      console.log(data);
+    },
+    error: function(error) {
+        console.log('Error:', error);
+    }
+  });
 
-      // Writing FEATURES 
-      ctx.font = '300 38px sans-serif';
-      ctx.fillStyle = 'black';
-      let wrappedFeatures = wrapText(
-      ctx, 
-      features,
-      100, 200,
-      550, 60
-      );
-      wrappedFeatures.forEach(function(item) {
-      features_text_line = item[0]
-      if (features_text_line.slice(0, 2) == "\n ") {
-          features_text_line = features_text_line.slice(2, 100)
-      }
-      ctx.fillStyle = '#22bed7';
-      ctx.fillText("✔ ", item[1], item[2]);
-      ctx.fillStyle = 'black';
-      ctx.fillText(features_text_line, item[1]+40, item[2]);
-      })
-      document.getElementById('myCanvasData').value = document.getElementById('myCanvas').toDataURL('image/png')
-  }
-  }
-  let thumbImg = document.getElementById('thumbnail')
-  thumbImg.addEventListener('change', function(e) {
-  if(e.target.files) {
-      let imageFile = e.target.files[0];
-      var reader = new FileReader();
-      reader.readAsDataURL(imageFile);
-      reader.onloadend = function (e) {
-      var myImage = new Image(); // Creates image object
-      myImage.src = e.target.result; // Assigns converted image to image object
-      myImage.onload = function(ev) {
-          ctx.save();
-          ctx.roundRect(1020, 220, 630, 630, [315,315,315,315]);
-          // ctx.fill('black')
-          ctx.clip();
-          ctx.drawImage(myImage,1000, 200, 700, 700);
-          ctx.restore();
-          ctx.stroke();
-          document.getElementById('myCanvasData').value = document.getElementById('myCanvas').toDataURL('image/png')
-      }
-      }
-  }
-  }) 
 </script>
 {% endblock js %}
