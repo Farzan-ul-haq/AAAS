@@ -2,7 +2,19 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}YourSite{% endblock title %}
+{% block css %}
+.products .btn-close {
+    border: none;
+    background-color: transparent;
+    font-family: monospace, sans-serif;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+}
 
+.products .btn-close:hover {
+    opacity: 0.7;
+}
+{% endblock css %}
 {% block body %}
 <link rel="stylesheet" href="{% static 'css/create-product.css' %}">
 
@@ -59,7 +71,7 @@
                     </div>
                     <small class="form-text text-muted">Select minimum 3 tags</small>
                 </div>
-                <button class="btn btn-primary form-btn">Continue</button>
+                <button class="btn btn-primary form-btn" onclick="fetchData()">Continue</button>
             </section>
 
             <!-- Step 02 - Pricing -->
@@ -71,8 +83,13 @@
                             <input name='price' type="text" class="form-control" id="price" value="{{package.price}}">
                             <small id="price" class="form-text text-muted">Enter the price in USD.</small>
                         </div>
-                        <div class="col-6">
-                            <button type="button" disabled id='btn-analysis' class="btn btn-warning col-12 h-100"><strong class="text-gray-dark">View<br>Statistical Analysis</strong></button>
+                        <div class="col-6 price-analysis">
+                            <div class="text-center bg-light">
+                                <h2 class="mb-3 avg-price">Average Price: <span>N/A</span></h2>
+                            </div>
+                            <div class="products">
+                                <!-- Will be generated dynamically -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -217,49 +234,76 @@
 </script>
 
 <script>
-    $("#title").change(function(){
-        if (!$('#title')[0].value) {
-            $('#btn-analysis').prop('disabled', true)
-        } else {
-            $('#btn-analysis').prop('disabled', false)
+    const productsContainer = document.querySelector('.products');
+    const averagePriceField = document.querySelector('.avg-price');
+    let products;
+
+    function renderProducts(products) {
+        while (productsContainer.firstChild) {
+            productsContainer.removeChild(productsContainer.firstChild);
         }
-    });
-    
-    $("#btn-analysis").click(function(){
-        console.log('working')
-        $('#modal-analysis').modal('show')
-        $.ajax({
-        type: 'GET',
-        url: `/api/v1/statistical-anaylsis/L/${$('#title').val()}/`,
-        success: function(data) {
-            for (product in data) {
-                console.log(data[product]);
-            $('#analysis-data').append(
-            `                
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="media m-3 text-muted">
-                    <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 32px; height: 32px;" src="${data[0].thumbnail}" data-holder-rendered="true">
-                    <div class="media-body">
-                        <h5 class="mt-0"><strong class="d-block text-gray-dark">@${data[product].title}</strong></h5>
+
+        if (!products.length) {
+            productsContainer.innerHTML+=getProducts404();
+            averagePriceField.innerText = 'Average Price: N/A';
+            return;
+        }
+
+        averagePriceField.innerText = `Average Price: $${getAveragePrice(products)}`;
+
+        products.forEach((product, idx) => {
+            const {id, title, price, review_count} = product;
+            productsContainer.innerHTML+=createProductCard(id, title, price, review_count, idx + 1);
+        });
+    }
+
+    function getAveragePrice(products) {
+        return products.reduce((curr, product) => {
+            return curr + product.price;
+        }, 0) / products.length;
+    }
+
+    function getProducts404() {
+        return `
+        <p class="text-center products-404">No results.</p>
+        `;
+    }
+
+    function createProductCard(id, title, price, reviewCount, idx) {
+        return `
+            <div class="card bg-light mb-3" style="max-width: 100%;">
+                <div class="modal-header">
+                    <h5 class="modal-title">Product #0${idx}</h5>
+                    <button type="button" class="btn-close" onclick=removeProduct(${id})>X</button>
                     </div>
-                    <div style="text-align: right;">
-                        <h4>${data[product].price} USD</h4>
-                    </div>
+                <div class="card-body">
+                    <h5 class="card-title">${title}</h5>
+                    <p class="card-text">$${price}</p>
+                    <p class="card-text">Reviews: ${reviewCount}</p>
                 </div>
             </div>
-            `
-            )
-            }
-        },
-        error: function(error) {
-            console.log('Error:', error);
-        }
-    });
-    });
+        `;
+    }
+
+    function removeProduct(id) {
+        products = products.filter((product) => product.id !== id);
+        renderProducts(products);
+    }
     
+    function fetchData() {
+        $.ajax({
+            type: 'GET',
+            url: `/api/v1/statistical-anaylsis/L/${$('#title').val()}/`,
+            // url: `/api/v1/statistical-anaylsis/L/hello/`,
+            success: function(data) {
+                products = data;
+                renderProducts(products);
+            },
+            error: function(error) {
+                console.log('Error:', error);
+            }
+        });
+    };
 </script>
 <script>
 {% for tag in product.tags.all %}
@@ -268,6 +312,13 @@
     tagsContainer.insertBefore(newTag, tagInput);
     tagInput.value = '';
     tags+=1;
+{% endfor %}
+
+{% for thumbnail in product.thumbnail_metadata %}
+images.push(`{{thumbnail.data}}`);
+updateThumbnailStates();
+displayImages();
+
 {% endfor %}
 </script>
 {% endblock js %}

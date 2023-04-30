@@ -3,6 +3,10 @@
 {% block title %}{% endblock title %}
 
 {% block css %}
+.products-404 {
+    padding: 1rem;
+    width: 100%;
+}
 {% endblock css %}
 
 {% block body %}
@@ -62,13 +66,26 @@
                             </div>
                             <small class="form-text text-muted">Select minimum 3 tags</small>
                         </div>
-                        <button class="btn btn-primary form-btn">Continue</button>
+                        <button class="btn btn-primary form-btn" onclick="fetchData()">Continue</button>
                     </section>
 
                     <!-- Step 02 - Pricing -->
                     <section class="form-step-inputs hidden" data-triggered="false">
                         <div class="container">
-                            <button  type="button" disabled id='btn-analysis' class="btn btn-warning col-12 my-5"><strong> View Statistical Analysis</strong></button>
+                            <table class="table">
+                                <thead class="thead-dark">
+                                  <tr>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Basic</th>
+                                    <th scope="col">Standard</th>
+                                    <th scope="col">Premium</th>
+                                    <th scope="col">Reviews</th>
+                                  </tr>
+                                </thead>
+                                <tbody class="products">
+                                </tbody>
+                            </table>
+                            <hr>
                             <div class="card-deck mb-3 text-center">
                             <div class="card mb-4 box-shadow">
                                 <div class="card-header">
@@ -211,7 +228,24 @@
                                         <thead>
                                         </thead>
                                         <tbody id="e_body">
-
+                                            {% for e in endpoints %}
+                                                <tr data-index="{{forloop.counter0}}" class="endpoint-item {{e.request_type}}">
+                                                    <td onclick="showEndpointInfo({{forloop.counter0}})">
+                                                        <span class="badge badge-primary {{e.request_type}}">{{e.request_type}}</span>
+                                                        {{e.path}}
+                                                        <input type="text" name="endpoint_request_type" value="{{e.request_type}}" hidden>
+                                                        <input type="text" name="endpoint_url" value="{{e.path}}" hidden>
+                                                        <textarea hidden name='enpoint_desc'>{{e.documentation}}</textarea>
+                                                        <textarea hidden name='enpoint_test'>{{e.test_data}}</textarea>
+                                                    </td>
+                                                    <td style="text-align:end; padding-top:15px;">
+                                                        <span><i class="fa fa-solid fa-trash" onclick='deleteEndpoint({{forloop.counter0}})'></i></span>
+                                                        <button class="btn-edit" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='openModal({{forloop.counter0}})'>
+                                                            <span><i class="fa fa-solid fa-pencil"></i></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                     <div class="col-12">
@@ -479,10 +513,10 @@ function updateEndpoint(idx) {
 
     try {
         updatedEndpoint.testData = editor.get(); 
-        newEndpoint.testDataJSON = editor.getText(); 
+        updatedEndpoint.testDataJSON = editor.getText(); 
     } catch {
         updatedEndpoint.testData = null;
-        newEndpoint.testDataJSON = ''; 
+        updatedEndpoint.testDataJSON = ''; 
     }
 
     endpoints[idx] = updatedEndpoint;
@@ -519,5 +553,88 @@ function deleteEndpoint(idx) {
     resetDescViewFields();
     renderEndpoints();
 }
+</script>
+<script>
+    const productsContainer = document.querySelector('.products');
+    let products;
+
+    function renderProducts(products) {
+        while (productsContainer.firstChild) {
+            productsContainer.removeChild(productsContainer.firstChild);
+        }
+
+        if (!products.length) {
+            productsContainer.innerHTML+=getProducts404();
+            return;
+        }
+
+        products.forEach((product, idx) => {
+            const {title, packages, review_count} = product;
+            productsContainer.innerHTML+=createProduct(
+                idx + 1,
+                title,
+                packages[0].price,
+                packages[0].requests,
+                packages[1].price,
+                packages[1].requests,
+                packages[2].price,
+                packages[2].requests,
+                review_count,
+            );
+        });
+    }
+
+    function getProducts404() {
+        return `
+            <td colspan="6" class="text-center">No results.</td>
+        `;
+    }
+
+    function createProduct(idx, title, p1, r1, p2, r2, p3, r3, reviewCount) {
+        return `
+            <tr>
+                <th scope="row">${title}</th>
+                <td>$${p1} /<br /> ${r1} requests</td>
+                <td>$${p2} /<br /> ${r2} requests</td>
+                <td>$${p3} /<br /> ${r3} requests</td>
+                <td>${reviewCount}</td>
+            </tr>
+        `;
+    }
+
+    function fetchData() {
+        $.ajax({
+            type: 'GET',
+            url: `/api/v1/statistical-anaylsis/A/${$('#title').val()}/`,
+            // url: `/api/v1/statistical-anaylsis/A/wefwef/`,
+            success: function(data) {
+                products = data;
+                renderProducts(products);
+                console.log(data)
+            },
+            error: function(error) {
+                console.log('Error:', error);
+            }
+        });
+    };
+</script>
+<script>
+    {% for tag in product.tags.all %}
+        newTag = createTag(`{{tag.name}}`);
+        newTag.addEventListener('click', deleteTag);
+        tagsContainer.insertBefore(newTag, tagInput);
+        tagInput.value = '';
+        tags+=1;
+    {% endfor %}
+
+    {% for e in endpoints %}
+    endpoints[{{forloop.counter0}}] = {
+        "method": "{{e.request_type}}",
+        "description": "{{e.documentation}}",
+        "testData": `{{e.test_data|safe}}`,
+        "url": "{{e.path}}"
+    }
+    {% endfor %}
+
 </script>
 {% endblock js %}
