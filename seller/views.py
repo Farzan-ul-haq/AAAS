@@ -6,8 +6,8 @@ from django.http import Http404
 from core.models import Product, DownloadSoftware, Logo, \
     HtmlTemplate, ProductPackage, ApiService, Endpoints, \
     Brochure, DribbleProduct, Transaction, Tag
-from seller.utils import create_product_obj, create_endpoint_obj, \
-    create_package_obj, update_product
+from seller.utils import create_endpoint_obj, \
+    create_package_obj, update_product, create_product
 from core.utils import get_product_object
 
 def seller_dashboard(request):
@@ -29,21 +29,7 @@ def create_logo(request):
             'seller/create-logo.html'
             )
     if request.method == 'POST':
-        p = create_product_obj(
-            owner=request.user,
-            title=request.POST.get('title'),
-            description=request.POST.get('description'),
-            product_type='L',
-            source_url=request.POST.get('source_url'),
-        )
-        p.thumbnail_metadata = json.loads(request.POST.get('images'))
-        p.save()
-        tags = [
-            Tag.objects.get_or_create(
-                name=tag
-            )[0] for tag in json.loads(request.POST.get('tags'))
-        ]
-        p.tags.set(tags)
+        p = create_product(request, "L")
         print(p.tags.all())
         create_package_obj(
             service=p,
@@ -68,21 +54,7 @@ def create_template(request):
             'seller/create-template.html'
             )
     if request.method == 'POST':
-        p = create_product_obj(
-            owner=request.user,
-            title=request.POST.get('title'),
-            description=request.POST.get('description'),
-            product_type='H',
-            source_url=request.POST.get('source_url', ""),
-        )
-        p.thumbnail_metadata = json.loads(request.POST.get('images'))
-        p.save()
-        tags = [
-            Tag.objects.get_or_create(
-                name=tag
-            )[0] for tag in json.loads(request.POST.get('tags'))
-        ]
-        p.tags.set(tags)
+        p = create_product(request, "H")
         print(p.tags.all())
         create_package_obj(
             service=p,
@@ -107,21 +79,7 @@ def create_software(request):
             'seller/create-software.html'
             )
     if request.method == 'POST':
-        p = create_product_obj(
-            owner=request.user,
-            title=request.POST.get('title'),
-            description=request.POST.get('description'),
-            product_type='D',
-            source_url="https://google.com",
-        )
-        p.thumbnail_metadata = json.loads(request.POST.get('images'))
-        p.save()
-        tags = [
-            Tag.objects.get_or_create(
-                name=tag
-            )[0] for tag in json.loads(request.POST.get('tags'))
-        ]
-        p.tags.set(tags)
+        p = create_product(request, "D")
         print(p.tags.all())
         create_package_obj(
             service=p,
@@ -150,22 +108,7 @@ def create_api(request):
             'seller/create-api.html'
             )
     if request.method == 'POST':
-        p = create_product_obj( # create product
-            owner=request.user,
-            title=request.POST.get('title'),
-            description=request.POST.get('description'),
-            thumbnail=request.FILES.get('thumbnail'),
-            product_type='A',
-            source_url=request.POST.get('source_url'),
-        )
-        p.thumbnail_metadata = json.loads(request.POST.get('images'))
-        p.save()
-        tags = [
-            Tag.objects.get_or_create(
-                name=tag
-            )[0] for tag in json.loads(request.POST.get('tags'))
-        ]
-        p.tags.set(tags)
+        p = create_product(request, "A")
         print(p.tags.all())
         for i in range(len(request.POST.getlist('package_requests'))):
             create_package_obj(
