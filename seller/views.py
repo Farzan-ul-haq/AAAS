@@ -5,7 +5,7 @@ from django.http import Http404
 
 from core.models import Product, DownloadSoftware, Logo, \
     HtmlTemplate, ProductPackage, ApiService, Endpoints, \
-    Brochure, DribbleProduct, Transaction
+    Brochure, DribbleProduct, Transaction, Tag
 from seller.utils import create_product_obj, create_endpoint_obj, \
     create_package_obj, update_product
 from core.utils import get_product_object
@@ -38,6 +38,13 @@ def create_logo(request):
         )
         p.thumbnail_metadata = json.loads(request.POST.get('images'))
         p.save()
+        tags = [
+            Tag.objects.get_or_create(
+                name=tag
+            )[0] for tag in json.loads(request.POST.get('tags'))
+        ]
+        p.tags.set(tags)
+        print(p.tags.all())
         create_package_obj(
             service=p,
             title='BASIC',
@@ -70,6 +77,13 @@ def create_template(request):
         )
         p.thumbnail_metadata = json.loads(request.POST.get('images'))
         p.save()
+        tags = [
+            Tag.objects.get_or_create(
+                name=tag
+            )[0] for tag in json.loads(request.POST.get('tags'))
+        ]
+        p.tags.set(tags)
+        print(p.tags.all())
         create_package_obj(
             service=p,
             title='BASIC',
@@ -102,6 +116,13 @@ def create_software(request):
         )
         p.thumbnail_metadata = json.loads(request.POST.get('images'))
         p.save()
+        tags = [
+            Tag.objects.get_or_create(
+                name=tag
+            )[0] for tag in json.loads(request.POST.get('tags'))
+        ]
+        p.tags.set(tags)
+        print(p.tags.all())
         create_package_obj(
             service=p,
             title='BASIC',
@@ -139,6 +160,13 @@ def create_api(request):
         )
         p.thumbnail_metadata = json.loads(request.POST.get('images'))
         p.save()
+        tags = [
+            Tag.objects.get_or_create(
+                name=tag
+            )[0] for tag in json.loads(request.POST.get('tags'))
+        ]
+        p.tags.set(tags)
+        print(p.tags.all())
         for i in range(len(request.POST.getlist('package_requests'))):
             create_package_obj(
                 service=p,

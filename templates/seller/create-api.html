@@ -366,5 +366,12 @@ $("#btn-analysis").click(function(){
         "url": "{{e.path}}"
     }
     {% endfor %}
+    {% for tag in product.tags.all %}
+        newTag = createTag(`{{tag.name}}`);
+        newTag.addEventListener('click', deleteTag);
+        tagsContainer.insertBefore(newTag, tagInput);
+        tagInput.value = '';
+        tags+=1;
+    {% endfor %}
 </script>
 {% endblock js %}
