@@ -16,11 +16,6 @@ REGEX_QUERY = r'"viewsCount":\s*([^"]+)'
 class Command(BaseCommand):
     help = 'Bootstrap Code to Generate Users'
 
-    def get_image_data(self, image_name):
-        with open(image_name, "rb") as img_file:
-            image_data = base64.b64encode(img_file.read())
-        return image_data
-
 
     def handle(self, *args, **options):
         self.create_marketing_platforms()

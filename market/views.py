@@ -69,7 +69,7 @@ def marketing_platform_list(request, pk):
         images.append([image_counter, thumbnail['data']])
         image_counter += 1
     for brochure in brochures:
-        images.append([image_counter, brochure.image])
+        images.append([image_counter, brochure.image_data])
         image_counter += 1
     if request.method == 'GET':
         return render(request, 'market/marketing-platform-list.html', {
