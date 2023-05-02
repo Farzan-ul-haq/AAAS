@@ -19,7 +19,7 @@ from django.utils.html import format_html
 from django.views.decorators.csrf import csrf_exempt
 from core.models import Product, MarketingPlatforms, DribbleProduct, \
     Brochure, Notification , BrochureTemplates
-from market.utils import upload_product_to_dribble
+from market.tasks import upload_product_to_dribble
 
 
 if settings.STRIPE_LIVE_MODE:
@@ -39,21 +39,22 @@ def brochure_list(request):
 def brochure_detail(request, product_id, brochure_id):
     """Returns Brochure Detail"""
     product = Product.objects.get(id=product_id)
+    if request.method == 'GET':
+        return render(request, 'market/brochure-detail.html', {
+            'product': product
+        })
     if request.method == 'POST':
+        print(request.POST)
         image_data = request.POST['myCanvasData']
-        format, imgstr = image_data.split(';base64,')
-        ext = format.split('/')[-1]
-        c = ContentFile(base64.b64decode(imgstr))
-        filename = "profile-"+datetime.now().strftime("%Y%m%d-%H%M%S")+"." + ext
-        b = Brochure.objects.create(
-            title=product.title, product=product,
-        )
-        b.image.save(filename, c, save=True)
-        
+        print('========')
+        print(image_data)
+        if image_data:
+            print('BROCHURE CREATED')
+            b = Brochure.objects.create(
+                title=product.title, product=product,
+                image_data=image_data
+            )
         return redirect('seller:dashboard')
-    return render(request, 'market/brochure-detail.html', {
-        'product': product
-    })
 
 
 def marketing_platform_list(request, pk):
@@ -62,25 +63,42 @@ def marketing_platform_list(request, pk):
     market_platforms = MarketingPlatforms.objects.all()
     brochures = Brochure.objects.filter(product=product)
     # IMAGES TO SHOW
-    images = [[0, product.thumbnail]]
+    images = []
     image_counter = 0
-    for brochure in brochures:
+    for thumbnail in product.thumbnail_metadata:
+        images.append([image_counter, thumbnail['data']])
         image_counter += 1
+    for brochure in brochures:
         images.append([image_counter, brochure.image])
-
+        image_counter += 1
+    if request.method == 'GET':
+        return render(request, 'market/marketing-platform-list.html', {
+            'product': product,
+            "market_platforms": market_platforms,
+            'images': images
+        })
     if request.method == 'POST':
         platform = request.POST.get('platform')
         if platform == 'Dribble':
-            selected_image = images[int(request.POST.get('selected_image'))][1]
+            print('DRIBBLE==============')
+            print(request.POST)
+            selected_image_index = request.POST.get('selected_image')
+            selected_image = images[int(selected_image_index)][1]
+            print(selected_image)
+            format, imgstr = selected_image.split(';base64,')
+            ext = format.split('/')[-1]
+            c = ContentFile(base64.b64decode(imgstr))
+            filename = "profile-"+datetime.now().strftime("%Y%m%d-%H%M%S")+"." + ext
             dp = DribbleProduct.objects.create(
                 product=product,
                 title=request.POST.get('title'),
                 description=request.POST.get('description'),
                 tags=request.POST.get('tags'),
-                image=selected_image,
                 views=0,
                 status='P'
             )
+            dp.image.save(filename, c, save=True)
+
             price = MarketingPlatforms.objects.get(title=platform).price
             if price:
                 pass
@@ -89,15 +107,7 @@ def marketing_platform_list(request, pk):
                     user=request.user,
                     content="Your Product will be listed shortly on Dribble",
                 )
-                messages.warning(request, 'Your Product will be listed shortly on Dribble')
-                t = Thread(
-                    target=upload_product_to_dribble,
-                    args=(
-                        dp,
-                        platform
-                    )
-                )
-                t.start()
+                upload_product_to_dribble.delay(dp.id, platform)
                 return redirect('seller:dashboard')
         elif platform == 'Dribble-PRO':
             selected_image = images[int(request.POST.get('selected_image'))][1]
@@ -151,14 +161,10 @@ def marketing_platform_list(request, pk):
                         platform
                     )
                 )
+                upload_product_to_dribble.delay(dp, platform)
                 t.start()
                 return redirect('seller:dashboard')
-    else:
-        return render(request, 'market/marketing-platform-list.html', {
-            'product': product,
-            "market_platforms": market_platforms,
-            'images': images
-        })
+
 
 def scraper(request):
     options = webdriver.ChromeOptions()

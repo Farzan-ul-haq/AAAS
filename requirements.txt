@@ -4,7 +4,7 @@ ipython==7.16.1
 coverage==5.3.1
 psycopg2-binary==2.8.6
 sentry-sdk==1.1.0
-selenium==3.141.0
+selenium==4.0.0.a5
 chromedriver-autoinstaller
 webdriver_manager
 django-celery-results==2.0.1

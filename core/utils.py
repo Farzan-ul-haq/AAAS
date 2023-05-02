@@ -2,7 +2,7 @@ from threading import Thread
 from core.models import Product, ApiService, Logo, HtmlTemplate, \
     DownloadSoftware, DribbleProduct, Notification, Transaction, \
     User
-from market.utils import upload_product_to_dribble
+from market.tasks import upload_product_to_dribble
 from buyer.utils import complete_product_purchase
 
 def get_product_object(product):
@@ -37,14 +37,7 @@ def fulfill_order(data, amount):
                 user=dp.product.owner,
                 content="Your Product will be listed shortly on Dribble-PRO",
             )
-            t = Thread(
-                target=upload_product_to_dribble,
-                args=(
-                    dp,
-                    data['platform']
-                )
-            )
-            t.start()
+            upload_product_to_dribble.delay(dp, data['platform'])
     elif data['type'] == 'purchase_package':
         print('+++++++++++')
         complete_product_purchase(data)

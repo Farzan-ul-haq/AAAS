@@ -63,18 +63,13 @@ body {
 {% endblock css %}
 
 {% block body %}
-
 <div class="container-fluid">
   <div class="row mx-5">
     <div class="col-3 pt-3 border">
       <h2>Enter Details...</h2>
       <div class="color-picker">
         <label for="title" class="font-weight-bold">Select color</label>
-        <div class="colors">
-          <div class="color color-blue selected"></div>
-          <div class="color color-black"></div>
-          <div class="color color-green"></div>
-        </div>
+        <div class="colors"></div>
       </div>
       <div class="form-group">
         <label for="title" class="font-weight-bold">Title</label>
@@ -121,10 +116,10 @@ body {
           Generate Brochure
         </button>
       </div>
-      <form action="" method="post">
+      <form action="" method="post" class="brochure-form">
         <div class="form-group">
-          <input type="text" hidden name="myCanvasData" id="myCanvasData" />
-          <button class="btn btn-primary col-12" type="submit">
+          <!-- <input type="text" hidden name="myCanvasData" id="myCanvasData" /> -->
+          <button class="btn btn-primary col-12 btn-save" type="submit">
             Save Brochure
           </button>
         </div>
@@ -148,20 +143,22 @@ body {
 // BROCHURE JS
 const canvas = document.getElementById("myCanvas");
 const backgroundCanvas = document.getElementById("background-canvas");
-const ctx = canvas.getContext("2d");
-const backgroundCtx = backgroundCanvas.getContext("2d");
 const thumbImgInput = document.getElementById("thumbnail");
-const colorOptions = [...document.getElementsByClassName("color")];
-
+const colorsContainer = document.querySelector(".colors");
 const title = document.getElementById("title");
 const description = document.getElementById("description-field");
 const features = document.getElementById("features-field");
+// const imageInput = document.querySelector("#myCanvasData");
+const saveBtn = document.querySelector(".btn-save");
+const form = document.querySelector(".brochure-form");
 
-const bgImage = {
-  blue: "./b3-blue.png",
-  black: "./b3-black.png",
-};
-let currentbgColor = "blue";
+const ctx = canvas.getContext("2d");
+const backgroundCtx = backgroundCanvas.getContext("2d");
+const bgImage = {};
+
+const secondaryColors = {};
+
+let currentbgColor;
 let bgImageSrc = getBgImageSrc(currentbgColor);
 let thumbImage = null;
 let throttleTimer;
@@ -169,22 +166,88 @@ let throttleTimer;
 title.addEventListener("keydown", () => throttle(generateBrochure, 300));
 description.addEventListener("keydown", () => throttle(generateBrochure, 300));
 features.addEventListener("keydown", () => throttle(generateBrochure, 300));
+saveBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+  const imageInput = createNewInput(
+    "myCanvasData", 
+    document.getElementById("myCanvas").toDataURL("image/png")
+  );
+  form.appendChild(imageInput);
+
+  form.submit();
+});
 
 // Add an event listener to the thumbImage input element
 // To read and save image eveytime a new one is uploaded
 thumbImgInput.addEventListener("change", handleFileChange);
 
-colorOptions.forEach((colorOption) => {
-  colorOption.addEventListener("click", handleColorSelection);
-});
-
 document.addEventListener("DOMContentLoaded", () => {
   // calling functions on page load
+  fetchData();
+  // setupColors();
   generateBrochure();
-  generateStaticBg();
+  generateStaticBg(bgImageSrc);
 });
 
-function generateStaticBg(imgSrc = "./b3-blue.png") {
+function fetchData() {
+  fetch("/api/v1/brochure-templates/L/")
+    .then((response) => response.json())
+    .then((data) => setupColors(data));
+}
+
+function createNewInput(name, value) {
+  const input = document.createElement("input");
+  input.type = "hidden";
+  input.name = name;
+  input.value = value;
+
+  return input;
+}
+
+function setupColors(colors) {
+  // colors = [
+  //   {
+  //     primary_color: "blue",
+  //     secondary_color: "black",
+  //     image: "./b3-blue.png",
+  //   },
+  //   {
+  //     primary_color: "black",
+  //     secondary_color: "black",
+  //     image: "./b3-black.png",
+  //   },
+  // ];
+
+  colors.forEach((color) => {
+    bgImage[color.primary_color] = color.image;
+    secondaryColors[color.primary_color] = color.secondary_color;
+  });
+
+  colors.forEach((color, idx) => {
+    if (idx === 0) {
+      currentbgColor = color.primary_color;
+      bgImageSrc = getBgImageSrc(currentbgColor);
+    }
+
+    const colorEl = createColor(idx === 0);
+    colorEl.style.backgroundColor = color.primary_color;
+
+    colorEl.addEventListener("click", () =>
+      handleColorSelection(colorEl, color.primary_color)
+    );
+    colorsContainer.appendChild(colorEl);
+  });
+}
+
+function createColor(isSelected) {
+  const colorEl = document.createElement("div");
+  // const selectedClass = isSelected ? "selected" : "";
+  colorEl.classList.add("color", isSelected && "selected");
+
+  return colorEl;
+}
+
+function generateStaticBg(imgSrc) {
   backgroundCtx.clearRect(
     0,
     0,
@@ -198,20 +261,21 @@ function generateStaticBg(imgSrc = "./b3-blue.png") {
   };
 }
 
-function handleColorSelection(event) {
-  const newColor = event.target.classList[1].split("-")[1];
+function handleColorSelection(colorEl, newColor) {
   const newBgImageSrc = getBgImageSrc(newColor);
   if (newBgImageSrc) {
     bgImageSrc = newBgImageSrc;
     currentbgColor = newColor;
   }
   clearColorSelection();
-  event.target.classList.add("selected");
+  colorEl.classList.add("selected");
   generateBrochure();
   generateStaticBg(bgImageSrc);
 }
 
 function clearColorSelection() {
+  const colorOptions = [...document.getElementsByClassName("color")];
+
   colorOptions.forEach((colorOption) => {
     if (colorOption.classList.contains("selected")) {
       colorOption.classList.remove("selected");
@@ -265,13 +329,14 @@ function refreshCanvas() {
 
 function drawTitle(title) {
   ctx.font = "900 95px sans-serif";
-  ctx.fillStyle = "black";
+  // ctx.fillStyle = secondaryColors[currentbgColor];
+  ctx.fillStyle = currentbgColor;
   const wrappedtitle = wrapText(ctx, title, 1350, 950, 500, 110);
   for (let i = 0; i < wrappedtitle.length; i++) {
     if (i % 2 == 0) {
-      ctx.fillStyle = currentbgColor === "blue" ? "#22bed7" : "black";
+      ctx.fillStyle = currentbgColor;
     } else {
-      ctx.fillStyle = "black";
+      ctx.fillStyle = secondaryColors[currentbgColor];
     }
     ctx.fillText(wrappedtitle[i][0], wrappedtitle[i][1], wrappedtitle[i][2]);
   }
@@ -280,15 +345,12 @@ function drawTitle(title) {
 function drawThumbnail(thumbImage) {
   if (thumbImage) {
     drawCircularImage(ctx, thumbImage, 1020, 220, 630, 630);
-    // document.getElementById("myCanvasData").value = document
-      // .getElementById("myCanvas")
-      // .toDataURL("image/png");
   }
 }
 
 function drawDescription(description) {
   ctx.font = "100 34px sans-serif";
-  ctx.fillStyle = "black";
+  ctx.fillStyle = secondaryColors[currentbgColor];
   const wrappedDescription = wrapText(ctx, description, 750, 1000, 550, 45);
   wrappedDescription.forEach((item) => {
     description_text_line = item[0];
@@ -308,14 +370,12 @@ function drawFeatures(features) {
     if (features_text_line.slice(0, 2) == "\n ") {
       features_text_line = features_text_line.slice(2, 100);
     }
-    ctx.fillStyle = currentbgColor === "blue" ? "#22bed7" : "black";
+    ctx.fillStyle = currentbgColor;
     ctx.fillText("✔ ", item[1], item[2]);
-    ctx.fillStyle = "black";
+    ctx.fillStyle = secondaryColors[currentbgColor];
     ctx.fillText(features_text_line, item[1] + 40, item[2]);
   });
 }
-
-
 </script>
 <script>
   // UTILS.JS
@@ -407,21 +467,9 @@ function throttle(callback, time) {
     callback();
     throttleTimer = null;
   }, time);
-}
+};
+
 
 </script>
-<script>
-  // FARZAN CODE TO CHECK API
-  $.ajax({
-    type: 'GET',
-    url: `/api/v1/brochure-templates/H/`,
-    success: function(data) {
-      console.log(data);
-    },
-    error: function(error) {
-        console.log('Error:', error);
-    }
-  });
 
-</script>
 {% endblock js %}

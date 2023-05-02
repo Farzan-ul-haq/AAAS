@@ -298,7 +298,8 @@ class BrochureTemplates(models.Model):
 class Brochure(models.Model):
     title = models.CharField(max_length=5000, default="")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.ImageField("brochure/")
+    image_data = models.TextField(default="")
+
 
     def __str__(self):
         return f"{self.id} | {self.product}"

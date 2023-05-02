@@ -35,28 +35,25 @@ try:
     driver.find_element(By.ID, 'title').send_keys("01") # ADD TITLE
     time.sleep(10)
 
-    driver.find_element(By.CLASS_NAME, 'ProseMirror').send_keys(
+    description_field = driver.find_element(By.CLASS_NAME, 'ProseMirror')
+    driver.execute_script("arguments[0].scrollIntoView(true);", description_field)
+    description_field.send_keys(
                 f"BUY NOW https://google.com"
     )
     driver.save_screenshot('selenium/5.png')
     print('5. Details Added')
     time.sleep(30)
-    continue_btn = driver.find_element(By.XPATH, """//button[text()="
-    Continue
-    "]""")
+    continue_btn = driver.find_element(By.XPATH, """//button[normalize-space()="Continue"]""")
     time.sleep(10)
     driver.execute_script("arguments[0].scrollIntoView(true);", continue_btn)
     continue_btn.click()
-    driver.quit()
     print('6. Continue Added')
     driver.save_screenshot('selenium/6.png')
     time.sleep(10)
     driver.find_element(By.TAG_NAME, 'tags').find_element(By.CLASS_NAME, 'tagify__input').send_keys('a,b,c,d,')
     print('7. Tags Added')
     driver.save_screenshot('selenium/7.png')
-    publish_btn = driver.find_element(By.XPATH, """//button[text()="
-    Publish now
-    "]""")
+    publish_btn = driver.find_element(By.XPATH, """//button[normalize-space()="Publish now"]""")
     publish_btn.click()
     print('8. Publish')
     driver.save_screenshot('selenium/8.png')
