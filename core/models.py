@@ -108,6 +108,16 @@ class Product(models.Model):
     def get_absolute_url(self):
         return "/{self.user.username}/{self.slug}/"
 
+    def get_product_obj(self):
+        if self.product_type == "A":
+            obj = ApiService.objects.get(product=self)
+        elif self.product_type == 'L':
+            obj = Logo.objects.get(product=self)
+        elif self.product_type == 'H':
+            obj = HtmlTemplate.objects.get(product=self)
+        elif self.product_type == 'D':
+            obj = DownloadSoftware.objects.get(product=self)
+        return obj
 
 class Logo(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)

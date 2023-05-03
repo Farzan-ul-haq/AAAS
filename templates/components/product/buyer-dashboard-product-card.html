@@ -14,7 +14,7 @@
             {% if bought_product.package.service.product_type == 'A' %}
             <a href="{% url 'buyer:buy-product' bought_product.package.id %}" type="button" class="btn btn-warning font-weight-bold"><b>Reactivate<br>Package</b></a>
             {% else %}
-            <button type="button" class="btn btn-warning font-weight-bold"><b>DOWNLOAD<br>PRODUCT</b></button>
+            <a href="{{bought_product.package.service.get_product_obj.source_file.url}}" type="button" class="btn btn-warning font-weight-bold"><b>DOWNLOAD<br>PRODUCT</b></a>
             {% endif %}
             <br><br>
             {% if not bought_product.is_feedback_given %}
