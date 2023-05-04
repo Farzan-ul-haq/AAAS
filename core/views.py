@@ -34,6 +34,17 @@ def index(request): # landing page
     return render(request, 'core/index.html')
 
 
+def redirect_users(request):
+    """REDIRECT USERS FROM LANDING PAGE"""
+    if request.user.is_authenticated:
+        if request.user.mode == 'S':
+            return redirect('seller:dashboard')
+        if request.user.mode == 'B':
+            return redirect('buyer:dashboard')
+    else:
+        return redirect('accounts:login')
+
+
 def explore(request): # this contains the list of products
     """This contains the list of products"""
     products = Product.objects.all()

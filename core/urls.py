@@ -8,6 +8,7 @@ app_name = 'core'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('redirect/', views.redirect_users, name='redirect'),
     path('explore/', views.explore, name='explore'),
     path('billing/', views.billing, name='billing'),
     path('notifications/', views.notifications, name='notifications'),
