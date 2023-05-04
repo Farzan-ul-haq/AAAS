@@ -6,16 +6,17 @@ from django.contrib import messages
 from django.urls import reverse
 
 from core.models import ProductPackage, ClientPackages, Transaction, \
-    Feedback
+    Feedback, ClientActivity
 # Create your views here.
 
 def client_dashboard(request):
     bought_products = ClientPackages.objects.filter(user=request.user)
     transactions = Transaction.objects.filter(user=request.user).order_by('-id')
-
+    activities = ClientActivity.objects.filter(user=request.user).order_by('-id')[:10]
     return render(request, 'buyer/dashboard.html', {
         "bought_products": bought_products,
-        "transactions": transactions
+        "transactions": transactions,
+        'activities': activities
     })
 
 def buy_product(request, price_package_id):

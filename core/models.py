@@ -295,6 +295,11 @@ class Transaction(models.Model):
         db_table = "Transaction"
 
 
+class ClientActivity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.CharField(max_length=5000)
+    redirect_url = models.CharField(max_length=10000)
+
 class BrochureTemplates(models.Model):
     image = models.ImageField("brochure-templates/", default="", null=True, blank=True)
     product_type = models.CharField(choices=PRODUCT_TYPES, default='A', max_length=1)

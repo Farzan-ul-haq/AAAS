@@ -5,11 +5,13 @@ from django.db.models import Q, F
 from django.shortcuts import HttpResponse
 from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
 
 from core.models import Product, ApiService, Logo,  \
     HtmlTemplate, DownloadSoftware, ProductPackage, \
     Feedback, Endpoints, Transaction, User
 from core.utils import get_product_object, fulfill_order
+from buyer.tasks import add_client_activity
 
 
 if settings.STRIPE_LIVE_MODE:
@@ -46,6 +48,12 @@ def search_product(request):
     products = Product.objects.filter(
         Q(title__icontains=query) | Q(description__icontains=query) | Q(status='A')
     )
+    if request.user.is_authenticated:
+        add_client_activity.delay(
+            f"You Searched: {query}",
+            request.user.id,
+            reverse('core:product-search')+f'query={query}'
+    )
     return render(request, 'core/search.html', {
         'products': products,
         'query': query
@@ -56,7 +64,13 @@ def view_product(request, slug):
     product = get_object_or_404(Product, slug=slug)
     product.clicks += 1
     product.save()
-
+    add_client_activity.delay(
+            f"Viewed: {product.title}",
+            request.user.id,
+            reverse('core:product-view', kwargs={
+                'slug': product.slug
+            })
+    )
     obj, template = get_product_object(product)
     package = ProductPackage.objects.filter(service=product)
     feedbacks = Feedback.objects.filter(package__service=product).order_by('-id')

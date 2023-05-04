@@ -17,7 +17,10 @@
             </div>
         </div>
         <div class="col-3 border">
-            <h5>Actvitiy Panel</h5>
+            <h5>Actvitiy Panel</h5><hr>
+            {%for activity in activities %}
+            <p><a href="{{activity.redirect_url}}"><strong>{{activity.content}}</strong></a></p><hr>
+            {% endfor %}
         </div>
     </div>
 </div>
