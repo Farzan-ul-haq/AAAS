@@ -40,7 +40,7 @@ services:
     container_name: postgres2
     hostname: postgres
     volumes:
-      - pg_data:/bitnami/postgresql
+      - postgres_data_recover:/var/lib/postgresql/data
     env_file:
       - ${ENV_FILE}
     networks:
@@ -86,6 +86,6 @@ networks:
   aaas_net:
 
 volumes:
-  pg_data:
+  postgres_data_recover:
   redis_data:
   media_volume:

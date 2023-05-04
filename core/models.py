@@ -85,6 +85,7 @@ class Product(models.Model):
 
     impressions = models.IntegerField(default=0)
     clicks = models.IntegerField(default=0)
+    show_on_landing = models.BooleanField(default=False)
 
     status = models.CharField(choices=(
         ('A', 'approved'),
