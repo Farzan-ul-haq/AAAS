@@ -1,9 +1,11 @@
+import datetime
+
 from core.models import User, Product, ProductPackage, \
     ClientPackages, Transaction, Notification
 from django.shortcuts import redirect
 
-def generate_buyer_token(client_package, buyer):
-    return f"{client_package.id}|{client_package.package.id}|{buyer.id}"
+def generate_buyer_token(buyer):
+    return f"{buyer.id}{datetime.datetime.now().isoformat().replace('-', '').replace(':', '').replace('.', '')}"
 
 def complete_product_purchase(data):
     product_package = ProductPackage.objects.get(id=data['product_package_id'])
@@ -11,17 +13,13 @@ def complete_product_purchase(data):
     seller = product_package.service.owner
     
     if product_package.service.product_type == 'A':
-        cp = ClientPackages.objects.get_or_create(
+        cp = ClientPackages.objects.create(
             package=product_package,
             user=buyer,
+            token=generate_buyer_token(buyer)
         )
-        cp = cp[0]
         print(cp)
         cp.normal_requests_left = cp.normal_requests_left + product_package.normal_requests
-        cp.token=generate_buyer_token(
-                cp,
-                buyer,
-            )
         cp.save()
     else:
         ClientPackages.objects.create(

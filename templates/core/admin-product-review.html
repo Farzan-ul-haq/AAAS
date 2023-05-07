@@ -5,7 +5,11 @@
 {% block body %}
 <div class="container mt-5 ">
     <div class="my-3 p-3 bg-white rounded box-shadow col-12">
+        <h3 class="border-bottom border-gray pb-2 mb-0"><strong>APPROVE/REJECT PRODUCT</strong></h3>
         <div class="row">
+            {%if not products%}
+                <h3 class="p-5 mb-0 col-12 text-center"><i><strong> NO NEW PRODUCTS</strong></i></h3>
+            {% endif %}
             {%for product in products %}
             <div class="col-12">
                 <div class="media m-3 text-muted">

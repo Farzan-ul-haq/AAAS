@@ -11,7 +11,7 @@ from seller.utils import create_endpoint_obj, \
 from core.utils import get_product_object
 
 def seller_dashboard(request):
-    products = Product.objects.filter(owner=request.user)
+    products = Product.objects.filter(owner=request.user).order_by('-id')
     brochures = Brochure.objects.filter(product__owner=request.user).order_by('-id')
 
     return render(request, 'seller/dashboard.html', context={
@@ -147,7 +147,8 @@ def delete_product(request, product_id):
             'seller/delete-product.html'
             )
     elif request.method == 'POST':
-        product.delete()
+        product.status='D'
+        product.save()
         return redirect('seller:dashboard')
 
 def update_logo(request, product_id):

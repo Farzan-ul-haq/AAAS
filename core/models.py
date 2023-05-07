@@ -32,6 +32,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'username'
 
+    def package_already_bought(self, package_id):
+        return ClientPackages.objects.filter(
+            user=self,
+            package__id=package_id
+        ).exists()
 
 PRODUCT_TYPES = (
     ('A', 'API'),
@@ -91,7 +96,7 @@ class Product(models.Model):
         ('A', 'approved'),
         ('R', 'rejected'),
         ('P', 'pending'),
-        ('D', 'draft'),
+        ('D', 'deleted'),
     ), default='D', max_length=1)
 
     created_at = models.DateTimeField(auto_now_add=True)

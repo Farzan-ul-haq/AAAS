@@ -6,30 +6,41 @@
     {% endif %}
     <div class="card-body">
         <h5 class="card-title">{{product.title}}</h5>
-        <p class="card-text">
-            {{product.description|truncatechars:40}}
-        </p>
         <div class="dropdown-divider"></div>
         <div class="">
             <span class="badge badge-warning float-start p-2">{{product.get_product_type_display.upper}}</span>
-            <span class="badge badge-primary float-right p-2">{{product.get_status_display.upper}}</span>
+            {% if product.status == 'A' %}
+            <span class="badge badge-success float-right p-2">{{product.get_status_display.upper}}</span>
+            {% elif product.status == 'P' %}
+            <span class="badge badge-warning float-right p-2">{{product.get_status_display.upper}}</span>
+            {% elif product.status == 'D' %}
+            <span class="badge badge-danger float-right p-2">{{product.get_status_display.upper}}</span>
+            {% endif %}
         </div>
-
         <div class="dropdown-divider"></div>
         <div class="">
-            <a href="{% url 'market:market-list' product.id %}" class="badge badge-info float-start p-2 col-12">MARKET</a>
-            <a href="{% url 'seller:delete-product' product.id %}" class="badge badge-danger float-start p-2 col-12 mt-2">DELETE</a>
-            {% if product.product_type == 'L' %}
-            <a href="{% url 'seller:update-logo' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
-            <a href="{% url 'market:brochure-detail' product.id 3 %}" class="badge badge-success float-start p-2 col-12 mt-2">DESIGN BROCHURE</a>
-            {% elif product.product_type == 'H'%}
-            <a href="{% url 'seller:update-template' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
-            <a href="{% url 'market:brochure-detail' product.id 2 %}" class="badge badge-success float-start p-2 col-12 mt-2">DESIGN BROCHURE</a>
-            {% elif product.product_type == 'D' %}
-            <a href="{% url 'seller:update-software' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
-            <a href="{% url 'market:brochure-detail' product.id 1 %}" class="badge badge-success float-start p-2 col-12 mt-2">DESIGN BROCHURE</a>
-            {% elif product.product_type == 'A' %}
-            <a href="{% url 'seller:update-api' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
+            {% if product.status != 'D' %}
+                {% if product.product_type == 'L' %}
+                <a href="{% url 'seller:update-logo' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
+                {% elif product.product_type == 'H'%}
+                <a href="{% url 'seller:update-template' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
+                {% elif product.product_type == 'D' %}
+                <a href="{% url 'seller:update-software' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
+                {% elif product.product_type == 'A' %}
+                <a href="{% url 'seller:update-api' product.id %}" class="badge badge-warning float-start p-2 col-12 mt-2">UPDATE</a>
+                {% endif %}
+                <a href="{% url 'seller:delete-product' product.id %}" class="badge badge-danger float-start p-2 col-12 my-2">DELETE</a>
+            {% endif %}
+
+            {% if product.status == 'A' %}
+                <a href="{% url 'market:market-list' product.id %}" class="badge badge-info float-start p-2 col-12">MARKET</a>
+                {% if product.product_type == 'L' %}
+                <a href="{% url 'market:brochure-detail' product.id 3 %}" class="badge badge-success float-start p-2 col-12 my-2">DESIGN BROCHURE</a>
+                {% elif product.product_type == 'H'%}
+                <a href="{% url 'market:brochure-detail' product.id 2 %}" class="badge badge-success float-start p-2 col-12 mt-2">DESIGN BROCHURE</a>
+                {% elif product.product_type == 'D' %}
+                <a href="{% url 'market:brochure-detail' product.id 1 %}" class="badge badge-success float-start p-2 col-12 mt-2">DESIGN BROCHURE</a>
+                {% endif %}
             {% endif %}
         </div>
         <div class="dropdown-divider"></div>

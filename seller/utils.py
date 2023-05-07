@@ -11,7 +11,7 @@ def update_product(product, request):
     product.save()
     tags = [
         Tag.objects.get_or_create(
-            name=tag
+            name=tag.upper()
         )[0] for tag in json.loads(request.POST.get('tags'))
     ]
     product.tags.set(tags)
@@ -29,7 +29,7 @@ def create_product(request, request_type):
     p.save()
     tags = [
         Tag.objects.get_or_create(
-            name=tag
+            name=tag.upper()
         )[0] for tag in json.loads(request.POST.get('tags'))
     ]
     p.tags.set(tags)

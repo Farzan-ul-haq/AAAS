@@ -12,7 +12,7 @@
         </div>
         <div class="ml-5 align-self-center px-3">
             {% if bought_product.package.service.product_type == 'A' %}
-            <a href="{% url 'buyer:buy-product' bought_product.package.id %}" type="button" class="btn btn-warning font-weight-bold"><b>Reactivate<br>Package</b></a>
+            <a href="{% url 'buyer:buy-product' bought_product.package.id %}" type="button" class="btn btn-warning font-weight-bold"><b>RE-BUY<br>Package</b></a>
             {% else %}
             <a href="{{bought_product.package.service.get_product_obj.source_file.url}}" type="button" class="btn btn-warning font-weight-bold"><b>DOWNLOAD<br>PRODUCT</b></a>
             {% endif %}

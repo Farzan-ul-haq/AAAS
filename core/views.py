@@ -75,16 +75,26 @@ def view_product(request, slug):
     product = get_object_or_404(Product, slug=slug)
     product.clicks += 1
     product.save()
-    add_client_activity.delay(
+    obj, template = get_product_object(product)
+    package = ProductPackage.objects.filter(service=product)
+    feedbacks = Feedback.objects.filter(package__service=product).order_by('-id')
+    if request.user.is_authenticated:
+        is_packages_bought = [
+            request.user.package_already_bought(p.id)
+            if request.user.is_authenticated else None
+            for p in package
+        ]
+        add_client_activity.delay(
             f"Viewed: {product.title}",
             request.user.id,
             reverse('core:product-view', kwargs={
                 'slug': product.slug
             })
-    )
-    obj, template = get_product_object(product)
-    package = ProductPackage.objects.filter(service=product)
-    feedbacks = Feedback.objects.filter(package__service=product).order_by('-id')
+        )
+    else:
+        is_packages_bought = [False for p in package]
+    packages_index = [i for i in range(len(is_packages_bought))]
+    print(is_packages_bought)
     if product.product_type == 'A':
         endpoints = Endpoints.objects.filter(service=obj)
         return render(request, template, {
@@ -92,14 +102,19 @@ def view_product(request, slug):
             "obj": obj,
             "endpoints": endpoints,
             "packages": package,
-            "feedbacks": feedbacks
+            "feedbacks": feedbacks,
+            "is_packages_bought": is_packages_bought,
+            "packages_index": packages_index
         })
     else:
         return render(request, template, {
             'product': product,
             "obj": obj,
             "package": package,
-            "feedbacks": feedbacks
+            "feedbacks": feedbacks,
+            "is_packages_bought": is_packages_bought,
+            "packages_index": packages_index
+
         })
 
 

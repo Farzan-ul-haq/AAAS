@@ -7,10 +7,11 @@ from django.urls import reverse
 
 from core.models import ProductPackage, ClientPackages, Transaction, \
     Feedback, ClientActivity
+from core.utils import create_checkout_session
 # Create your views here.
 
 def client_dashboard(request):
-    bought_products = ClientPackages.objects.filter(user=request.user)
+    bought_products = ClientPackages.objects.filter(user=request.user).order_by('-id')
     transactions = Transaction.objects.filter(user=request.user).order_by('-id')
     activities = ClientActivity.objects.filter(user=request.user).order_by('-id')[:10]
     return render(request, 'buyer/dashboard.html', {
@@ -26,32 +27,18 @@ def buy_product(request, price_package_id):
     if not request.user.is_authenticated:
         return redirect('accounts:login')
     # payment checkout URL
-    checkout_session = stripe.checkout.Session.create(
-        line_items = [
-            {
-                'price_data': {
-                    'currency': 'usd',
-                    'unit_amount': int(product_package.price*100),
-                    'product_data': {
-                        'name': f'Purchase: {product.title}',
-                    },
-                },
-                'quantity': 1,
-            },
-        ],
+    checkout_session_url = create_checkout_session(
+        price=product_package.price,
+        title=f'Purchase: {product.title}',
         metadata={
             "uid": request.user.id,
             "product_package_id": product_package.id,
             'type': 'purchase_package'
         },
-        mode='payment',
         success_url=domain_url + reverse('buyer:dashboard'),
-        cancel_url=domain_url + reverse(
-            'core:product-view', 
-            kwargs={'slug': product.slug}
-        ),
+        cancel_url=domain_url + reverse('core:product-view', kwargs={'slug': product.slug})
     )
-    return redirect(checkout_session.url)
+    return redirect(checkout_session_url)
 
 
 def give_feedback(request, bought_package_id):
