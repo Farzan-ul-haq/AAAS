@@ -17,9 +17,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.html import format_html
 from django.views.decorators.csrf import csrf_exempt
+
 from core.models import Product, MarketingPlatforms, DribbleProduct, \
-    Brochure, Notification , BrochureTemplates
-from market.tasks import upload_product_to_dribble
+    Brochure, Notification, \
+    BrochureTemplates, PinterestProduct, CoroloftProduct
+from core.utils import create_checkout_session
+from market.tasks import upload_product_to_dribble, \
+    upload_product_to_coroflot, upload_product_to_pinterest
 
 
 if settings.STRIPE_LIVE_MODE:
@@ -78,17 +82,27 @@ def marketing_platform_list(request, pk):
             'images': images
         })
     if request.method == 'POST':
+        domain_url = "http://" + request.get_host()
         platform = request.POST.get('platform')
-        if platform == 'Dribble':
+        print(request.POST)
+        # GET SELECTED IMAGE
+        selected_image_index = request.POST.get('selected_image')
+        selected_image = images[int(selected_image_index)][1]
+        format, imgstr = selected_image.split(';base64,')
+        ext = format.split('/')[-1]
+        c = ContentFile(base64.b64decode(imgstr))
+        filename = "profile-"+datetime.now().strftime("%Y%m%d-%H%M%S")+"." + ext
+    
+        NOTIFICATION_MSG = f"Your product will be listed shortly on {platform}"
+        messages.warning(request, NOTIFICATION_MSG)
+        Notification.objects.create(
+            user=request.user,
+            content=NOTIFICATION_MSG,
+        )
+        price = MarketingPlatforms.objects.get(title=platform).price
+
+        if platform.lower() == 'dribble':
             print('DRIBBLE==============')
-            print(request.POST)
-            selected_image_index = request.POST.get('selected_image')
-            selected_image = images[int(selected_image_index)][1]
-            print(selected_image)
-            format, imgstr = selected_image.split(';base64,')
-            ext = format.split('/')[-1]
-            c = ContentFile(base64.b64decode(imgstr))
-            filename = "profile-"+datetime.now().strftime("%Y%m%d-%H%M%S")+"." + ext
             dp = DribbleProduct.objects.create(
                 product=product,
                 title=request.POST.get('title'),
@@ -99,97 +113,107 @@ def marketing_platform_list(request, pk):
             )
             dp.image.save(filename, c, save=True)
 
-            price = MarketingPlatforms.objects.get(title=platform).price
             if price:
-                pass
-            else:
-                Notification.objects.create(
-                    user=request.user,
-                    content="Your Product will be listed shortly on Dribble",
-                )
-                upload_product_to_dribble.delay(dp.id, platform)
-                return redirect('seller:dashboard')
-        elif platform == 'Dribble-PRO':
-            selected_image = images[int(request.POST.get('selected_image'))][1]
-            dp = DribbleProduct.objects.create(
-                product=product,
-                title=request.POST.get('title'),
-                description=request.POST.get('description'),
-                tags=request.POST.get('tags'),
-                image=selected_image,
-                views=0,
-                status='P'
-            )
-            price = MarketingPlatforms.objects.get(title=platform).price
-            if price:
-                messages.warning(request, 'Your Product will be listed shortly on Dribble-PRO')
-                # payment checkout URL
-                checkout_session = stripe.checkout.Session.create(
-                    line_items = [
-                        {
-                            'price_data': {
-                                'currency': 'usd',
-                                'unit_amount': int(price*100),
-                                'product_data': {
-                                    'name': f'Dribble PRO Listing',
-                                },
-                            },
-                            'quantity': 1,
-                        },
-                    ],
+                checkout_session_url = create_checkout_session(
+                    price=price,
+                    title="Dribble Listing",
                     metadata={
                         "uid": request.user.id,
                         "dribble_product": dp.id,
                         "platform": platform,
                         'type': 'product_marketing'
                     },
-                    mode='payment',
                     success_url=settings.DOMAIN_URL + reverse('seller:dashboard'),
-                    cancel_url=settings.DOMAIN_URL + reverse('market:market-list', kwargs={'pk': pk}),
+                    cancel_url=settings.DOMAIN_URL + reverse('market:market-list', kwargs={'pk': pk})
                 )
-                print(checkout_session.id)
-                return redirect(checkout_session.url)
+                return redirect(checkout_session_url)
             else:
-                Notification.objects.create(
-                    user=request.user,
-                    content="Your Product will be listed shortly on Dribble-PRO",
-                )
-                t = Thread(
-                    target=upload_product_to_dribble,
-                    args=(
-                        dp,
-                        platform
-                    )
-                )
-                upload_product_to_dribble.delay(dp, platform)
-                t.start()
+                upload_product_to_dribble.delay(dp.id, platform)
                 return redirect('seller:dashboard')
 
+        elif platform.lower() == 'dribble-pro':
+            print('DRIBBLE-PRO==============')
+            dp = DribbleProduct.objects.create(
+                product=product,
+                title=request.POST.get('title'),
+                description=request.POST.get('description'),
+                tags=request.POST.get('tags'),
+                views=0,
+                status='P'
+            )
+            dp.image.save(filename, c, save=True)
 
-def scraper(request):
-    options = webdriver.ChromeOptions()
-    options.add_argument(' - incognito')
-    options.add_argument('--headless')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--no-sandbox')
-    i=1
-    try:
-        chromedriver_autoinstaller.install()
-        driver = webdriver.Chrome(options=options)
-        driver.get('https://google.com')
-        file = driver.get_screenshot_as_base64()
-        # DribbleProduct.objects.create('')
-        driver.quit()
-        return HttpResponse(format_html(f'<h1>{i}</h1><img src="data:;base64,{file}">'))
-    except Exception as e:
-        print(e)
-    i=2
-    try:
-        driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-        driver.get('https://google.com')
-        file = driver.get_screenshot_as_base64()
-        # DribbleProduct.objects.create('')
-        driver.quit()
-        return HttpResponse(format_html(f'<h1>{i}</h1><img src="data:;base64,{file}">'))
-    except Exception as e:
-        print(e)
+            if price:
+                checkout_session_url = create_checkout_session(
+                    price=price,
+                    title="Dribble PRO Listing",
+                    metadata={
+                        "uid": request.user.id,
+                        "dribble_product": dp.id,
+                        "platform": platform,
+                        'type': 'product_marketing'
+                    },
+                    success_url=settings.DOMAIN_URL + reverse('seller:dashboard'),
+                    cancel_url=settings.DOMAIN_URL + reverse('market:market-list', kwargs={'pk': pk})
+                )
+                return redirect(checkout_session_url)
+            else:
+                upload_product_to_dribble.delay(dp.id, platform)
+                return redirect('seller:dashboard')
+
+        elif platform == 'Pinterest':
+            pp = PinterestProduct.objects.create(
+                product=product,
+                title=request.POST.get('title'),
+                description=request.POST.get('description'),
+                pinterest_id='',
+                redirect_url=domain_url+reverse(
+                    'core:product-view', 
+                    kwargs={'slug': product.slug}
+                ),
+                status='P'
+            )
+            pp.image.save(filename, c, save=True)
+            if price:
+                checkout_session_url = create_checkout_session(
+                    price=price,
+                    title="Pinterest Listing",
+                    metadata={
+                        "uid": request.user.id,
+                        "pinterest_product": pp.id,
+                        "platform": platform,
+                        'type': 'product_marketing'
+                    },
+                    success_url=settings.DOMAIN_URL + reverse('seller:dashboard'),
+                    cancel_url=settings.DOMAIN_URL + reverse('market:market-list', kwargs={'pk': pk})
+                )
+                return redirect(checkout_session_url)
+            else:
+                upload_product_to_pinterest.delay(pp.id, platform)
+                return redirect('seller:dashboard')
+        elif platform == 'Coroflot':
+            cp = CoroloftProduct.objects.create(
+                product=product,
+                description=request.POST.get('description'),
+                coroflot_id='',
+                status='P'
+            )
+            cp.image.save(filename, c, save=True)
+            if price:
+                checkout_session_url = create_checkout_session(
+                    price=price,
+                    title="Coroflot Listing",
+                    metadata={
+                        "uid": request.user.id,
+                        "coroflot_product": cp.id,
+                        "platform": platform,
+                        'type': 'product_marketing'
+                    },
+                    success_url=settings.DOMAIN_URL + reverse('seller:dashboard'),
+                    cancel_url=settings.DOMAIN_URL + reverse('market:market-list', kwargs={'pk': pk})
+                )
+                return redirect(checkout_session_url)
+            else:
+                print(cp)
+                upload_product_to_coroflot.delay(cp.id, platform)
+                return redirect('seller:dashboard')

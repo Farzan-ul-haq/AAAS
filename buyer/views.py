@@ -23,6 +23,8 @@ def buy_product(request, price_package_id):
     domain_url = "http://" + request.get_host() 
     product_package = get_object_or_404(ProductPackage, pk=price_package_id)
     product = product_package.service
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
     # payment checkout URL
     checkout_session = stripe.checkout.Session.create(
         line_items = [

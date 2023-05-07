@@ -66,6 +66,35 @@
               <hr>
             {% endif %}
           {% endfor %}
+        {% elif market.title.lower == 'pinterest' %}
+          {% for pinterest in product.get_pinterest_obj %}
+              <div class="media m-3 text-muted">
+                <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{pinterest.image.url }}" data-holder-rendered="true">
+                <div class="media-body">
+                  <h5 class="mt-0"><strong class="d-block text-gray-dark">@{{market.title.title}}</strong></h5>
+                  <li><strong class="text-gray-dark">{{product.title}}</strong></li>
+                  <li><strong class="text-gray-dark"><a class='text-gray-dark' href="{{pinterest.get_absolute_url}}">Pinterest URL</a></strong></li>
+                </div>
+              </div>
+              <hr>
+          {% endfor %}
+        {% elif market.title.lower == 'coroflot' %}
+          {% for coroflot in product.get_coroflot_obj %}
+              <div class="media m-3 text-muted">
+                <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{coroflot.image.url }}" data-holder-rendered="true">
+                <div class="media-body">
+                  <h5 class="mt-0"><strong class="d-block text-gray-dark">@{{market.title.title}}</strong></h5>
+                  <li><strong class="text-gray-dark">{{product.title}}</strong></li>
+                  <li><strong class="text-gray-dark"><a class='text-gray-dark' href="{{coroflot.get_absolute_url}}">Coroflot URL</a></strong></li>
+                </div>
+                <div style="text-align: right;">
+                  {% for data in coroflot.get_details %}
+                  <h4>{{data.0}} <i class="fa fa-solid fa-{{data.1}}"></i></h4>
+                  {% endfor %}
+                </div>
+              </div>
+              <hr>
+          {% endfor %}
         {% endif %}
       {% endfor %}
     {% endfor %}

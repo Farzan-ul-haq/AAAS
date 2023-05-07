@@ -186,7 +186,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 from .info_settings import *
 
-DOMAIN_URL = 'http://139.59.221.126'
+DOMAIN_URL = 'http://157.245.16.34:8000/'
 
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "redis://localhost:6379/0"

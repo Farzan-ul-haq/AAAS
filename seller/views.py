@@ -13,12 +13,10 @@ from core.utils import get_product_object
 def seller_dashboard(request):
     products = Product.objects.filter(owner=request.user)
     brochures = Brochure.objects.filter(product__owner=request.user).order_by('-id')
-    dribble_product = DribbleProduct.objects.filter(product__owner=request.user)
 
     return render(request, 'seller/dashboard.html', context={
         'products': products,
         'brochures': brochures,
-        'dribble_product': dribble_product,
     })
 
 

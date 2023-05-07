@@ -1,9 +1,21 @@
-from threading import Thread
+import stripe
+
+from django.conf import settings
+from django.urls import reverse
+from django.shortcuts import render, redirect
+
 from core.models import Product, ApiService, Logo, HtmlTemplate, \
     DownloadSoftware, DribbleProduct, Notification, Transaction, \
     User
 from market.tasks import upload_product_to_dribble
 from buyer.utils import complete_product_purchase
+
+
+if settings.STRIPE_LIVE_MODE:
+    stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
+else:
+    stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+endpoint_secret = settings.DJSTRIPE_WEBHOOK_SECRET
 
 def get_product_object(product):
     if product.product_type == "A":
@@ -33,11 +45,29 @@ def fulfill_order(data, amount):
             pass
         elif data['platform'].lower() == 'dribble-pro':
             dp = DribbleProduct.objects.get(id=data['dribble_product'])
-            Notification.objects.create(
-                user=dp.product.owner,
-                content="Your Product will be listed shortly on Dribble-PRO",
-            )
-            upload_product_to_dribble.delay(dp, data['platform'])
+            upload_product_to_dribble.delay(dp.id, data['platform'])
     elif data['type'] == 'purchase_package':
         print('+++++++++++')
         complete_product_purchase(data)
+
+def create_checkout_session(price, title, metadata, success_url, cancel_url):
+        checkout_session = stripe.checkout.Session.create(
+            line_items = [
+                {
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': int(price*100),
+                        'product_data': {
+                            'name': f'Dribble PRO Listing',
+                        },
+                    },
+                    'quantity': 1,
+                },
+            ],
+            metadata=metadata,
+            mode='payment',
+            success_url=success_url,
+            cancel_url=cancel_url,
+        )
+        print(checkout_session.id)
+        return checkout_session.url

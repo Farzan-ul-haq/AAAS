@@ -26,17 +26,21 @@ class Command(BaseCommand):
         # logo Product
 
     def create_marketing_platforms(self):
-        MarketingPlatforms.objects.create(
+        MarketingPlatforms.objects.get_or_create(
             title="Dribble",
-            description="",
-            supported_products="Logo, Web Template, Software",
-            price=0
+            supported_products="Logo, Web Template, Software, API Products",
         )
-        MarketingPlatforms.objects.create(
+        MarketingPlatforms.objects.get_or_create(
             title="Dribble-PRO",
-            description="",
-            supported_products="Logo, Web Template, Software",
-            price=1
+            supported_products="Logo, Web Template, Software, API Products",
+        )
+        MarketingPlatforms.objects.get_or_create(
+            title="Pinterest",
+            supported_products="Logo, Web Template, Software, API Products",
+        )
+        MarketingPlatforms.objects.get_or_create(
+            title="Coroflot",
+            supported_products="Logo, Web Template, Software, API Products",
         )
 
     def create_brochure_templates(self):

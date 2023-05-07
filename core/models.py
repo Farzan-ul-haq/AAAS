@@ -1,15 +1,15 @@
 import re
 import requests
+from bs4 import BeautifulSoup
 
 from tinymce.models import HTMLField
 
+from django.utils.timezone import now
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, \
                                         PermissionsMixin
-
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
-
 from django.conf import settings
 
 from .managers import UserManager
@@ -119,6 +119,15 @@ class Product(models.Model):
         elif self.product_type == 'D':
             obj = DownloadSoftware.objects.get(product=self)
         return obj
+
+    def get_dribble_obj(self):
+        return DribbleProduct.objects.filter(product=self, status='A')
+    
+    def get_pinterest_obj(self):
+        return PinterestProduct.objects.filter(product=self, status='A')
+
+    def get_coroflot_obj(self):
+        return CoroloftProduct.objects.filter(product=self, status='A')
 
 class Logo(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
@@ -331,6 +340,9 @@ class MarketingPlatforms(models.Model):
     supported_products = models.CharField(max_length=500)
     price = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         db_table = "MarketingPlatforms"
 
@@ -347,7 +359,7 @@ class DribbleProduct(models.Model):
         ('P', 'PENDING'),
         ('A', 'APPROVED'),
     ), default='P')
-    # created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
         db_table = 'DribbleProduct'
@@ -380,4 +392,58 @@ class DribbleProduct(models.Model):
         return [
             [views, 'eye'],
             [likes, 'thumbs-up']
+        ]
+
+
+class PinterestProduct(models.Model):
+    product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    pinterest_id = models.CharField(max_length=255, blank=True, null=True)
+    redirect_url = models.CharField(max_length=1000, blank=True, null=True)
+    image = models.ImageField('market/pinterest/', null=True, blank=True)
+    status = models.CharField(max_length=1, choices=(
+        ('P', 'PENDING'),
+        ('A', 'APPROVED'),
+    ), default='P')
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+    def get_absolute_url(self):
+        return f"{settings.PINTEREST_PIN_URL}{self.pinterest_id}"
+
+
+class CoroloftProduct(models.Model):
+    product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL)
+    description = models.TextField()
+    coroflot_id = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField('market/coroflot/', null=True, blank=True)
+    status = models.CharField(max_length=1, choices=(
+        ('P', 'PENDING'),
+        ('A', 'APPROVED'),
+    ), default='P')
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+    def get_absolute_url(self):
+        return f"{settings.COROFLOT_PIN_URL}{self.coroflot_id}"
+
+    def get_details(self):
+        soup = BeautifulSoup(requests.get(self.get_absolute_url()).text)
+        try: # VIEWS
+            views = re.findall(
+                "[0-9]+", soup.find_all("li", {"class": "stat_item"})[0].text
+            )[0]
+        except Exception as e:
+            print(e)
+            views = 0
+        try:
+            likes = re.findall(
+                "[0-9]+", soup.find_all("li", {"class": "stat_item"})[1].text
+            )[0]
+        except Exception as e:
+            print(e)
+            likes = 0
+        print(views)
+        return [
+            [views, 'eye'],
+            [likes, 'thumbs-up'],
         ]

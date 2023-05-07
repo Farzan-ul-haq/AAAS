@@ -90,6 +90,26 @@
                             </div>
                         </div>
                     </div>
+                {% elif mp.title.lower == 'pinterest' %}
+                    <div class="modal fade bd-example-modal-lg-pinterest" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content p-3 col-12">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Pinterest</h5>
+                                <hr>
+                                {% include 'components/market/pinterest-form.html' %}
+                            </div>
+                        </div>
+                    </div>
+                {% elif mp.title.lower == 'coroflot' %}
+                    <div class="modal fade bd-example-modal-lg-coroflot" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content p-3 col-12">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Coroflot</h5>
+                                <hr>
+                                {% include 'components/market/coroflot-form.html' %}
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
                 </div>
             {% endif %}

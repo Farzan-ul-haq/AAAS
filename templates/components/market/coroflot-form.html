@@ -1,0 +1,18 @@
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name='description' class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+    <hr>
+    <div class="form-group">
+        <label class="mb-3">Select Image</label><br>
+        {% for image in images %}
+        <input type="radio" name="selected_image" id="c-{{image.0}}" value="{{image.0}}" class="input-hidden" {%if not image.0 %} checked {% endif %}/>
+        <label for="c-{{image.0}}">
+            <img  class='mx-2' src="{{image.1}}" alt="I'm sad" />
+        </label>
+        {% endfor %}
+    </div>
+    <input type="text" hidden name="platform" value='Coroflot'>
+    <button type="submit" class="btn btn-primary">Publish to Coroflot</button>
+</form>

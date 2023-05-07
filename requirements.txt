@@ -25,3 +25,4 @@ stripe
 Pillow
 flask
 flask_limiter
+beautifulsoup4==4.12.2
