@@ -178,7 +178,7 @@ def upload_product_to_pinterest(pp, platform):
             for i in driver.find_elements(By.XPATH, '//a') 
             if 'https://www.pinterest.com/pin/' in i.get_attribute('href')
         ][0].replace('https://www.pinterest.com/pin/', '')
-
+        driver.close()
         pp.pinterest_id = pinterest_id
         pp.status = "A"
         pp.save()
@@ -193,6 +193,7 @@ def upload_product_to_pinterest(pp, platform):
         print("ERROR: ",e)
         driver.save_screenshot('error.png')
         driver.quit()
+    return
 
 @shared_task
 def upload_product_to_coroflot(cp, platform):
@@ -247,6 +248,7 @@ def upload_product_to_coroflot(cp, platform):
             for i in driver.find_elements(By.TAG_NAME, 'a') 
             if 'https://www.coroflot.com/p/' in i.get_attribute('href')
         ][0].replace('https://www.coroflot.com/p/', '')
+        driver.close()
         print(f'12. {coroflot_id}')
         cp.coroflot_id = coroflot_id
         cp.status = "A"
@@ -262,4 +264,5 @@ def upload_product_to_coroflot(cp, platform):
         print("ERROR: ",e)
         driver.save_screenshot('error.png')
         driver.quit()
+    return
         
