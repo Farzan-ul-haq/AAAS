@@ -141,11 +141,11 @@ crossorigin="anonymous"></script>
   {% endblock js %}
   <script src="https://cdn.tiny.cloud/1/cjb79ugu717829e6z3xuubd4o8s98in5vsytb7lp9fnzfw8d/tinymce/6/tinymce.min.js"
             referrerpolicy="origin"></script>
-    <script>
-
+  <script>
     tinymce.init({
       selector: '.richtext_field',
-      toolbar: 'undo redo | bold italic underline strikethrough | link | align | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+      plugins: 'anchor autolink charmap codesample emoticons lists media searchreplace table visualblocks wordcount',
+      toolbar: 'undo redo | bold italic underline strikethrough | align | numlist bullist indent outdent | emoticons charmap | removeformat',
       tinycomments_mode: 'embedded',
       tinycomments_author: 'Author name',
       statusbar: false,
@@ -155,5 +155,5 @@ crossorigin="anonymous"></script>
         { value: 'Email', title: 'Email' },
       ]
     });
-    </script>
+  </script>
 </html>

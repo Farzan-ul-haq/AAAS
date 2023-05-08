@@ -16,21 +16,55 @@
             </div> 
             <span class="badge badge-primary px-2 py-1">{{product.get_product_type_display}}</span>
             <h1>{{product.title.title}}</h1>
-            {% for thumbnail in product.thumbnail_metadata %}
-                <img class='rounded w-100' src="{{thumbnail.data}}" alt="HEHE" w-50 />
-                <hr>
-            {% endfor %}
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                {% for thumbnail in product.thumbnail_metadata %}
+                {% if thumbnail.isPrimary %}
+                  <div class="carousel-item active">
+                    <img src="{{thumbnail.data}}" class="d-block w-100" style="max-height: 400px;" alt="...">
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% for thumbnail in product.thumbnail_metadata %}
+                    {% if not thumbnail.isPrimary %}
+                  <div class="carousel-item">
+                    <img src="{{thumbnail.data}}" class="d-block w-100" style="max-height: 400px;" alt="...">
+                  </div>
+                {% endif %}
+                {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
             <hr>
-            <p><span><strong>Source URL: </strong></span>{{product.source_url}}</p>
-            <p><span><strong>Base URL: </strong></span>{{obj.base_url}}</p>
-            <h6><strong>Description: </strong></h6>
-            <p>{{product.description}}</p>
-            <h6><strong>In Scope: </strong></h6>
-            <p>{{obj.in_scope}}</p>
-            <h6><strong>Out Scope: </strong></h6>
-            <p>{{obj.out_scope}}</p>
-            <h6><strong>Technical Instructions: </strong></h6>
-            <p>{{obj.technical_instructions}}</p>
+            {% if product.source_url %}
+                <p><h3><strong>Source URL: </strong></h3>{{product.source_url}}</p>
+            {% endif %}
+    
+            <h3><strong>Description: </strong></h3>
+                {{product.description|safe}}
+
+            {% if obj.technical_instructions %}
+                <h3><strong>Technical Instructions: </strong></h3>
+                {{obj.technical_instructions|safe}}
+            {% endif %}
+
+            {% if obj.in_scope %}
+                <h3><strong>In Scope: </strong></h3>
+                {{obj.in_scope|safe}}
+            {% endif %}
+
+            {% if obj.out_scope %}
+                <h3><strong>Out Scope: </strong></h3>
+                {{obj.out_scope|safe}}
+            {% endif %}
+
             <hr>
             <div class="col-12">
                 <div class="row">
@@ -78,10 +112,10 @@
                     <h4 class="my-0 font-weight-normal text-center">{{package.title}}</h4>
                 </div>
                 <div class="card-body">
-                    <h1 class="card-title pricing-card-title text-center">{{package.price}} USD</h1>
+                    <h5 class="card-title pricing-card-title text-center">{{package.price}} USD</h5>
+                    <hr>
                     <h5 class="text-center">Number Of Requests: {{package.normal_requests}}</h5>
-                    <ul class="list-unstyled mt-3 mb-4">
-                    </ul>
+                    <hr>
                     {% if request.user.is_authenticated %}
                     <a href="{% url 'buyer:buy-product' package.id %}" type="button" class="btn btn-lg btn-block btn-success">Buy Now</a>
                     {% else %}
@@ -104,6 +138,7 @@
 function show_endpoint_info(el) {
     document.getElementById('e_desc_view').innerHTML = el.childNodes[7].innerHTML
     document.getElementById('e_test_data_view').innerHTML = el.childNodes[9].innerHTML
+    console.log(el.childNodes[9].innerHTML)
 }
 </script>
 {% endblock js %}

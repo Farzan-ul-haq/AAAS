@@ -16,16 +16,39 @@
             </div> 
             <span class="badge badge-primary px-2 py-1">{{product.get_product_type_display}}</span>
             <h1>{{product.title.title}}</h1>
-            {% for thumbnail in product.thumbnail_metadata %}
-                <img class='rounded w-100' src="{{thumbnail.data}}" alt="HEHE" w-50 />
-                <hr>
-            {% endfor %}
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                {% for thumbnail in product.thumbnail_metadata %}
+                {% if thumbnail.isPrimary %}
+                  <div class="carousel-item active">
+                    <img src="{{thumbnail.data}}" class="d-block w-100" style="max-height: 400px;" alt="...">
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% for thumbnail in product.thumbnail_metadata %}
+                    {% if not thumbnail.isPrimary %}
+                  <div class="carousel-item">
+                    <img src="{{thumbnail.data}}" class="d-block w-100" style="max-height: 400px;" alt="...">
+                  </div>
+                {% endif %}
+                {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
             <hr>
-            <p><span><strong>Source URL: </strong></span>{{product.source_url}}</p>
-            <p><span><strong>Dimensions: </strong></span>{{obj.width}} x {{obj.height}}</p>
-            <p><span><strong>Orientation: </strong></span>{{obj.logo_type}}</p>
-            <h6><strong>Description: </strong></h6>
-            <p>{{product.description}}</p>
+            {% if product.source_url %}
+                <p><h3><strong>Source URL: </strong></h3>{{product.source_url}}</p>
+            {% endif %}
+            <p><h3><strong>Orientation: </strong></h3>{{obj.width}} x {{obj.height}}({{obj.logo_type}})</p>
+            <h3><strong>Description: </strong></h3>
+            {{product.description|safe}}
             <hr>
         </div>
         <div class="col-3">
