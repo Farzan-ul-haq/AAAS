@@ -48,24 +48,22 @@
     {% for product in products %}
       {% for market in product.marketed_on.all %}
         {% if market.title.lower == 'dribble' or market.title.lower == 'dribble-pro' %}
-          {% for dribble in dribble_product %}
-            {% if dribble.product == product and dribble.status == 'A' %}
-              <div class="media m-3 text-muted">
-                <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 32px; height: 32px;" src="{{dribble.product.thumbnail_metadata.0.data}}" data-holder-rendered="true">
-                <div class="media-body">
-                  <h5 class="mt-0"><strong class="d-block text-gray-dark">@{{market.title.title}}</strong></h5>
-                  <li><strong class="text-gray-dark">{{product.title}}</strong>({{product.description|truncatechars:40}})</li>
-                  <li><strong class="text-gray-dark"><a class='text-gray-dark' href="{{dribble.get_absolute_url}}">Dribble URL</a></strong></li>
-                </div>
-                <div style="text-align: right;">
-                  {% for data in dribble.get_details %}
-                  <h4>{{data.0}} <i class="fa fa-solid fa-{{data.1}}"></i></h4>
-                  {% endfor %}
-                </div>
-              </div>
-              <hr>
-            {% endif %}
-          {% endfor %}
+          {% for dribble in product.get_dribble_obj %}
+          <div class="media m-3 text-muted">
+            <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{dribble.image.url }}" data-holder-rendered="true">
+            <div class="media-body">
+              <h5 class="mt-0"><strong class="d-block text-gray-dark">@{{market.title.title}}</strong></h5>
+              <li><strong class="text-gray-dark">{{product.title}}</strong></li>
+              <li><strong class="text-gray-dark"><a class='text-gray-dark' href="{{dribble.get_absolute_url}}">Coroflot URL</a></strong></li>
+            </div>
+            <div style="text-align: right;">
+              {% for data in dribble.get_details %}
+              <h4>{{data.0}} <i class="fa fa-solid fa-{{data.1}}"></i></h4>
+              {% endfor %}
+            </div>
+          </div>
+          <hr>
+        {% endfor %}
         {% elif market.title.lower == 'pinterest' %}
           {% for pinterest in product.get_pinterest_obj %}
               <div class="media m-3 text-muted">
