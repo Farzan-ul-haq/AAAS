@@ -46,7 +46,7 @@ def upload_product_to_dribble(dp, platform):
         print('1. DRIVER OPEN')
         driver.get("https://dribbble.com/session/new") # Login URL
         time.sleep(10)
-        driver.find_element(By.ID, "login").send_keys('fsiddiqui@students.uit.edu') # add username
+        driver.find_element(By.ID, "login").send_keys('farzanulhaq12@gmail.com') # add username
         driver.find_element(By.ID, "password").send_keys('faddy3143') # add password
         time.sleep(10)
         driver.find_element(By.CLASS_NAME, "form-sub").click() # click on submit
@@ -233,9 +233,12 @@ def upload_product_to_coroflot(cp, platform):
         driver.find_element(By.ID, 'autocomplete_morsel_tag').send_keys(" #AAA") # ADD DESCRIPTION
         driver.find_element(By.ID, 'autocomplete_morsel_tag').send_keys("S") # ADD DESCRIPTION
         print('8. DESCRIPTION ADDED')
-        time.sleep(3)
-        driver.find_element(By.XPATH, '//div[normalize-space()="#AAAS"]').click()
-        print('9. SELECT HASHTAG')
+        time.sleep(10)
+        try:
+            driver.find_element(By.XPATH, '//div[normalize-space()="#AAAS"]').click()
+            print('9. SELECT HASHTAG')
+        except Exception as e:
+            print(e)
         time.sleep(3)
         driver.find_element(By.XPATH, '//span[normalize-space()="Save"]').click()
         print('10. SAVE DESCRIPTION')
