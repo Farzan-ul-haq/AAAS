@@ -12,4 +12,5 @@ def add_client_activity(text, user_id, redirect_url):
         content=text,
         redirect_url=redirect_url
     )
+    return
 

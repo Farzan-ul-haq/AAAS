@@ -18,7 +18,7 @@
 
         reader.onloadstart = () => {
             progressBar.style.display = 'block';
-            fileUploadButton.style.display = 'none';
+            fileUploadButton.style.display = 'none'; 
         };
 
         reader.onprogress = (progressEvent) => {

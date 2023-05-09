@@ -9,7 +9,7 @@
 {% block body %}
 <div class="container-fluid">
     <nav class="navbar navbar-light ">
-        <a class="navbar-brand"><b></b></a>
+        <a class="navbar-brand"><h1><b>Explore</b></h1></a>
         <form method='GET' action='{% url "core:product-search" %}' class="form-inline">
             <input name='query' class="form-control mr-sm-2" type="search" placeholder="" aria-label="Search" alue="">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -17,7 +17,7 @@
     </nav>
     </div>
 <br>
-<div class="container-fluid">
+<!-- <div class="container-fluid">
     <nav class="navbar navbar-light bg-light">
         <h4>Popular Searches:</h4>
 
@@ -28,24 +28,13 @@
         <button type="button" style="height:50px; width:160px" class="btn btn-primary">Clean Master PRO</button>
         
     </nav>
-</div>
+</div> -->
     <br>
 
 <br>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-3">
-            <nav class="nav flex-column bg-light ">
-                <h4><B>Categories</B></h4>
-                <a class="nav-link" href="#">API</a>
-                <a class="nav-link" href="#">Templates</a>
-                <a class="nav-link" href="#">Logo</a>
-                <a class="nav-link" href="#">Downloadable Softwares</a>
-
-            </nav>
-        </div>
-        
-        <div class="col-9">
+        <div class="col-12">
             <div class="row">
                 {% for product in products %}
                     {% include 'components/product/public-product-card.html'%}

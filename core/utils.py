@@ -17,6 +17,19 @@ else:
     stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 endpoint_secret = settings.DJSTRIPE_WEBHOOK_SECRET
 
+CALL_TO_ACTIONS = {
+    "A": "Accelerate your development process with our high-performance API - Buy now! {URL}",
+    "L": "Accelerate your development process with our high-performance API - Buy now! {URL}",
+    "H": "Upgrade your website's functionality with our feature-rich templates - Buy now! {URL}",
+    "D": "Simplify your daily operations with our user-friendly software - Buy now! {URL}",
+}
+
+def get_marketing_description(product_type, redirect_url):
+    description = CALL_TO_ACTIONS[product_type]
+    description = description.replace("{URL}", redirect_url)
+    return description
+
+
 def get_product_object(product):
     if product.product_type == "A":
         obj = ApiService.objects.get(product=product)

@@ -356,6 +356,7 @@ class DribbleProduct(models.Model):
     product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=255)
     views = models.IntegerField(default=0)
+    likes = models.IntegerField(default=0)
     description = models.TextField()
     dribble_id = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField('market/dribble/', null=True, blank=True)
@@ -420,6 +421,8 @@ class PinterestProduct(models.Model):
 class CoroloftProduct(models.Model):
     product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL)
     description = models.TextField()
+    views = models.IntegerField(default=0)
+    likes = models.IntegerField(default=0)
     coroflot_id = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField('market/coroflot/', null=True, blank=True)
     status = models.CharField(max_length=1, choices=(

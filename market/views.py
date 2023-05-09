@@ -21,7 +21,7 @@ from django.views.decorators.csrf import csrf_exempt
 from core.models import Product, MarketingPlatforms, DribbleProduct, \
     Brochure, Notification, \
     BrochureTemplates, PinterestProduct, CoroloftProduct
-from core.utils import create_checkout_session
+from core.utils import create_checkout_session, get_marketing_description
 from market.tasks import upload_product_to_dribble, \
     upload_product_to_coroflot, upload_product_to_pinterest
 
@@ -92,7 +92,7 @@ def marketing_platform_list(request, pk):
         ext = format.split('/')[-1]
         c = ContentFile(base64.b64decode(imgstr))
         filename = "profile-"+datetime.now().strftime("%Y%m%d-%H%M%S")+"." + ext
-    
+
         NOTIFICATION_MSG = f"Your product will be listed shortly on {platform}"
         messages.warning(request, NOTIFICATION_MSG)
         Notification.objects.create(
@@ -100,13 +100,17 @@ def marketing_platform_list(request, pk):
             content=NOTIFICATION_MSG,
         )
         price = MarketingPlatforms.objects.get(title=platform).price
+        redirect_url = domain_url+reverse(
+            'core:product-view', 
+            kwargs={'slug': product.slug}
+        )
 
         if platform.lower() == 'dribble':
             print('DRIBBLE==============')
             dp = DribbleProduct.objects.create(
                 product=product,
                 title=request.POST.get('title'),
-                description=request.POST.get('description'),
+                description=f"{request.POST.get('description')} {get_marketing_description(product.product_type, redirect_url)}",
                 tags=request.POST.get('tags'),
                 views=0,
                 status='P'
@@ -136,7 +140,7 @@ def marketing_platform_list(request, pk):
             dp = DribbleProduct.objects.create(
                 product=product,
                 title=request.POST.get('title'),
-                description=request.POST.get('description'),
+                description=f"{request.POST.get('description')} {get_marketing_description(product.product_type, redirect_url)}",
                 tags=request.POST.get('tags'),
                 views=0,
                 status='P'
@@ -162,15 +166,13 @@ def marketing_platform_list(request, pk):
                 return redirect('seller:dashboard')
 
         elif platform == 'Pinterest':
+            print('PINTEREST==============')
             pp = PinterestProduct.objects.create(
                 product=product,
                 title=request.POST.get('title'),
-                description=request.POST.get('description'),
+                description=f"{request.POST.get('description')} {get_marketing_description(product.product_type, redirect_url)}",
                 pinterest_id='',
-                redirect_url=domain_url+reverse(
-                    'core:product-view', 
-                    kwargs={'slug': product.slug}
-                ),
+                redirect_url=redirect_url,
                 status='P'
             )
             pp.image.save(filename, c, save=True)
@@ -192,9 +194,10 @@ def marketing_platform_list(request, pk):
                 upload_product_to_pinterest.delay(pp.id, platform)
                 return redirect('seller:dashboard')
         elif platform == 'Coroflot':
+            print('COROFLOT==============')
             cp = CoroloftProduct.objects.create(
                 product=product,
-                description=request.POST.get('description'),
+                description=f"{request.POST.get('description')} {get_marketing_description(product.product_type, redirect_url)}",
                 coroflot_id='',
                 status='P'
             )

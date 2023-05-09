@@ -65,9 +65,8 @@ def upload_product_to_dribble(dp, platform):
         time.sleep(10)
         description_field = driver.find_element(By.CLASS_NAME, 'ProseMirror')
         driver.execute_script("arguments[0].scrollIntoView(true);", description_field)
-        description_field.send_keys(
-                    f"BUY NOW https://google.com"
-        ) # ADD DESCRIPTION
+        description_field.send_keys(dp.description) # ADD DESCRIPTION
+        print(dp.description)
         print('5. Details Added')
         time.sleep(30)
 
@@ -125,7 +124,7 @@ def upload_product_to_pinterest(pp, platform):
         time.sleep(5)
         driver.find_element(By.XPATH, """//div[normalize-space()="Log in"]""").click() # CLICK LOGIN BUTTON
         print('2. CLICK LOGIN BUTTON')
-        time.sleep(2)
+        time.sleep(10)
         driver.find_element(By.ID, 'email').send_keys('fsiddiqui@students.uit.edu') # ADD EMAIl
         print('3. ADD EMAIL')
         time.sleep(2)
@@ -134,7 +133,7 @@ def upload_product_to_pinterest(pp, platform):
         time.sleep(2)
         driver.find_element(By.XPATH, """//div[@data-test-id='registerFormSubmitButton']""").click() # CLICK LOGIN BUTTOn
         print('5. CLICK LOGIN SUBMIT BTN')
-        time.sleep(2)
+        time.sleep(10)
         driver.get('https://www.pinterest.com/pin-builder/') # GO TO CREATE PIN URL
         print('6. CREATE PIN URL')
         time.sleep(5)
@@ -160,12 +159,13 @@ def upload_product_to_pinterest(pp, platform):
         ).find_elements(By.XPATH, '//span') # COLLECT SPAN
         for span in description_span:
             try:
-                span.send_keys('TEST DESCRIPTION') # ADD DESCRIPTION
+                span.send_keys(pp.description) # ADD DESCRIPTION
                 print('9. ADD DESCRIPTION')
                 time.sleep(2)
             except Exception as e:
                 pass
         driver.find_element(By.XPATH, "//input[@aria-label='File upload']").send_keys(pp.image.path) # UPLOAD IMAGE
+        time.sleep(20)
         print('10. UPLOAD IMAGE')
         driver.find_element(By.XPATH, "//button[@data-test-id='board-dropdown-save-button']").click() # CLICK PUBLISH BUTTON
         time.sleep(50)

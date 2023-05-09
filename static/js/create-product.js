@@ -137,7 +137,9 @@ function handleSubmit(event) {
     form.appendChild(imagesInput);
     form.appendChild(tagsInput);
 
+    $('#infoModal').modal('show');
     form.submit();
+
 }
 
 
