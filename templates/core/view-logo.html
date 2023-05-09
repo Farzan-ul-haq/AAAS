@@ -44,10 +44,10 @@
             </div>
             <hr>
             {% if product.source_url %}
-                <p><h3><strong>Source URL: </strong></h3>{{product.source_url}}</p>
+                <p><h3 class="text-muted font-italic"><strong>Source URL: </strong></h3>{{product.source_url}}</p>
             {% endif %}
-            <p><h3><strong>Orientation: </strong></h3>{{obj.width}} x {{obj.height}}({{obj.logo_type}})</p>
-            <h3><strong>Description: </strong></h3>
+            <p><h3 class="text-muted font-italic"><strong>Orientation: </strong></h3>{{obj.width}} x {{obj.height}}({{obj.logo_type}})</p>
+            <h3 class="text-muted font-italic"><strong>Description: </strong></h3>
             {{product.description|safe}}
             <hr>
         </div>
@@ -55,6 +55,7 @@
             <div class="card p-3">
                 <div class="pricing text-center ">
                     <h2>{{package.0.price}} USD</h2>
+                    <hr>
                     {% if request.user.is_authenticated %}
                     <a href="{% url 'buyer:buy-product' package.0.id %}" type="button" class="btn btn-lg btn-block btn-success">Buy Now</a>
                     {% else %}

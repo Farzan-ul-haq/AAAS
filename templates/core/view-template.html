@@ -44,18 +44,18 @@
             </div>
             <hr>
             {% if product.source_url %}
-                <p><h3><strong>Source URL: </strong></h3>{{product.source_url}}</p>
+                <p><h3 class="text-muted font-italic"><strong>Source URL: </strong></h3>{{product.source_url}}</p>
             {% endif %}
             {% if obj.supported_browser %}
-                <p><h3><strong>Supported Browser: </strong></h3>{{obj.supported_browser}}</p>
+                <p><h3 class="text-muted font-italic"><strong>Supported Browser: </strong></h3>{{obj.supported_browser}}</p>
             {% endif %}
             {% if obj.demo_site %}
-                <p><h3><strong>Supported Browser: </strong></h3>{{obj.demo_site}}</p>
+                <p><h3 class="text-muted font-italic"><strong>Supported Browser: </strong></h3>{{obj.demo_site}}</p>
             {% endif %}
-            <h3><strong>Description: </strong></h3>
+            <h3 class="text-muted font-italic"><strong>Description: </strong></h3>
             {{product.description|safe}}
             {% if obj.technical_instructions %}
-            <h3><strong>Technical Instructions: </strong></h3>
+            <h3 class="text-muted font-italic"><strong>Technical Instructions: </strong></h3>
             {{obj.technical_instructions|safe}}
             {% endif %}
             <hr>
@@ -64,6 +64,7 @@
             <div class="card p-3">
                 <div class="pricing text-center ">
                     <h2>{{package.0.price}} USD</h2>
+                    <hr>
                     <a href="{% url 'buyer:buy-product' package.0.id %}" type="button" class="btn btn-lg btn-block btn-success">Buy Now</a>
                 </div>
             </div>
