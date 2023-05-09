@@ -187,6 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // setupColors();
   generateBrochure();
   generateStaticBg(bgImageSrc);
+  console.log('PAGE LOADED')
 });
 
 function fetchData() {
@@ -217,7 +218,7 @@ function setupColors(colors) {
   //     image: "./b3-black.png",
   //   },
   // ];
-
+  console.log(colors);
   colors.forEach((color) => {
     bgImage[color.primary_color] = color.image;
     secondaryColors[color.primary_color] = color.secondary_color;
@@ -225,6 +226,7 @@ function setupColors(colors) {
 
   colors.forEach((color, idx) => {
     if (idx === 0) {
+      console.log('selecting primary color')
       currentbgColor = color.primary_color;
       bgImageSrc = getBgImageSrc(currentbgColor);
     }
@@ -236,6 +238,8 @@ function setupColors(colors) {
       handleColorSelection(colorEl, color.primary_color)
     );
     colorsContainer.appendChild(colorEl);
+    document.getElementsByClassName('colors')[0].children[0].click();
+    
   });
 }
 
