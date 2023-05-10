@@ -2,12 +2,13 @@ import psycopg2, os, requests, json, io
 from time import time
 
 from flask import Flask, request
+from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 limiter = Limiter(get_remote_address, app=app)
-
+CORS(app)
 
 conn = psycopg2.connect(
     database=os.environ.get("POSTGRES_NAME", "postgres"), 
@@ -43,6 +44,7 @@ def test_api_requests(endpoint_path):
     """
     t = time()
     product_id = request.headers.get('aaas-token', "").replace('TEST-', "")
+    print(product_id)
     if product_id:
         c = conn.cursor()
         c.execute(f"""
@@ -51,9 +53,9 @@ def test_api_requests(endpoint_path):
             FROM 
                 "Product" P 
             INNER JOIN 
-                "ApiService" APS ON(APS.id=P.id)
+                "ApiService" APS ON(APS.product_id=P.id)
             WHERE
-                P.id = {product_id} ;
+                P.id = '{product_id}' ;
         """)
         try:
             db_data = c.fetchall()[0]

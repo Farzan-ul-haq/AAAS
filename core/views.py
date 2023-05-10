@@ -42,7 +42,7 @@ def redirect_users(request):
         if request.user.mode == 'B':
             return redirect('buyer:dashboard')
     else:
-        return redirect('accounts:login')
+        return redirect('core:explore')
 
 
 def explore(request): # this contains the list of products

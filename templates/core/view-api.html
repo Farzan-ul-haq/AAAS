@@ -66,43 +66,7 @@
             {% endif %}
 
             <hr>
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-3 card">
-                        <h3 class="text-muted font-italic"><u>Endpoint</u></h3><hr>
-                        <table class="table border">
-                            <thead>
-                            </thead>
-                            <tbody id="e_body">
-                                {% for endpoint in endpoints %}
-                                <tr>
-                                    <td onclick="show_endpoint_info(this)">
-                                        <span class="badge badge-primary">{{endpoint.request_type}}</span>
-                                        {{endpoint.path}}
-                                        <input type="text" name="endpoint_request_type" value="{{endpoint.request_type}}" hidden>
-                                        <input type="text" name="endpoint_url" value="{{endpoint.path}}" hidden>
-                                        <textarea hidden name='enpoint_desc'>{{endpoint.documentation}}</textarea>
-                                        <textarea hidden name='enpoint_test_data'>{{endpoint.test_data}}</textarea>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-5 border">
-                        <h3><u>Endpoint Doc.</u></h3><hr>
-                        <p id="e_desc_view">{{endpoints.0.documentation}}
-                        </p>
-                        <!-- <textarea class="form-control mb-2" id="e_desc_view" rows="10"
-                            placeholder="Endpoint Documentation" disabled></textarea> -->
-                    </div>
-                    <div class="col-4 border">
-                        <h3><u>Testing Data</u></h3><hr>
-                        <p id="e_test_data_view">{{endpoints.0.test_data}}
-                        </p>
-                    </div>
-                </div>
-            </div>
+
             <hr>
         </div>
         <div class="col-3">
@@ -122,12 +86,110 @@
                     <a href="{% url 'accounts:login' %}" type="button" class="btn btn-lg btn-block btn-success">Log In & Buy Now</a>
                     {% endif %}
                 </div>
-                </div>
+            </div>
             {% endfor %}
         </div>
-        <div class="col-9">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-5 card">
+                    <h3 class="text-muted font-italic"><u>Endpoint</u></h3><hr>
+                    <table class="table border">
+                        <thead>
+                        </thead>
+                        <tbody id="e_body">
+                            {% for endpoint in endpoints %}
+                            <tr>
+                                <td onclick="show_endpoint_info(this)">
+                                    <span class="badge badge-primary">{{endpoint.request_type}}</span>
+                                    {{endpoint.path}}
+                                    <input type="text" name="endpoint_request_type" value="{{endpoint.request_type}}" hidden>
+                                    <input type="text" name="endpoint_url" value="{{endpoint.get_full_test_url}}" hidden>
+                                    <textarea hidden name='enpoint_desc'>{{endpoint.documentation}}</textarea>
+                                    <textarea hidden name='enpoint_test_data'>{{endpoint.test_data}}</textarea>
+                                </td>
+                                <td style="text-align:end;">
+                                    <button class="btn-edit badge badge-info h-100" data-toggle="modal" data-target=".bd-example-modal-lg" onclick="test_modal(this)">TEST</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-3 border">
+                    <h3><u>Endpoint Doc.</u></h3><hr>
+                    <p id="e_desc_view">{{endpoints.0.documentation}}
+                    </p>
+                    <!-- <textarea class="form-control mb-2" id="e_desc_view" rows="10"
+                        placeholder="Endpoint Documentation" disabled></textarea> -->
+                </div>
+                <div class="col-4 border">
+                    <h3><u>Testing Data</u></h3><hr>
+                    <pre id="e_test_data_view">{{endpoints.0.test_data}}
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
             <h3 class="border-bottom border-gray pb-2 mb-0 col-12">Feedback</h3>
             {% include 'components/feedback.html' %}
+        </div>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="e_modal" tabindex="-1" role="dialog"
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">TEST ENDPOINTS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- ENDPOINT TEST MODAL -->
+            <div class="modal-body" id="endpoint_modal">
+                <div class="container-fluid top px-5">
+                    <div class="row">
+                        <div class="btn-group col-3 mb-3">
+                            <select class='form-control' id="endpoint_request_type" disabled>
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="DELETE">DELETE</option>
+                                <option value="PUT">PUT</option>
+                                <option value="PATCH">PATCH</option>
+                            </select>
+                        </div>
+                        <div class="col-9">
+                            <input type="Endpoint URL" class="form-control" id="endpoint_url"
+                                aria-describedby="titleHelp" placeholder="Endpoint URL">
+                        </div>
+                        <div class="col-12">
+                            <small>NOTE: Only Content-type: application/json is acceptable</small>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <hr>
+                            <h4 class="form-text text-muted desc">Headers:</h4>
+                            <span><strong>Content-type: </strong>application/json</span><br>
+                            <span><strong>AAAS-TOKEN: </strong>TEST-{{product.id}}</span>
+                            <hr>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <h4 class="form-text text-muted desc">Request Data:</h4>
+                            <textarea class="form-control" id="endpoint_test_data" rows="7"></textarea>
+                            <hr>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-success col-12" onclick="request_to_endpoint()">REQUEST TO ENDPOINT</button>
+                        </div>
+                        <div class="col-12">
+                            <h4 class="form-text text-muted desc">Response</h4>
+                            <!-- <span><strong>Status Code: </strong><span id="test_endpoint_status_code">200</span></span><br> -->
+                                <pre id='endpoint_response' class="border" style="width: 100%;" class="p-3">
+                                    
+                                </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -137,8 +199,44 @@
 <script>
 function show_endpoint_info(el) {
     document.getElementById('e_desc_view').innerHTML = el.childNodes[7].innerHTML
-    document.getElementById('e_test_data_view').innerHTML = el.childNodes[9].innerHTML
+    document.getElementById('e_test_data_view').innerHTML =  el.childNodes[9].innerHTML
     console.log(el.childNodes[9].innerHTML)
+};
+
+function test_modal(el) {
+    obj = el.parentElement.parentElement.children[0];
+    console.log(obj)
+    document.getElementById('endpoint_request_type').value = obj.children[1].value;
+    document.getElementById('endpoint_url').value = obj.children[2].value;
+    document.getElementById('endpoint_test_data').value = obj.children[4].value;
+    $('#e_modal').modal('show');
+}
+
+function request_to_endpoint() {
+    console.log(document.getElementById('endpoint_test_data').value)
+    $.ajax({
+        type: document.getElementById('endpoint_request_type').value,
+        url: document.getElementById('endpoint_url').value,
+        crossDomain: true,
+        headers: {
+            "Content-Type": "application/json",
+            "AAAS-TOKEN": "TEST-{{product.id}}"
+        },
+        data: document.getElementById('endpoint_test_data').value,
+        success: function(data){
+            document.getElementById('endpoint_response').textContent = JSON.stringify(data, null, 4);
+           console.log(data)
+        },
+        error: function(error){
+            console.log('error')
+            console.log(error)
+            if ("responseJSON" in error) {
+                document.getElementById('endpoint_response').textContent = JSON.stringify(error.responseJSON, null, 3);
+            } else {
+                document.getElementById('endpoint_response').textContent = error.statusText;
+            }
+        }
+});
 }
 </script>
 {% endblock js %}

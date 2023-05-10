@@ -136,6 +136,7 @@ def create_api(request):
 
         return redirect('seller:dashboard')
 
+
 def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if product.owner != request.user:
@@ -150,6 +151,7 @@ def delete_product(request, product_id):
         product.status='D'
         product.save()
         return redirect('seller:dashboard')
+
 
 def update_logo(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -264,7 +266,6 @@ def update_api(request, product_id):
             'endpoints': endpoints
         })
     if request.method == "POST":
-        print(request.FILES)
         product = update_product(product, request)
 
         for package_index in range(len(packages)):
@@ -282,5 +283,5 @@ def update_api(request, product_id):
                 documentation=request.POST.getlist('enpoint_desc')[i],
                 test_data=request.POST.getlist('enpoint_test')[i],
             )
-        
+
         return redirect('seller:dashboard')

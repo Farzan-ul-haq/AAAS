@@ -635,6 +635,10 @@ function deleteEndpoint(idx) {
         "url": "{{e.path}}"
     }
     {% endfor %}
-
+    {% for thumbnail in product.thumbnail_metadata %}
+        images.push(`{{thumbnail.data}}`);
+        updateThumbnailStates();
+        displayImages();
+    {% endfor %}
 </script>
 {% endblock js %}

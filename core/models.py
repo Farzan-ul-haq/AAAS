@@ -219,6 +219,9 @@ class Endpoints(models.Model):
     class Meta:
         db_table = "Endpoints"
 
+    def get_full_test_url(self):
+        return f"{settings.API_SERVER_TEST_URL}{self.path}"
+
 
 class ProductPackage(models.Model):
     service = models.ForeignKey(Product, on_delete=models.CASCADE)
