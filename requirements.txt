@@ -25,4 +25,5 @@ stripe
 Pillow
 flask
 flask_limiter
+flask-cors
 beautifulsoup4==4.12.2

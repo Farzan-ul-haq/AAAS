@@ -17,7 +17,7 @@ try:
     driver.get("https://dribbble.com/session/new") # Login URL
     driver.save_screenshot('selenium/1.png')
     time.sleep(10)
-    driver.find_element(By.ID, "login").send_keys('fsiddiqui@students.uit.edu') # add username
+    driver.find_element(By.ID, "login").send_keys('farzanulhaq12@gmail.com') # add username
     driver.find_element(By.ID, "password").send_keys('faddy3143') # add password
     time.sleep(10)
     driver.save_screenshot('selenium/2.png')
@@ -38,8 +38,11 @@ try:
     description_field = driver.find_element(By.CLASS_NAME, 'ProseMirror')
     driver.execute_script("arguments[0].scrollIntoView(true);", description_field)
     description_field.send_keys(
-                f"BUY NOW https://google.com"
+                """FontLab 2022 is a reliable and powerful Font developing and editing application which allows you to design and edit your favorite fonts in a professional graphical environment. It is a comprehensive font editor which comes loaded with a professional and full-featured toolset for creating and customizing fonts. It is the ultimate integrated font editor that helps you create fonts from start to finish, from a simple design to a really ultra bold complex project. It supports all popular font formats, including Type 1, TrueType, PostScript, Web fonts, Multiple Master, OpenType, and more.The program offers an easy-to-use interface that provides easy access to all tools. You can also download Summitsoft Creative Fonts Collection 2021 Free Download. Simplify your daily operations with our user-friendly software - Buy now! http://localhost:8000/product/137-fontslab-2022/"""
     )
+    description_field.click()
+    time.sleep(5)
+    driver.find_element(By.XPATH, '//button[@data-test="button-item-center"]').click()
     driver.save_screenshot('selenium/5.png')
     print('5. Details Added')
     time.sleep(30)

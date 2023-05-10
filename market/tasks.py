@@ -38,10 +38,9 @@ def upload_product_to_dribble(dp, platform):
     )
     print('0. STARTED')
     try:
-        print('DP', dp)
         dp = DribbleProduct.objects.get(id=dp)
         print(dp)
-        print('platform', platform)
+        print(platform)
             # driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), options=options)
         print('1. DRIVER OPEN')
         driver.get("https://dribbble.com/session/new") # Login URL
@@ -66,6 +65,9 @@ def upload_product_to_dribble(dp, platform):
         description_field = driver.find_element(By.CLASS_NAME, 'ProseMirror')
         driver.execute_script("arguments[0].scrollIntoView(true);", description_field)
         description_field.send_keys(dp.description) # ADD DESCRIPTION
+        description_field.click() # CLICK DESCRIPTION TEXT TO SEE THE RIGHT ALIGN BUTTON
+        time.sleep(5)
+        driver.find_element(By.XPATH, '//button[@data-test="button-item-center"]').click() # CENTER ALIGN BUTTON CLICK
         print(dp.description)
         print('5. Details Added')
         time.sleep(30)

@@ -47,7 +47,9 @@ def redirect_users(request):
 
 def explore(request): # this contains the list of products
     """This contains the list of products"""
-    products = Product.objects.all()
+    products = Product.objects.filter(
+        status='A'
+    )
     products.update(impressions=F('impressions') + 1)
     return render(request, 'core/explore.html', {
         'products': products
