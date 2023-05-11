@@ -47,16 +47,22 @@ def test_api_requests(endpoint_path):
     print(product_id)
     if product_id:
         c = conn.cursor()
-        c.execute(f"""
-            SELECT 
-                P.id, APS.base_url 
-            FROM 
-                "Product" P 
-            INNER JOIN 
-                "ApiService" APS ON(APS.product_id=P.id)
-            WHERE
-                P.id = '{product_id}' ;
-        """)
+        try:
+            c.execute(f"""
+                SELECT 
+                    P.id, APS.base_url 
+                FROM 
+                    "Product" P 
+                INNER JOIN 
+                    "ApiService" APS ON(APS.product_id=P.id)
+                WHERE
+                    P.id = '{product_id}' ;
+            """)
+        except Exception as e:
+            print('DB ERROR', e)
+            c.execute('ROLLBACK')
+            conn.commit()
+            return f"INVALID AAAS-TOKEN"
         try:
             db_data = c.fetchall()[0]
             print(db_data)
