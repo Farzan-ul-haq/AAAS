@@ -10,7 +10,7 @@ from core.models import Product, ApiService, Logo, HtmlTemplate, \
 from market.tasks import upload_product_to_dribble, \
     upload_product_to_coroflot, upload_product_to_pinterest
 from buyer.utils import complete_product_purchase
-
+from core.tasks import send_email
 
 if settings.STRIPE_LIVE_MODE:
     stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
@@ -65,6 +65,11 @@ def fulfill_order(data, amount):
         user=User.objects.get(id=data['uid']),
         content='Funds Added.',
         type=0
+    )
+    send_email.delay(
+        User.objects.get(id=data['uid']).email,
+        'Funds Added',
+        f'Funds {amount}$ is added to your wallet'
     )
     if data['type'] == 'product_marketing':
         if data['platform'].lower() == 'dribble':

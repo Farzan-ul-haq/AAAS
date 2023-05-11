@@ -1,8 +1,10 @@
 import datetime
 
+from django.shortcuts import redirect
+
+from core.tasks import send_email
 from core.models import User, Product, ProductPackage, \
     ClientPackages, Transaction, Notification
-from django.shortcuts import redirect
 
 def generate_buyer_token(buyer):
     """
@@ -51,10 +53,20 @@ def complete_product_purchase(data):
         content='Product Purchase',
         type=1
     )
+    send_email.delay(
+        buyer.email,
+        'Product Purchase Successful',
+        f'Product Purchased successfully.\n{product_package.price}$ is subracted from your wallet.'
+    )
     # ADD AMOUNT TO SELLER
     Transaction.objects.create(
         coins=product_package.price,
         user=seller,
         content=f'{buyer.username} purchased your product.',
         type=0
+    )
+    send_email.delay(
+        seller.email,
+        'Product Purchase',
+        f'{buyer.username} purchased your product.\n{product_package.price}$ is added to your wallet.'
     )
