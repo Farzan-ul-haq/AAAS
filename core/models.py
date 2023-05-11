@@ -134,7 +134,7 @@ class Product(models.Model):
         return obj
 
     def get_description_text(self):
-        return BeautifulSoup(self.description, parser='lxml').text
+        return BeautifulSoup(self.description, parser='lxml', features='html.parser').text
 
     def get_dribble_obj(self):
         return DribbleProduct.objects.filter(product=self, status='A')
