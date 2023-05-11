@@ -1,7 +1,7 @@
 # AAAS
 Aplication As A Service(FYP Project)[updated]
 
-Docker Development Command: docker-compose -f docker-compose-testserver.yml up --build
+Docker Development Command: docker-compose -f docker-compose-dev.yml up --build
 
 Docker Production Command: docker-compose up --build
 

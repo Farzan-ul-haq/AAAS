@@ -191,7 +191,7 @@ def admins_product_reivew(request):
 
 def billing(request): # this contains the list of products
     """USER BILLING: RETURN ALL THE USER TRANSACTIONS"""
-    transactions = Transaction.objects.filter(user=request.user)
+    transactions = Transaction.objects.filter(user=request.user).order_by('-id')
     return render(request, 'core/billing.html', {
         'transactions': transactions
     })
