@@ -8,5 +8,11 @@ Docker Production Command: docker-compose up --build
 Stripe Listener Command: stripe listen --forward-to localhost:8000/stripe/webhook/
 
 
-Database Shell Connection: docker-compose exec postgres sh -c 'psql -h postgres -p 5432 -d aaasdatabase -U dbuser' 
-RqSTuVWe_TrWEXazxswe_
+Database Shell Connection: docker-compose exec postgres sh -c 'psql -h postgres -p 5432 -d aaasdatabase -U dbuser'
+Password: RqSTuVWe_TrWEXazxswe_
+
+docker-compose exec web sh -c "python manage.py migrate"
+docker-compose exec web sh -c "python manage.py makemigrations"
+docker-compose exec web sh -c "python manage.py collectstatic --noinput"
+
+DB SCHEMA COMMAND: docker-compose exec web sh -c "python manage.py graph_models -a --arrow-shape normal -o db_schema.png"

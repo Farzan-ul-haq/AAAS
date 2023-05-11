@@ -76,7 +76,7 @@ def search_product(request):
             f"You Searched: {query}",
             request.user.id,
             reverse('core:product-search')+f'query={query}'
-    )
+        )
     return render(request, 'core/search.html', {
         'products': products,
         'query': query
@@ -191,7 +191,9 @@ def admins_product_reivew(request):
 
 def billing(request): # this contains the list of products
     """USER BILLING: RETURN ALL THE USER TRANSACTIONS"""
-    transactions = Transaction.objects.filter(user=request.user).order_by('-id')
+    transactions = Transaction.objects.filter(
+        user=request.user
+    ).order_by('-id')
     return render(request, 'core/billing.html', {
         'transactions': transactions
     })
@@ -220,7 +222,7 @@ def stripe_webhook(request):
 
     try:
         event = stripe.Webhook.construct_event(
-        payload, sig_header, endpoint_secret
+            payload, sig_header, endpoint_secret
         )
     except ValueError as e:
         # Invalid payload

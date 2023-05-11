@@ -58,7 +58,7 @@ def fulfill_order(data, amount):
     IF TYPE == MARKETING
         MARKET ON THE PLATFORM
     IF TYPE == PRODUCT_PURCHSE
-        COMPLETE PRODUCT PURCHASE
+        COMPLETE PRODUCT PURCHASE()
     """
     Transaction.objects.create(
         coins=amount,

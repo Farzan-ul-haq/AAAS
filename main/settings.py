@@ -180,7 +180,7 @@ GRAPH_MODELS = {
 }
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://aaas-production-5be9.up.railway.app/',
+    'http://157.245.16.34:8000/',
     'https://aaas-production-5be9.up.railway.app'
 ]
 

@@ -32,6 +32,7 @@ def add(x, y):
     print('DONE', str(x), str(y))
     return x + y
 
+
 @shared_task
 def upload_product_to_dribble(dp, platform):
     """
@@ -215,6 +216,7 @@ def upload_product_to_pinterest(pp, platform):
         driver.save_screenshot('error.png')
         driver.quit()
     return
+
 
 @shared_task
 def upload_product_to_coroflot(cp, platform):

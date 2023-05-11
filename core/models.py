@@ -492,10 +492,6 @@ class CoroloftProduct(models.Model):
         return f"{settings.COROFLOT_PIN_URL}{self.coroflot_id}"
 
     def get_details(self):
-        return [
-            [0, 'eye'],
-            [0, 'thumbs-up'],
-        ]
         soup = BeautifulSoup(requests.get(self.get_absolute_url()).text, features='lxml')
         try: # VIEWS
             views = re.findall(
