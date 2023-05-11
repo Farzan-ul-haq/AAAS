@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function fetchData() {
-  fetch("/api/v1/brochure-templates/L/")
+  fetch("/api/v1/brochure-templates/{{product.product_type}}/")
     .then((response) => response.json())
     .then((data) => setupColors(data));
 }

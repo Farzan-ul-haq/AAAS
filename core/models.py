@@ -32,11 +32,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'username'
 
+    def __str__(self):
+        return f"{self.id} | {self.username} | {self.mode}"
+
     def package_already_bought(self, package_id):
         return ClientPackages.objects.filter(
             user=self,
             package__id=package_id
         ).exists()
+
 
 PRODUCT_TYPES = (
     ('A', 'API'),
@@ -44,6 +48,7 @@ PRODUCT_TYPES = (
     ('H', 'TEMPLATE'),
     ('D', 'Software'), # desktop or mobile application.
 )
+
 
 class Category(models.Model):
     product_type = models.CharField(choices=PRODUCT_TYPES, default='A', max_length=1)
@@ -64,6 +69,9 @@ class Tag(models.Model):
 
     class Meta:
         db_table = "Tag"
+
+    def __str__(self):
+        return f"{self.id} | {self.name}"
 
 
 class Product(models.Model):
@@ -105,7 +113,7 @@ class Product(models.Model):
         db_table = "Product"
 
     def __str__(self):
-        return f"{self.product_type} | {self.owner.username} | {self.title}"
+        return f"{self.id} | {self.product_type} | {self.owner.username} | {self.title}"
 
     def save(self, *args, **kwargs):
         self.slug = f"{self.id}-{self.title.replace(' ', '-').lower()}"
@@ -152,6 +160,9 @@ class Logo(models.Model):
     class Meta:
         db_table = "Logo"
 
+    def __str__(self):
+        return f"{self.id} | {self.product.title}"
+
 
 class HtmlTemplate(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
@@ -163,6 +174,9 @@ class HtmlTemplate(models.Model):
 
     class Meta:
         db_table = "HtmlTemplate"
+
+    def __str__(self):
+        return f"{self.id} | {self.product.title}"
 
 
 class DownloadSoftware(models.Model):
@@ -184,6 +198,9 @@ class DownloadSoftware(models.Model):
     class Meta:
         db_table = "DownloadSoftware"
 
+    def __str__(self):
+        return f"{self.id} | {self.product.title}"
+
 
 class ApiService(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
@@ -199,6 +216,9 @@ class ApiService(models.Model):
 
     class Meta:
         db_table = "ApiService"
+
+    def __str__(self):
+        return f"{self.id} | {self.product.title}"
 
 
 class Endpoints(models.Model):
@@ -225,6 +245,9 @@ class Endpoints(models.Model):
     def get_full_test_url(self):
         return f"{settings.API_SERVER_TEST_URL}{self.path}"
 
+    def __str__(self):
+        return f"{self.id} | {self.service.product.title} | {self.path}"
+
 
 class ProductPackage(models.Model):
     service = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -237,6 +260,9 @@ class ProductPackage(models.Model):
 
     class Meta:
         db_table = "ProductPackage"
+
+    def __str__(self):
+        return f"{self.id} | {self.service.title} | {self.title}"
 
 
 class ClientPackages(models.Model):
@@ -255,6 +281,9 @@ class ClientPackages(models.Model):
     class Meta:
         db_table = "ClientPackages"
 
+    def __str__(self):
+        return f"{self.id} | {self.package.service.title} | {self.user.username}"
+
 
 class Notification(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
@@ -265,6 +294,9 @@ class Notification(models.Model):
 
     class Meta:
         db_table = "Notification"
+
+    def __str__(self):
+        return f"{self.id} | {self.user.username} | {self.content}"
 
 
 class Feedback(models.Model):
@@ -284,6 +316,8 @@ class Feedback(models.Model):
     class Meta:
         db_table = "Feedback"
 
+    def __str__(self):
+        return f"{self.id} | {self.rating} | {self.package.service.title} | {self.content}"
 
 class Transaction(models.Model):
     type = models.IntegerField(default=0, choices=(
@@ -296,7 +330,11 @@ class Transaction(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.type}|{self.coins}|{self.user.username}"
+        if self.type == 0:
+            return f"+ | {self.coins} | {self.user.username}"
+        elif self.type == 1:
+            return f"- | {self.coins} | {self.user.username}"
+
 
     def save(self, *args, **kwargs):
         user = self.user
@@ -321,6 +359,10 @@ class ClientActivity(models.Model):
     content = models.CharField(max_length=5000)
     redirect_url = models.CharField(max_length=10000)
 
+    def __str__(self):
+        return f"{self.id} | {self.user.username} | {self.content}"
+
+
 class BrochureTemplates(models.Model):
     image = models.ImageField("brochure-templates/", default="", null=True, blank=True)
     product_type = models.CharField(choices=PRODUCT_TYPES, default='A', max_length=1)
@@ -330,6 +372,9 @@ class BrochureTemplates(models.Model):
     class Meta:
         db_table = "BrochureTemplates"
 
+    def __str__(self):
+        return f"{self.id} | {self.product_type} | {self.primary_color}"
+
 
 class Brochure(models.Model):
     title = models.CharField(max_length=5000, default="")
@@ -338,7 +383,7 @@ class Brochure(models.Model):
 
 
     def __str__(self):
-        return f"{self.id} | {self.product}"
+        return f"{self.id} | {self.product.title}"
 
 
     class Meta:
@@ -406,6 +451,9 @@ class DribbleProduct(models.Model):
             [likes, 'thumbs-up']
         ]
 
+    def __str__(self):
+        return f"{self.id} | {self.status} | {self.dribble_id}"
+
 
 class PinterestProduct(models.Model):
     product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL)
@@ -422,6 +470,9 @@ class PinterestProduct(models.Model):
 
     def get_absolute_url(self):
         return f"{settings.PINTEREST_PIN_URL}{self.pinterest_id}"
+
+    def __str__(self):
+        return f"{self.id} | {self.status} | {self.pinterest_id}"
 
 
 class CoroloftProduct(models.Model):
@@ -461,3 +512,6 @@ class CoroloftProduct(models.Model):
             [views, 'eye'],
             [likes, 'thumbs-up'],
         ]
+
+    def __str__(self):
+        return f"{self.id} | {self.status} | {self.coroflot_id}"
