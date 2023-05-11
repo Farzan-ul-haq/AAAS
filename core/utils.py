@@ -79,10 +79,10 @@ def fulfill_order(data, amount):
             obj = DribbleProduct.objects.get(id=data['dribble_product'])
             upload_product_to_dribble.delay(obj.id, data['platform'])
         elif data['platform'].lower() == 'pinterest':
-            obj = PinterestProduct.objects.get(id=data['dribble_product'])
+            obj = PinterestProduct.objects.get(id=data['pinterest_product'])
             upload_product_to_pinterest.delay(obj.id, data['platform'])
         elif data['platform'].lower() == 'coroflot':
-            obj = CoroloftProduct.objects.get(id=data['dribble_product'])
+            obj = CoroloftProduct.objects.get(id=data['coroflot_product'])
             upload_product_to_coroflot.delay(obj.id, data['platform'])
     elif data['type'] == 'purchase_package':
         print('+++++++++++')
