@@ -8,13 +8,19 @@ from core.models import Product, ProductPackage, BrochureTemplates
 
 
 def statistical_analysis(request, product_type, title=""):
+    """
+    Filter Products By TITLE
+    RANK BY review_average
+    CONVERT OBJ TO JSON
+    RETURN JSON IN RESPONSE
+    """
     print(title)
     products = Product.objects.filter(
         product_type=product_type,
         status='A'
     ).annotate(
         rank=SearchRank(
-            SearchVector('review_count'),
+            SearchVector('review_average'),
             SearchQuery(title)
         )
     ).order_by('-rank')
@@ -46,7 +52,12 @@ def statistical_analysis(request, product_type, title=""):
     print(data)
     return JsonResponse(data, safe=False)
 
+
 def brochure_templates(request, product_type):
+    """
+    RETURN BROCHURES OF THE PRODUCT TYPE
+    CONVERT OBJ TO JSON
+    """
     bts = BrochureTemplates.objects.filter(product_type=product_type)
     data = []
     for bt in bts:

@@ -11,6 +11,12 @@ from core.utils import create_checkout_session
 # Create your views here.
 
 def client_dashboard(request):
+    """
+    CLIENT DASHBOARD:
+    GET USER BOUGHT PRODUCTS
+    GET USER TRANSACTIONS
+    GET USER ACTIVITIES
+    """
     bought_products = ClientPackages.objects.filter(user=request.user).order_by('-id')
     transactions = Transaction.objects.filter(user=request.user).order_by('-id')
     activities = ClientActivity.objects.filter(user=request.user).order_by('-id')[:10]
@@ -21,6 +27,13 @@ def client_dashboard(request):
     })
 
 def buy_product(request, price_package_id):
+    """
+    BUY PRODUCT:
+    GET DOMAIN
+    GET PRODUCT PRICE & TITLE
+    CREATE SUCCESS URL & CANCEL URL
+    CREATE CHECKOUT SESSION
+    """
     domain_url = "http://" + request.get_host() 
     product_package = get_object_or_404(ProductPackage, pk=price_package_id)
     product = product_package.service
@@ -42,6 +55,15 @@ def buy_product(request, price_package_id):
 
 
 def give_feedback(request, bought_package_id):
+    """
+    FEEDBACK:
+    GET: RETURN CLIENT PACKAGE INFOTMATION TO THE FEEDBACK PAGE
+    POST:
+    GET CONTENT AND RATING FROM POST REQUEST
+    CREATE FEEDBACK OBJECT
+    UPDATE THE PRODUCT REVIEW_COUNT & PRODUCT_REVIEW_AVERAGE
+    REDIRECT TO DASHBOARD
+    """
     client_package = get_object_or_404(
         ClientPackages, 
         pk=bought_package_id, 

@@ -6,8 +6,9 @@ from django.shortcuts import render, redirect
 
 from core.models import Product, ApiService, Logo, HtmlTemplate, \
     DownloadSoftware, DribbleProduct, Notification, Transaction, \
-    User
-from market.tasks import upload_product_to_dribble
+    User, CoroloftProduct, PinterestProduct
+from market.tasks import upload_product_to_dribble, \
+    upload_product_to_coroflot, upload_product_to_pinterest
 from buyer.utils import complete_product_purchase
 
 
@@ -25,6 +26,9 @@ CALL_TO_ACTIONS = {
 }
 
 def get_marketing_description(product_type, redirect_url):
+    """
+    GET CALL TO ACTION ACCORDING TO THE PRODUCT TYPE
+    """
     description = CALL_TO_ACTIONS[product_type]
     description = description.replace("{URL}", redirect_url)
     return description
@@ -47,6 +51,15 @@ def get_product_object(product):
 
 
 def fulfill_order(data, amount):
+    """
+    FULFILL ORDER
+    CREATE TRANSACTION LOGS
+    CHECK DATA
+    IF TYPE == MARKETING
+        MARKET ON THE PLATFORM
+    IF TYPE == PRODUCT_PURCHSE
+        COMPLETE PRODUCT PURCHASE
+    """
     Transaction.objects.create(
         coins=amount,
         user=User.objects.get(id=data['uid']),
@@ -55,32 +68,42 @@ def fulfill_order(data, amount):
     )
     if data['type'] == 'product_marketing':
         if data['platform'].lower() == 'dribble':
-            pass
+            obj = DribbleProduct.objects.get(id=data['dribble_product'])
+            upload_product_to_dribble.delay(obj.id, data['platform'])
         elif data['platform'].lower() == 'dribble-pro':
-            dp = DribbleProduct.objects.get(id=data['dribble_product'])
-            upload_product_to_dribble.delay(dp.id, data['platform'])
+            obj = DribbleProduct.objects.get(id=data['dribble_product'])
+            upload_product_to_dribble.delay(obj.id, data['platform'])
+        elif data['platform'].lower() == 'pinterest':
+            obj = PinterestProduct.objects.get(id=data['dribble_product'])
+            upload_product_to_pinterest.delay(obj.id, data['platform'])
+        elif data['platform'].lower() == 'coroflot':
+            obj = CoroloftProduct.objects.get(id=data['dribble_product'])
+            upload_product_to_coroflot.delay(obj.id, data['platform'])
     elif data['type'] == 'purchase_package':
         print('+++++++++++')
         complete_product_purchase(data)
 
 def create_checkout_session(price, title, metadata, success_url, cancel_url):
-        checkout_session = stripe.checkout.Session.create(
-            line_items = [
-                {
-                    'price_data': {
-                        'currency': 'usd',
-                        'unit_amount': int(price*100),
-                        'product_data': {
-                            'name': title,
-                        },
+    """
+    CREATE CHECKOUT SESSION
+    """
+    checkout_session = stripe.checkout.Session.create(
+        line_items = [
+            {
+                'price_data': {
+                    'currency': 'usd',
+                    'unit_amount': int(price*100),
+                    'product_data': {
+                        'name': title,
                     },
-                    'quantity': 1,
                 },
-            ],
-            metadata=metadata,
-            mode='payment',
-            success_url=success_url,
-            cancel_url=cancel_url,
-        )
-        print(checkout_session.id)
-        return checkout_session.url
+                'quantity': 1,
+            },
+        ],
+        metadata=metadata,
+        mode='payment',
+        success_url=success_url,
+        cancel_url=cancel_url,
+    )
+    print(checkout_session.id)
+    return checkout_session.url

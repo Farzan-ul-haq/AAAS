@@ -11,6 +11,11 @@ from seller.utils import create_endpoint_obj, \
 from core.utils import get_product_object
 
 def seller_dashboard(request):
+    """
+    SELLER DASHBOARD:
+    GET USER PRODUCT
+    GET USER BROCHURES
+    """
     products = Product.objects.filter(owner=request.user).order_by('-id')
     brochures = Brochure.objects.filter(product__owner=request.user).order_by('-id')
 
@@ -21,6 +26,14 @@ def seller_dashboard(request):
 
 
 def create_logo(request):
+    """
+    CREATE LOGO:
+    IF POST:
+        CREATE PRODUCT
+        GET TAGS
+        CREATE PRODUCT PACKAGE
+        CREATE LOGO OBJECT LINKED WITH PRODUCT
+    """
     if request.method == 'GET':
         return render(
             request,
@@ -46,6 +59,14 @@ def create_logo(request):
 
 
 def create_template(request):
+    """
+    CREATE TEMPLATE:
+    IF POST:
+        CREATE PRODUCT
+        GET TAGS
+        CREATE PRODUCT PACKAGE
+        CREATE TEMPLATE OBJECT LINKED WITH PRODUCT
+    """
     if request.method == 'GET':
         return render(
             request,
@@ -71,6 +92,14 @@ def create_template(request):
 
 
 def create_software(request):
+    """
+    CREATE SOFTWARE:
+    IF POST:
+        CREATE PRODUCT
+        GET TAGS
+        CREATE PRODUCT PACKAGE
+        CREATE SOFTWARE OBJECT LINKED WITH PRODUCT
+    """
     if request.method == 'GET':
         return render(
             request,
@@ -100,6 +129,15 @@ def create_software(request):
 
 
 def create_api(request):
+    """
+    CREATE API:
+    IF POST:
+        CREATE PRODUCT
+        GET TAGS
+        CREATE PRODUCT PACKAGES
+        CREATE APISERVICE OBJECT LINKED WITH PRODUCT
+        CREATE ENDPOINTS
+    """
     if request.method == 'GET':
         return render(
             request,
@@ -138,6 +176,11 @@ def create_api(request):
 
 
 def delete_product(request, product_id):
+    """
+    DELELTE PRODUCT:
+    GET PRODUCT OBJ
+    GET PROJECT STATUS TO DELETED
+    """
     product = get_object_or_404(Product, pk=product_id)
     if product.owner != request.user:
         raise Http404
@@ -154,6 +197,17 @@ def delete_product(request, product_id):
 
 
 def update_logo(request, product_id):
+    """
+    GET PRODUCT
+    GET LOGO OBJ, TEMPLATE
+    IF GET: REUTRN 
+    IF POST:
+        UPDATE PRODUCT
+        UPDATE PRODUCT PACKAG
+        UPDATE DOWNLOADABLE_FILE IF CHANGED
+        UPDATED OBJ
+        REDIRECT TO DASHBOARD
+    """
     product = get_object_or_404(Product, pk=product_id)
     obj, template = get_product_object(product)
     package = get_object_or_404(ProductPackage, service=product)
@@ -185,6 +239,17 @@ def update_logo(request, product_id):
 
 
 def update_template(request, product_id):
+    """
+    GET PRODUCT
+    GET TEMPLATE OBJ, TEMPLATE
+    IF GET: REUTRN 
+    IF POST:
+        UPDATE PRODUCT
+        UPDATE PRODUCT PACKAG
+        UPDATE DOWNLOADABLE_FILE IF CHANGED
+        UPDATED OBJ
+        REDIRECT TO DASHBOARD
+    """
     product = get_object_or_404(Product, pk=product_id)
     obj, template = get_product_object(product)
     package = get_object_or_404(ProductPackage, service=product)
@@ -214,6 +279,17 @@ def update_template(request, product_id):
 
 
 def update_software(request, product_id):
+    """
+    GET PRODUCT
+    GET SOFTWARE OBJ, TEMPLATE
+    IF GET: REUTRN 
+    IF POST:
+        UPDATE PRODUCT
+        UPDATE PRODUCT PACKAG
+        UPDATE DOWNLOADABLE_FILE IF CHANGED
+        UPDATED OBJ
+        REDIRECT TO DASHBOARD
+    """
     product = get_object_or_404(Product, pk=product_id)
     obj, template = get_product_object(product)
     package = get_object_or_404(ProductPackage, service=product)
@@ -252,6 +328,17 @@ def update_software(request, product_id):
 
 
 def update_api(request, product_id):
+    """
+    GET PRODUCT
+    GET LOGO OBJ, TEMPLATE
+    IF GET: REUTRN 
+    IF POST:
+        UPDATE PRODUCT
+        UPDATE PRODUCT PACKAGES
+        DELETE ALL THE PREVIOUS ENDPOINTS AND CREATE NEW ONES
+        UPDATED OBJ
+        REDIRECT TO DASHBOARD
+    """
     product = get_object_or_404(Product, pk=product_id)
     obj, template = get_product_object(product)
     packages = ProductPackage.objects.filter(service=product)

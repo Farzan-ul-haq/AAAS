@@ -41,7 +41,11 @@ def brochure_list(request):
 
 @csrf_exempt
 def brochure_detail(request, product_id, brochure_id):
-    """Returns Brochure Detail"""
+    """
+    BROCHURE DETAIL:
+    GET PRODUCT
+    RETURN TO BROCHURE DETAIL
+    """
     product = Product.objects.get(id=product_id)
     if request.method == 'GET':
         return render(request, 'market/brochure-detail.html', {
@@ -62,7 +66,27 @@ def brochure_detail(request, product_id, brochure_id):
 
 
 def marketing_platform_list(request, pk):
-    """Returns Marketing Platforms"""
+    """
+    MARKETING PLATFORM LIST:
+    GET PRODUCT OBJECT
+    GET MARKETING PLATFORMS
+    GET BROCHURES
+    GET LIST OF IMAGES(PRODUCT.THUMBNAIL + PRODUCT.BROCHURE)
+    IF GET: 
+        RETURN PLATFORM LIST
+    IF POST:
+        GET DOMAIN URL
+        GET PLATFORM
+        CREATE IMAGE
+        CREATE INFO NOTIFICATION
+        GET MARKETING PLATFORM PRICE
+        GET MARKETING OBJ WITH STATUS "PENDING"
+        IF PRICE:
+            CREATE SUCCESS URL, CANCEL URL, METADATA & CREATE CHECKOUT SESSION
+            REDIRECT TO STRIPE WEBHOOK PAGE
+        ELSE:
+            START MARKETING PLATFORM SCRIPT IN BACKGROUND
+    """
     product = Product.objects.get(id=pk)
     market_platforms = MarketingPlatforms.objects.all()
     brochures = Brochure.objects.filter(product=product)

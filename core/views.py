@@ -22,20 +22,15 @@ endpoint_secret = settings.DJSTRIPE_WEBHOOK_SECRET
 
 
 def index(request): # landing page
-    """Landing Page"""
-    ## COMMENTING FOR NOW
-    # if request.user.is_authenticated:
-    #     if request.user.mode == 'S':
-    #         return redirect('seller:dashboard')
-    #     if request.user.mode == 'B':
-    #         return redirect('buyer:dashboard')
-    # else:
-    #     return render(request, 'core/index.html')
+    """LANDING PAGE"""
+
     return render(request, 'core/index.html')
 
 
 def redirect_users(request):
-    """REDIRECT USERS FROM LANDING PAGE"""
+    """
+    REDIRECT USERS FROM LANDING PAGE
+    """
     if request.user.is_authenticated:
         if request.user.mode == 'S':
             return redirect('seller:dashboard')
@@ -46,7 +41,10 @@ def redirect_users(request):
 
 
 def explore(request): # this contains the list of products
-    """This contains the list of products"""
+    """
+    FILTER PRODUCTS BY APPROVED
+    INCREASE THE IMPRESSIONS OF EACH PRODUCT
+    """
     products = Product.objects.filter(
         status='A'
     )
@@ -57,9 +55,17 @@ def explore(request): # this contains the list of products
 
 
 def about(request):
+    """
+    RETURN ABOUT PAGE
+    """
     return render(request, 'core/about.html')
 
 def search_product(request):
+    """
+    SEARCH PRODUCT:
+    FILTERS PRODUCTS BY TITLE AND DESCRIPTION
+    IF AUTHENTICATED: CREATE SEARCH QUERY
+    """
     query = request.GET.get('query')
     products = Product.objects.filter(
         Q(title__icontains=query) | Q(description__icontains=query) | Q(status='A')
@@ -77,6 +83,14 @@ def search_product(request):
 
 
 def view_product(request, slug):
+    """
+    VIEW PRODUCT:
+    GET PRODUCT OBJECT
+    INCREASE THE CLICK OF THE PRODUCT
+    GET PRODUCT PACKAGES
+    GET PRODUCT FEEDBACKS
+    IF AUTHENTICATED: CREATE CLIENT ACTIVITY
+    """
     product = get_object_or_404(Product, slug=slug)
     product.clicks += 1
     product.save()
@@ -124,6 +138,11 @@ def view_product(request, slug):
 
 
 def view_user(request, username):
+    """
+    GET USER OBJECT
+    GET USER PRODUCTS
+    GET PRODUCTS FEEDBACKS
+    """
     user = User.objects.get(username=username)
     print(user)
     products = Product.objects.filter(owner__username=username, status='A')
@@ -140,6 +159,12 @@ def view_user(request, username):
 
 
 def admins_product_reivew(request):
+    """
+    IF GET: RETURN PENDING PRODUCTS
+    IF POST:
+        GET ACTION AND PRODUCT ID
+        UPDATE THE STATUS OF PRODUCT WITH ACTION ID
+    """
     products = Product.objects.filter(status='P').order_by('-id')
 
     if not request.user.is_staff:
@@ -163,7 +188,7 @@ def admins_product_reivew(request):
     })
 
 def billing(request): # this contains the list of products
-    """This contains all the transaction history of user"""
+    """USER BILLING: RETURN ALL THE USER TRANSACTIONS"""
     transactions = Transaction.objects.filter(user=request.user)
     return render(request, 'core/billing.html', {
         'transactions': transactions
@@ -171,16 +196,22 @@ def billing(request): # this contains the list of products
 
 
 def notifications(request): # this contains the list of products
-    """This contains all the notifications of user"""
+    """USER NOTIFICATIONS: RETURNS ALL THE USER NOTIFICATIONS"""
     return render(request, 'core/notifications.html')
 
 
 def project_plan(request): # ONLY FOR DEVs
+    """PROJECT PLAN: RETURNS THE STATIC PRODUCT PLAN DEVELOPED BY DEVELOPERS"""
     return render(request, 'core/plan.html')
 
 
 @csrf_exempt
 def stripe_webhook(request):
+    """
+    STRIPE WEBHOOK VIEW:
+    VERIFY SIGNATURE
+    IF EVENT COMPLETED: FULLFIL ORDER
+    """
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None

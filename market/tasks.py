@@ -12,7 +12,7 @@ from celery import shared_task
 from core.models import DribbleProduct, Notification, MarketingPlatforms, \
     CoroloftProduct, PinterestProduct
 
-
+# DRIVER OPTIONS
 options = webdriver.ChromeOptions()
 options.add_argument(' - incognito')
 options.add_argument('--headless')
@@ -24,6 +24,9 @@ options.add_argument("--window-size=1920,1080")
 
 @shared_task
 def add(x, y):
+    """
+    CELERY TASK TO TEST
+    """
     print('STARTING', str(x), str(y))
     time.sleep(10)
     print('DONE', str(x), str(y))
@@ -31,6 +34,14 @@ def add(x, y):
 
 @shared_task
 def upload_product_to_dribble(dp, platform):
+    """
+    CELERY TASK:
+    START DRIVER
+    GET DRIBBLE OBJ
+    RUN THE DRIVER
+    CREATE SUCCESS NOTIFICATION
+    ADD PLATFORM TO PRODUCT MARKETED ON
+    """
     driver = webdriver.Remote(
                 command_executor='http://chrome:4444/wd/hub',
                 desired_capabilities=DesiredCapabilities.CHROME,
@@ -111,6 +122,14 @@ def upload_product_to_dribble(dp, platform):
 
 @shared_task
 def upload_product_to_pinterest(pp, platform):
+    """
+    CELERY TASK:
+    START DRIVER
+    GET PINTEREST OBJ
+    RUN THE DRIVER
+    CREATE SUCCESS NOTIFICATION
+    ADD PLATFORM TO PRODUCT MARKETED ON
+    """
     driver = webdriver.Remote(
                 command_executor='http://chrome:4444/wd/hub',
                 desired_capabilities=DesiredCapabilities.CHROME,
@@ -199,6 +218,14 @@ def upload_product_to_pinterest(pp, platform):
 
 @shared_task
 def upload_product_to_coroflot(cp, platform):
+    """
+    CELERY TASK:
+    START DRIVER
+    GET COROFLOT OBJ
+    RUN THE DRIVER
+    CREATE SUCCESS NOTIFICATION
+    ADD PLATFORM TO PRODUCT MARKETED ON
+    """
     driver = webdriver.Remote(
                 command_executor='http://chrome:4444/wd/hub',
                 desired_capabilities=DesiredCapabilities.CHROME,

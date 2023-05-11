@@ -4,6 +4,11 @@ from core.models import Product, Endpoints, ProductPackage, \
 
 
 def update_product(product, request):
+    """
+    UPDATE PRODUCT
+    UPDATE THUMBNAIL IMAGES
+    UPDATE TAGS
+    """
     product.title = request.POST.get('title')
     product.description = request.POST.get('description')
     product.source_url = request.POST.get('source_url')
@@ -18,6 +23,11 @@ def update_product(product, request):
     return product
 
 def create_product(request, request_type):
+    """
+    CREATE PRODUCT
+    CREATE YHUMBNAIL IMAGES
+    CREATE TAGS
+    """
     p = create_product_obj(
         owner=request.user,
         title=request.POST.get('title'),
@@ -36,13 +46,22 @@ def create_product(request, request_type):
     return p
 
 def create_product_obj(*args, **data):
+    """
+    CREATE PRODUCT WITH STATUS "PENDING"
+    """
     data['status'] = 'P'
     return Product.objects.create(**data)
 
 
 def create_endpoint_obj(*args, **data):
+    """
+    CREATE ENDPOINT WITH DATA
+    """
     return Endpoints.objects.create(**data)
 
 
 def create_package_obj(*args, **data):
+    """
+    CREATE PRODUCT PACKAGE WITH DATA
+    """
     ProductPackage.objects.create(**data)

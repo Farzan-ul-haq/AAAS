@@ -5,9 +5,26 @@ from core.models import User, Product, ProductPackage, \
 from django.shortcuts import redirect
 
 def generate_buyer_token(buyer):
+    """
+    GET BUYER ID
+    GET THE DATEANDTIME
+    GENERATE TOKEN BY ADDING THE BUYER ID + DATEANDTIME
+    """
     return f"{buyer.id}{datetime.datetime.now().isoformat().replace('-', '').replace(':', '').replace('.', '')}"
 
 def complete_product_purchase(data):
+    """
+    COMPLETE PRODUCT PURCHASE:
+    GET PRODUCT PACKAGE
+    GET PRODUCT BUYER
+    GET SELLER
+    CREATE CLIENT PACKAGE[SO USER CAN VIEW PRODUCT IN DASHBOARD]
+    IF API PRODUCT:
+        GENERATE TOKEN
+        APPEND THE NO OF REUQESTS
+    TRANSACTION LOG TO SUBRACT AMOUNT FROM BUYER
+    TRANSACTION LOG TO ADD AMOUNT TO SELLER
+    """
     product_package = ProductPackage.objects.get(id=data['product_package_id'])
     buyer = User.objects.get(id=data['uid'])
     seller = product_package.service.owner

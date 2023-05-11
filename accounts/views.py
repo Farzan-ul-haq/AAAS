@@ -9,6 +9,8 @@ from core.models import User
 # Create your views here.
 
 def test(request):
+    """
+    """
     return HttpResponse('HELLo test')
 
 
@@ -20,6 +22,15 @@ def base(request):
 
 
 def register(request):
+    """
+    REGISTER:
+        GET CREATE USER FORM
+        IF POST:
+            CHECK FORM VALIDITY
+            IF VALID CREATE USER
+            LOGIN THE CREATED USER
+            REDIRECT TO DASHBOARD
+    """
     form = createuserform()
     if request.method=="POST":
         form = createuserform(request.POST)
@@ -36,6 +47,16 @@ def register(request):
 
 
 def login(request):
+    """
+    REGISTER:
+        GET CREATE USER FORM
+        IF POST:
+            GET USERNAME AND PASSWORD
+            AUTHENTICATIE THE USERNAME AND PASSWORD
+            IF USER FOUND: LOGGED IN THE USER AND REDIRECT TO DASHBOARD
+            ELSE: RETURN THE INVALID USER FORM
+                
+    """
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -53,11 +74,18 @@ def login(request):
 
 
 def logout(request):
+    """
+    LOGOUT USER
+    """
     dj_logout(request)
     return redirect('core:index')
 
 
 def user_profile(request):
+    """
+    IF LOGGED IN: RETURN TO PROFILE PAGE
+    IF NOT LOGGED IN: RETURN ERROR
+    """
     if request.user.is_authenticated:
         context={}
         return render(request, 'accounts/user_profile.html', context)
