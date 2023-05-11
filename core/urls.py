@@ -11,6 +11,7 @@ urlpatterns = [
     path('redirect/', views.redirect_users, name='redirect'),
     path('explore/', views.explore, name='explore'),
     path('billing/', views.billing, name='billing'),
+    path('about-us/', views.about, name='about-us'),
     path('notifications/', views.notifications, name='notifications'),
 
     path('product/search/', views.search_product, name='product-search'),

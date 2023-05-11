@@ -6,11 +6,11 @@
     </div>
     <div class="form-group">
         <label for="description">Description</label>
-        <textarea name='description' class="form-control" id="exampleFormControlTextarea1" rows="3">{{product.description|safe}}</textarea>
+        <textarea name='description' class="form-control" id="exampleFormControlTextarea1" rows="3">{{product.get_description_text}}</textarea>
     </div>
     <div class="form-group">
         <label for="tags">Tags</label>
-        <input name='tags' type="text" class="form-control" id="tags" placeholder="Enter Tags...">
+        <input name='tags' type="text" class="form-control" id="tags" placeholder="Enter Tags..." value="{%for tag in product.tags.all %}{{tag}},{% endfor%}">
         <small id="tags" class="form-text text-muted">Sepereated by " , " Max 12.</small>
     </div>
     <hr>

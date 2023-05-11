@@ -71,7 +71,7 @@ def create_checkout_session(price, title, metadata, success_url, cancel_url):
                         'currency': 'usd',
                         'unit_amount': int(price*100),
                         'product_data': {
-                            'name': f'Dribble PRO Listing',
+                            'name': title,
                         },
                     },
                     'quantity': 1,

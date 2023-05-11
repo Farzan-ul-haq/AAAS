@@ -125,6 +125,9 @@ class Product(models.Model):
             obj = DownloadSoftware.objects.get(product=self)
         return obj
 
+    def get_description_text(self):
+        return BeautifulSoup(self.description).text
+
     def get_dribble_obj(self):
         return DribbleProduct.objects.filter(product=self, status='A')
     

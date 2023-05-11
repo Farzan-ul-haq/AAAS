@@ -65,8 +65,10 @@
             </div>
         </div>
         <div class="col-9">
-            <h3 class="mt-0">Feedback</h2>
+            {% if feedbacks %}
+            <h3 class="my-3">Feedback</h2>
                 {% include 'components/feedback.html' %}
+            {% endif %}
         </div>
     </div>
 </div>

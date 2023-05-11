@@ -56,6 +56,9 @@ def explore(request): # this contains the list of products
     })
 
 
+def about(request):
+    return render(request, 'core/about.html')
+
 def search_product(request):
     query = request.GET.get('query')
     products = Product.objects.filter(
