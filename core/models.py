@@ -496,7 +496,7 @@ class CoroloftProduct(models.Model):
             [0, 'eye'],
             [0, 'thumbs-up'],
         ]
-        soup = BeautifulSoup(requests.get(self.get_absolute_url()).text, text=)
+        soup = BeautifulSoup(requests.get(self.get_absolute_url()).text, features='lxml')
         try: # VIEWS
             views = re.findall(
                 "[0-9]+", soup.find_all("li", {"class": "stat_item"})[0].text
