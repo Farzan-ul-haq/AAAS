@@ -245,14 +245,10 @@ def stripe_webhook(request):
         )
     # Passed signature verification
     elif event['type'] == 'charge.failed':
-        session = stripe.checkout.Session.retrieve(
-            event['data']['object']['id'],
-            expand=['line_items'],
-        )
         print(f'Payment Error')
         failure_msg = event['data']['object']['failure_message']
         send_email.delay(
-            User.objects.get(id=session.metadata['uid']).email,
+            'farzanulhaq123@gmail.com',
             'Payment Failed',
             f'Payment Failed: {failure_msg}'
         )
