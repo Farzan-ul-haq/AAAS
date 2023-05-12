@@ -233,8 +233,8 @@ def stripe_webhook(request):
 
     if event['type'] == 'checkout.session.completed':
         session = stripe.checkout.Session.retrieve(
-        event['data']['object']['id'],
-        expand=['line_items'],
+            event['data']['object']['id'],
+            expand=['line_items'],
         )
 
         line_items = session.line_items
@@ -245,6 +245,10 @@ def stripe_webhook(request):
         )
     # Passed signature verification
     elif event['type'] == 'charge.failed':
+        session = stripe.checkout.Session.retrieve(
+            event['data']['object']['id'],
+            expand=['line_items'],
+        )
         print(f'Payment Error')
         failure_msg = event['data']['object']['failure_message']
         send_email.delay(

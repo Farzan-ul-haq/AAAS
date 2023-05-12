@@ -16,7 +16,7 @@ def seller_dashboard(request):
     GET USER PRODUCT
     GET USER BROCHURES
     """
-    products = Product.objects.filter(owner=request.user).order_by('-id')
+    products = Product.objects.filter(owner=request.user).exclude(status='D').order_by('-id')
     brochures = Brochure.objects.filter(product__owner=request.user).order_by('-id')
 
     return render(request, 'seller/dashboard.html', context={
