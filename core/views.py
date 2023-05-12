@@ -248,7 +248,7 @@ def stripe_webhook(request):
         print(f'Payment Error')
         failure_msg = event['data']['object']['failure_message']
         send_email.delay(
-            'farzanulhaq123@gmail.com',
+            User.objects.get(id=session.metadata['uid']).email,
             'Payment Failed',
             f'Payment Failed: {failure_msg}'
         )

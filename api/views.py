@@ -26,7 +26,7 @@ def statistical_analysis(request, product_type, title=""):
     ).order_by('-rank')
 
     data = []
-    for product in products:
+    for product in products[:5]:
         if product_type == 'A': # api products
             data.append({
                 "id":product.id,
