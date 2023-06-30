@@ -11,5 +11,6 @@ urlpatterns = [
     path('login/',views.login, name='login'),
     path('logout/',views.logout, name='logout'),
     path('user_profile/',views.user_profile, name='user_profile'),
+    path('user-mode-switch/',views.user_mode_switch, name='user-mode-switch'),
 
 ]

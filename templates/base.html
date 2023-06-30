@@ -75,6 +75,16 @@
           {% endif %}
           {% if request.user.is_authenticated %}
           <div class="btn-group mr-2">
+          <form action="{% url 'accounts:user-mode-switch' %}" method="post">
+            {% csrf_token %}
+            {% if request.user.mode == 'B' %}
+                <button class="nav-link btn btn-outline-success">SWITCH TO SELLER</button>
+            {% elif request.user.mode == 'S' %}
+                <button class="nav-link btn btn-outline-success">SWITCH TO BUYER</button>
+            {% endif %}
+            </form>
+          </div>
+          <div class="btn-group mr-2">
             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications <span class="badge badge-light">{{notifications.count}}</span></button>
             <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
               {% for notification in notifications %}

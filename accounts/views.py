@@ -91,3 +91,14 @@ def user_profile(request):
         return render(request, 'accounts/user_profile.html', context)
     else:
         return HttpResponse('please login with your credentials to view user profile page ')
+
+
+def user_mode_switch(request):
+    if request.method == 'POST':
+        u = request.user
+        if u.mode == 'S':
+            u.mode = 'B'
+        elif u.mode == 'B':
+            u.mode = 'S'
+        u.save()
+        return redirect(f"{u.get_mode_display()}:dashboard")
