@@ -59,7 +59,8 @@ def explore(request): # this contains the list of products
     page_number = int(request.GET.get('page', 1))
     paginated_products = paginator.get_page(page_number)
 
-    products.update(impressions=F('impressions') + 1)
+    paginated_products.update(impressions=F('impressions') + 1)
+
     return render(request, 'core/explore.html', {
         'products': paginated_products,
         "pages": range(1, paginator.num_pages+1),
