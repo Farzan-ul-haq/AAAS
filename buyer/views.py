@@ -38,6 +38,9 @@ def buy_product(request, price_package_id):
     product_package = get_object_or_404(ProductPackage, pk=price_package_id)
     product = product_package.service
     if not request.user.is_authenticated:
+        request.session['redirect_to'] = reverse('core:product-view', kwargs={
+            'slug': product.slug
+        })
         return redirect('accounts:login')
     # payment checkout URL
     checkout_session_url = create_checkout_session(

@@ -1,2 +1,4 @@
 # For Generating Class Diagrams
 python manage.py graph_models -a --arrow-shape normal -o db_schema.png
+
+docker-compose -f docker-compose.dev.yml up --build

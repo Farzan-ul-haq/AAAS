@@ -1,4 +1,8 @@
 *.pyc
 *.sqlite3
 staticfiles/*
-*.log
+host.access.log
+host.error.log
+nginx-error.log
+selenium/*.png
+core/__pycache__/*

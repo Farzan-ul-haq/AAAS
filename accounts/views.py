@@ -38,8 +38,14 @@ def register(request):
             user = form.save()
             messages.success(request,'Account Created...')
             dj_login(request, user)
-            mode = 'buyer' if user.mode == 'B' else "seller"
-            return redirect(f"{mode}:dashboard")
+
+            redirect_to = request.session.get('redirect_to', None) # IF REDIRECT URL: MARKETED CUSTOMER
+            if redirect_to:
+                del request.session['redirect_to']
+                return redirect(redirect_to)
+            else:
+                mode = 'buyer' if user.mode == 'B' else "seller"
+                return redirect(f"{mode}:dashboard")
 
     return render(request,'accounts/register.html', {
         'form': form
@@ -65,8 +71,13 @@ def login(request):
 
         if user is not None:
             dj_login(request, user)
-            mode = 'buyer' if user.mode == 'B' else "seller"
-            return redirect(f"{mode}:dashboard")
+            redirect_to = request.session.get('redirect_to', None) # IF REDIRECT URL: MARKETED CUSTOMER
+            if redirect_to:
+                del request.session['redirect_to']
+                return redirect(redirect_to)
+            else:
+                mode = 'buyer' if user.mode == 'B' else "seller"
+                return redirect(f"{mode}:dashboard")
         else:
             messages.info(request,'Username Or Password is incorrect')
     context={}

@@ -78,7 +78,13 @@
                 <div class="pricing text-center ">
                     <h2>{{package.0.price}} USD</h2>
                     <hr>
-                    <a href="{% url 'buyer:buy-product' package.0.id %}" type="button" class="btn btn-lg btn-block btn-success">Buy Now</a>
+                    <a href="{% url 'buyer:buy-product' package.0.id %}" type="button" class="btn btn-lg btn-block btn-success">
+                        {% if request.user.is_authenticated %}
+                            Buy Now
+                        {% else %}
+                            Log In & Buy Now
+                        {% endif %}
+                    </a>
                 </div>
             </div>
         </div>
