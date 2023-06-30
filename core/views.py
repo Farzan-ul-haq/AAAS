@@ -6,6 +6,9 @@ from django.shortcuts import HttpResponse
 from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
+from django.contrib.postgres.search import SearchQuery, SearchRank, \
+                                        SearchVector
+from django.core.paginator import Paginator
 
 from core.models import Product, ApiService, Logo,  \
     HtmlTemplate, DownloadSoftware, ProductPackage, \
@@ -46,11 +49,21 @@ def explore(request): # this contains the list of products
     INCREASE THE IMPRESSIONS OF EACH PRODUCT
     """
     products = Product.objects.filter(
-        status='A'
+        status='A',
+    ).order_by(
+        'review_average', 
+        'review_count'
     )
+
+    paginator = Paginator(products, per_page=1)
+    page_number = int(request.GET.get('page', 1))
+    paginated_products = paginator.get_page(page_number)
+
     products.update(impressions=F('impressions') + 1)
     return render(request, 'core/explore.html', {
-        'products': products
+        'products': paginated_products,
+        "pages": range(1, paginator.num_pages+1),
+        "page_number": page_number
     })
 
 
