@@ -14,7 +14,7 @@ from core.models import Product, ApiService, Logo,  \
     HtmlTemplate, DownloadSoftware, ProductPackage, \
     Feedback, Endpoints, Transaction, User
 from core.utils import get_product_object, fulfill_order
-from core.tasks import send_email
+from core.tasks import send_email, create_click_obj, create_impresion_obj
 from buyer.tasks import add_client_activity
 
 
@@ -58,8 +58,11 @@ def explore(request): # this contains the list of products
     paginator = Paginator(products, per_page=1)
     page_number = int(request.GET.get('page', 1))
     paginated_products = paginator.get_page(page_number)
-
-    paginated_products.update(impressions=F('impressions') + 1)
+    create_impresion_obj.delay(list(
+        paginated_products.object_list.values_list(
+            'id', flat=True
+        )
+    ))
 
     return render(request, 'core/explore.html', {
         'products': paginated_products,
@@ -84,16 +87,28 @@ def search_product(request):
     query = request.GET.get('query')
     products = Product.objects.filter(
         Q(title__icontains=query) | Q(description__icontains=query) | Q(status='A')
+    ).order_by(
+        'review_average', 
+        'review_count'
     )
+
+    paginator = Paginator(products, per_page=1)
+    page_number = int(request.GET.get('page', 1))
+    paginated_products = paginator.get_page(page_number)
+    create_impresion_obj(paginated_products.object_list.values_list('id', flat=True)).delay()
+
     if request.user.is_authenticated:
         add_client_activity.delay(
             f"You Searched: {query}",
             request.user.id,
             reverse('core:product-search')+f'query={query}'
         )
+
     return render(request, 'core/search.html', {
-        'products': products,
-        'query': query
+        'products': paginated_products,
+        'query': query,
+        "page_number": page_number
+
     })
 
 

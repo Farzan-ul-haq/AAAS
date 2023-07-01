@@ -1,9 +1,11 @@
-from django.shortcuts import render , redirect
+from datetime import datetime
+
 from django.http import JsonResponse
 from django.contrib.postgres.search import SearchQuery, SearchRank, \
                                         SearchVector
-
-from core.models import Product, ProductPackage, BrochureTemplates
+from django.db.models import Count
+from core.models import Product, ProductPackage, BrochureTemplates, \
+    ProductClick, ProductImpression
 # Create your views here.
 
 
@@ -68,3 +70,25 @@ def brochure_templates(request, product_type):
             "secondary_color": bt.secondary_color
         })
     return JsonResponse(data, safe=False)
+
+
+def product_activity(request, product_id, activity_type):
+    if activity_type == 'clicks':
+        obj = ProductClick
+    elif activity_type == 'impressions':
+        obj = ProductImpression
+    else:
+        return JsonResponse({})
+    activities = obj.objects.filter(
+        product__id=product_id,
+        datestamp__gte=datetime(2023, 7, 1)
+    ).values('datestamp').annotate(
+        activity=Count("product")
+    ).order_by('-datestamp')
+
+    return JsonResponse(
+        [{
+            "date": i["datestamp"],
+            activity_type: i['activity']
+        } for i in activities], safe=False
+    )

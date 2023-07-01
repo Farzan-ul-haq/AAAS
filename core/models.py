@@ -515,3 +515,19 @@ class CoroloftProduct(models.Model):
 
     def __str__(self):
         return f"{self.id} | {self.status} | {self.coroflot_id}"
+
+
+class ProductImpression(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    datestamp = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.product.title} | {self.datestamp}"
+
+
+class ProductClick(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    datestamp = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.product.title} | {self.datestamp}"
