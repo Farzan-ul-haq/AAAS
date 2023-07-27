@@ -269,6 +269,7 @@ class ClientPackages(models.Model):
     package = models.ForeignKey(ProductPackage, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     token = models.CharField(max_length=255)
+    amount_paid = models.IntegerField(default=0)
 
     tiny_requests_left = models.IntegerField(default=0)
     normal_requests_left = models.IntegerField(default=0)

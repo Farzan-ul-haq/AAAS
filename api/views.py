@@ -4,10 +4,15 @@ from django.http import JsonResponse
 from django.contrib.postgres.search import SearchQuery, SearchRank, \
                                         SearchVector
 from django.db.models import Count
-from core.models import Product, ProductPackage, BrochureTemplates, \
-    ProductClick, ProductImpression
-# Create your views here.
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import viewsets, generics, status
+from rest_framework.response import Response
+from rest_framework.pagination import LimitOffsetPagination
 
+from core.models import Product, ProductPackage, BrochureTemplates, \
+    ProductClick, ProductImpression, Feedback
+from api.serializers import ProductSerializer, FeedbackSerializer
 
 def statistical_analysis(request, product_type, title=""):
     """
@@ -92,3 +97,39 @@ def product_activity(request, product_id, activity_type):
             activity_type: i['activity']
         } for i in activities], safe=False
     )
+
+
+class UserProductsView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        if 'username' in self.kwargs.keys():
+            products = Product.objects.filter(
+                owner__username=self.kwargs['username']
+            )
+        else:
+            products = Product.objects.all()
+        products = products.order_by(
+            'review_average',
+            'review_count'
+        )
+        return products
+
+
+class UserProductFeedbackView(APIView):
+    serializer_class = FeedbackSerializer
+
+    def get(self, request, product_id):
+        feedbacks = Feedback.objects.filter(
+            package__service__id=product_id
+        )
+        serializer = self.serializer_class(feedbacks, many=True)
+        print(serializer.data)
+        return Response(serializer.data)
+
+
+class UserProductOrdersView(APIView):
+    serializer_class = FeedbackSerializer
+
+    def get(self, request, product_id):
+        return Response({})

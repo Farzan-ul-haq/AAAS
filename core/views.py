@@ -55,7 +55,7 @@ def explore(request): # this contains the list of products
         'review_count'
     )
 
-    paginator = Paginator(products, per_page=1)
+    paginator = Paginator(products, per_page=15)
     page_number = int(request.GET.get('page', 1))
     paginated_products = paginator.get_page(page_number)
     create_impresion_obj.delay(list(
@@ -282,3 +282,22 @@ def stripe_webhook(request):
             f'Payment Failed: {failure_msg}'
         )
     return HttpResponse(status=200)
+
+
+def product_analysis_view(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, 'analysis/product.html', {
+        'product': product
+    })
+
+
+def user_analysis_view(request, username):
+    user = get_object_or_404(User, username=username)
+    return render(request, 'analysis/user.html', {
+        'user': user
+    })
+
+
+def admin_dashboard_view(request):
+    return render(request, 'core/admin-dashboard.html', {
+    })

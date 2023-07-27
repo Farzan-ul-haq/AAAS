@@ -28,3 +28,6 @@ flask_limiter
 flask-cors
 beautifulsoup4==4.12.2
 lxml
+djangorestframework
+markdown
+django-filter

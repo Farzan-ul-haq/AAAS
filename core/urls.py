@@ -23,4 +23,8 @@ urlpatterns = [
     path('stripe/webhook/', views.stripe_webhook, name='stripe_webhook'),
 
     path('admins/product/review/', views.admins_product_reivew, name='admin-product-review'),
+    path('admins/dashboard/', views.admin_dashboard_view, name='admin-dashboard'),
+
+    path('analysis/product/<int:product_id>/', views.product_analysis_view, name='product-analysis'),
+    path('analysis/user/<str:username>/', views.user_analysis_view, name='user-analysis'),
 ]
