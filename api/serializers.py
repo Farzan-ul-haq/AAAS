@@ -1,7 +1,11 @@
 from rest_framework import serializers
 
-from core.models import Product, Feedback
-
+from core.models import (
+    Product, 
+    Feedback, 
+    ClientPackages,
+    Brochure
+)
 
 class ProductSerializer(serializers.ModelSerializer):
     total_sales = serializers.SerializerMethodField()
@@ -38,12 +42,47 @@ class FeedbackSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'username',
-            'package',
             'content',
             'rating'
         ]
 
 
-# class OrderSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ClientPackages
+class OrderSerializer(serializers.ModelSerializer):
+    feedback = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ClientPackages
+        fields = [
+            "id",
+            "amount_paid",
+            "timestamp",
+            "is_feedback_given",
+            "feedback",
+            "user"
+        ]
+
+    def get_feedback(self, obj):
+        feedback = Feedback.objects.filter(
+                package=obj.package,
+                user=obj.user
+            )
+        if feedback.exists():
+            return FeedbackSerializer(
+                feedback.first()
+            ).data
+        return None
+
+class BrochureSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Brochure
+        fields = [
+            'id',
+            'title',
+            'image_data',
+        ]
+
+
+# class MarketingPlatformsSerialier(serializers.Serializer):
+    
+    

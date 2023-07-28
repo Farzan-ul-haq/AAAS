@@ -1,4 +1,5 @@
 from datetime import datetime
+from datetime import date, timedelta
 
 from django.http import JsonResponse
 from django.contrib.postgres.search import SearchQuery, SearchRank, \
@@ -11,8 +12,10 @@ from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
 
 from core.models import Product, ProductPackage, BrochureTemplates, \
-    ProductClick, ProductImpression, Feedback
-from api.serializers import ProductSerializer, FeedbackSerializer
+    ProductClick, ProductImpression, Feedback, ClientPackages, \
+    Brochure, DribbleProduct, CoroloftProduct, PinterestProduct
+from api.serializers import ProductSerializer, FeedbackSerializer, \
+    OrderSerializer, BrochureSerializer
 
 def statistical_analysis(request, product_type, title=""):
     """
@@ -133,3 +136,86 @@ class UserProductOrdersView(APIView):
 
     def get(self, request, product_id):
         return Response({})
+
+
+class UserRecentOrdersView(APIView):
+    serializer_class = OrderSerializer
+
+    def get(self, request, username):
+        orders = ClientPackages.objects.filter(
+            timestamp__gte=date.today()-timedelta(days=3),
+            package__service__owner__username=username
+        )
+        serializer = self.serializer_class(orders, many=True)
+        return Response(serializer.data)
+
+
+class UserOrdersView(APIView):
+    serializer_class = OrderSerializer
+
+    def get(self, request, username):
+        orders = ClientPackages.objects.filter(
+            timestamp__lte=date.today()-timedelta(days=3),
+            package__service__owner__username=username
+        )
+        serializer = self.serializer_class(orders, many=True)
+        return Response(serializer.data)
+
+
+class ProductOrdersView(APIView):
+    serializer_class = BrochureSerializer
+
+    def get(self, request, product_id):
+        orders = ClientPackages.objects.filter(
+            package__service__id=product_id
+        )
+        serializer = self.serializer_class(orders, many=True)
+        return Response(serializer.data)
+
+
+class UserBrochureView(APIView):
+    serializer_class = BrochureSerializer
+
+    def get(self, request, username):
+        brochures = Brochure.objects.filter(
+            product__owner__username=username
+        )
+        serializer = self.serializer_class(brochures, many=True)
+        return Response(serializer.data)
+
+
+class UserMarketingResults(APIView):
+
+    def get(self, request, username):
+        output = {}
+        output['dribble'] = [
+            {
+                "id": obj.id,
+                "title": obj.title,
+                "image": obj.image.url,
+                "details": obj.get_details(),
+                "url": obj.get_absolute_url()
+            } for obj in DribbleProduct.objects.filter(
+            product__owner__username=username
+        )]
+        output['coroflot'] = [
+            {
+                "id": obj.id,
+                "title": obj.product.title,
+                "image": obj.image.url,
+                "details": obj.get_details(),
+                "url": obj.get_absolute_url()
+            } for obj in CoroloftProduct.objects.filter(
+            product__owner__username=username
+        )]
+        output['pinterest'] = [
+            {
+                "id": obj.id,
+                "title": obj.title,
+                "image": obj.image.url,
+                "details": None,
+                "url": obj.get_absolute_url()
+            } for obj in CoroloftProduct.objects.filter(
+            product__owner__username=username
+        )]
+        return Response(output)

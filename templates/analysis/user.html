@@ -310,7 +310,7 @@ background-color: #f8f9fa;
                         <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo">
                             <div class="collapse-card-body">
                                 <div id="add_to_me"></div>
-                                <button onclick="loadData()" class="load-more-btn">Load More</button>
+                                <button onclick="loadData()" class="load-more-btn col-12">Load More</button>
                             </div>
                         </div>
                     </div>
@@ -367,7 +367,7 @@ background-color: #f8f9fa;
 
 <script>
     let products = [];
-    let offset = 5;
+    let offset = 0;
 
     function fetchData() {
         $.ajax({
