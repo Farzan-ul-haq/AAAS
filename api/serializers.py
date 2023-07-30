@@ -9,6 +9,8 @@ from core.models import (
 
 class ProductSerializer(serializers.ModelSerializer):
     total_sales = serializers.SerializerMethodField()
+    status = serializers.CharField(source='get_status_display')
+    product_type = serializers.CharField(source='get_product_type_display')
 
     class Meta:
         model = Product
@@ -27,6 +29,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'clicks',
             'status',
             'created_at',
+            'thumbnail',
 
             'total_sales'
         ]
@@ -49,6 +52,9 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     feedback = serializers.SerializerMethodField()
+    product_title = serializers.CharField(source='package.service.title')
+    product_thumbnail = serializers.ImageField(source='package.service.thumbnail')
+    username = serializers.CharField(source='user.username')
 
     class Meta:
         model = ClientPackages
@@ -58,7 +64,9 @@ class OrderSerializer(serializers.ModelSerializer):
             "timestamp",
             "is_feedback_given",
             "feedback",
-            "user"
+            "username",
+            'product_title',
+            'product_thumbnail'
         ]
 
     def get_feedback(self, obj):

@@ -163,7 +163,7 @@ class UserOrdersView(APIView):
 
 
 class ProductOrdersView(APIView):
-    serializer_class = BrochureSerializer
+    serializer_class = OrderSerializer
 
     def get(self, request, product_id):
         orders = ClientPackages.objects.filter(
@@ -215,7 +215,7 @@ class UserMarketingResults(APIView):
                 "image": obj.image.url,
                 "details": None,
                 "url": obj.get_absolute_url()
-            } for obj in CoroloftProduct.objects.filter(
+            } for obj in PinterestProduct.objects.filter(
             product__owner__username=username
         )]
         return Response(output)

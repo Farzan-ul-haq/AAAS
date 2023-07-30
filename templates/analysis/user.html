@@ -261,17 +261,17 @@ background-color: #f8f9fa;
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL5T9o5Jww6mim8gRRC9BhRqEcBLnRiU1UCA&usqp=CAU"
                         alt="">
                     <div class="user-details">
-                        <h1 class="mb-0">Selena Gomez</h1>
+                        <h1 class="mb-0">{{user.username.title}}</h1>
                     </div>
                 </div>
                 <ul>
                     <li class="mt-0">
                         <p><img src="{% static 'assets/img/total-sales-icon.svg' %}" />Total Sales</p>
-                        <h2>00</h2>
+                        <h2>{{total_sales}}</h2>
                     </li>
                     <li>
                         <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Total Orders</p>
-                        <h2>00</h2>
+                        <h2>{{total_orders}}</h2>
                     </li>
                 </ul>
             </div>
@@ -287,15 +287,10 @@ background-color: #f8f9fa;
                             </button>
                         </div>
 
-                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
                             <div class="collapse-card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-                                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-                                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-                                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
-                                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                <div id="orders_add_to_me"></div>
+                                <button id='load-order-btn' onclick="fetchOrderData()" class="load-more-btn col-12">Load More</button>
                             </div>
                         </div>
                     </div>
@@ -303,14 +298,14 @@ background-color: #f8f9fa;
                         <div class="collapse-card-header p-0" id="headingTwo">
                             <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
                                 aria-expanded="true" aria-controls="collapseTwo">
-                                Products
+                                Products[{{total_products_count}}]
                             </button>
                         </div>
 
                         <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo">
                             <div class="collapse-card-body">
-                                <div id="add_to_me"></div>
-                                <button onclick="loadData()" class="load-more-btn col-12">Load More</button>
+                                <div id="product_add_to_me"></div>
+                                <button onclick="loadProductData()" class="load-more-btn col-12">Load More</button>
                             </div>
                         </div>
                     </div>
@@ -322,15 +317,9 @@ background-color: #f8f9fa;
                             </button>
                         </div>
 
-                        <div id="collapseThree" class="collapse " aria-labelledby="headingThree">
+                        <div id="collapseThree" class="collapse show" aria-labelledby="headingThree">
                             <div class="collapse-card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-                                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-                                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-                                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
-                                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                <div id="brochure_add_to_me"></div>
                             </div>
                         </div>
                     </div>
@@ -342,15 +331,10 @@ background-color: #f8f9fa;
                             </button>
                         </div>
 
-                        <div id="collapseFour" class="collapse " aria-labelledby="headingFour" data-parent="#accordion">
+                        <div id="collapseFour" class="collapse show" aria-labelledby="headingFour" data-parent="#accordion">
                             <div class="collapse-card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-                                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-                                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-                                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
-                                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                <div id="market_add_to_me">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -367,12 +351,13 @@ background-color: #f8f9fa;
 
 <script>
     let products = [];
+    let orders = [];
     let offset = 0;
 
-    function fetchData() {
+    function fetchProductData() {
         $.ajax({
             type: 'GET',
-            url: `/api/v1/products/?limit=5&offset=${offset}`,
+            url: `/api/v1/users/{{user.username}}/products/?limit=3&offset=${offset}`,
             success: function (data) {
                 const displayValue = data.next ? "block" : "none";
                 const loadMoreBtns = document.querySelectorAll('.load-more-btn');
@@ -387,9 +372,234 @@ background-color: #f8f9fa;
             },
         });
     }
+    function fetchRecentOrderData() {
+        $.ajax({
+            type: 'GET',
+            url: `/api/v1/users/{{user.username}}/orders/recent/`,
+            success: function (data) {
+                const container = document.getElementById('orders_add_to_me');
+                // container.innerHTML = "";
+                let value = data.forEach(elem => {
+                    console.log(elem);
+                  const orderCard = document.createElement('div');
+                  feedback = elem.feedback ? true : false;
+                  // orderCard.classList.add('product-card');
+                  // orderCard.classList.add('border');
+                  // orderCard.classList.add('border-warning');
+                  if (feedback) {
+                    orderCard.innerHTML = `
+                      <div class="media m-3 p-3 text-muted border border-warning">
+                      <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.product_thumbnail}" data-holder-rendered="true">
+                      <div class="media-body">
+                        <h5 class="mt-0"><strong class="d-block text-dark">${elem.product_title}</strong></h5>
+                        <li><strong class="text-gray-dark">Bought By: ${elem.username}</strong></li>
+                        <li><strong class="text-dark">Feedback: ${elem.feedback.content} [⭐: ${elem.feedback.rating}]</strong></li>
+                      </div>
+                      <div style="text-align: center;" class='align-self-center text-dark'>
+                        <h6>Paid:</h6>
+                        <h3>${elem.amount_paid}$</h3>
+                        <hr>
+                        <h6>${elem.timestamp}</h6>
+                      </div>
+                    </div>
+                    <hr>
+                  `  
+                  } else {
+                    orderCard.innerHTML = `
+                  <div class="media m-3 p-3 text-muted  border border-warning">
+                  <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.product_thumbnail}" data-holder-rendered="true">
+                  <div class="media-body">
+                    <h5 class="mt-0"><strong class="d-block text-dark">${elem.product_title}</strong></h5>
+                    <li><strong class="text-gray-dark">Bought By: ${elem.username}</strong></li>
+
+                    <li><strong class="text-dark">Bought By: ${elem.username}</strong></li>
+                    <li><strong class="text-dark">Feedback: ❌</strong></li>
+                  </div>
+                  <div style="text-align: center;" class='align-self-center text-dark'>
+                        <h6>Paid:</h6>
+                        <h3>${elem.amount_paid}$</h3>
+                        <hr>
+                        <h6>${elem.timestamp}</h6>
+                    </div>
+                </div>
+                <hr>
+              `
+                  }
+                console.log(orderCard);
+            container.appendChild(orderCard);
+            })},
+            error: function (error) {
+                console.log('Error:', error);
+            },
+        });
+    }
+    function fetchOrderData() {
+        document.getElementById("load-order-btn").remove();
+        $.ajax({
+            type: 'GET',
+            url: `/api/v1/users/{{user.username}}/orders/`,
+            success: function (data) {
+                const container = document.getElementById('orders_add_to_me');
+                // container.innerHTML = "";
+                let value = data.forEach(elem => {
+                    console.log(elem);
+                    const orderCard = document.createElement('div');
+                    feedback = elem.feedback ? true : false;
+                  // orderCard.classList.add('product-card');
+                  // orderCard.classList.add('border');
+                  // orderCard.classList.add('border-warning');
+                  if (feedback) {
+                    orderCard.innerHTML = `
+                      <div class="media m-3 text-muted">
+                      <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.product_thumbnail}" data-holder-rendered="true">
+                      <div class="media-body">
+                        <h5 class="mt-0"><strong class="d-block text-dark">${elem.product_title}</strong></h5>
+                        <li><strong class="text-gray-dark">Bought By: ${elem.username}</strong></li>
+                        <li><strong class="text-dark">Feedback: ${elem.feedback.content} [⭐: ${elem.feedback.rating}]</strong></li>
+                      </div>
+                      <div style="text-align: center;" class='align-self-center text-dark'>
+                        <h6>Paid:</h6>
+                        <h3>${elem.amount_paid}$</h3>
+                        <hr>
+                        <h6>${elem.timestamp}</h6>
+                      </div>
+                    </div>
+                    <hr>
+                  `  
+                  } else {
+                    orderCard.innerHTML = `
+                  <div class="media m-3 text-muted">
+                  <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.product_thumbnail}" data-holder-rendered="true">
+                  <div class="media-body">
+                    <h5 class="mt-0"><strong class="d-block text-dark">${elem.product_title}</strong></h5>
+                    <li><strong class="text-gray-dark">Bought By: ${elem.username}</strong></li>
+                    <li><strong class="text-dark">Feedback: ❌</strong></li>
+                  </div>
+                  <div style="text-align: center;" class='align-self-center text-dark'>
+                        <h6>Paid:</h6>
+                        <h3>${elem.amount_paid}$</h3>
+                        <hr>
+                        <h6>${elem.timestamp}</h6>
+                    </div>
+                </div>
+                <hr>
+              `
+                  }
+                    container.appendChild(orderCard);
+            })
+        },
+            error: function (error) {
+                console.log('Error:', error);
+            },
+        });
+    }
+
+    function fetchBrochureData() {
+        $.ajax({
+            type: 'GET',
+            url: `/api/v1/users/{{user.username}}/brochures/`,
+            success: function (data) {
+                const container = document.getElementById('brochure_add_to_me');
+                // container.innerHTML = "";
+                let value = data.forEach(elem => {
+                    console.log(elem);
+                    const brochureCard = document.createElement('div');
+                    // brochureCard.classList.add('product-card');
+                    brochureCard.innerHTML = `
+                    <div class="media m-3 text-muted">
+                        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 32px; height: 32px;" src="${elem.image_data}" data-holder-rendered="true">
+                        <div class="media-body">
+                            <h5 class="mt-0"><strong class="d-block text-gray-dark">@${elem.title}</strong></h5>
+                        </div>
+                    </div>
+                    <hr>
+                    `
+                    container.appendChild(brochureCard);
+                })
+            },            
+            error: function (error) {
+                console.log('Error:', error);
+            },
+        })
+    };
+
+    function fetchMarketData() {
+        $.ajax({
+            type: 'GET',
+            url: `/api/v1/users/{{user.username}}/market/`,
+            success: function (data) {
+                const container = document.getElementById('market_add_to_me');
+                // container.innerHTML = "";
+                console.log(data)
+                data['dribble'].forEach(elem => {
+                    console.log(elem);
+                    const dribbleCard = document.createElement('div');
+                    // brochureCard.classList.add('product-card');
+                    dribbleCard.innerHTML = `
+                    <div class="media m-3 text-muted">
+                        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.image}" data-holder-rendered="true">
+                        <div class="media-body">
+                        <h5 class="mt-0"><strong class="d-block text-gray-dark">@Dribble</strong></h5>
+                        <li><strong class="text-gray-dark">${elem.title}</strong></li>
+                        <li><strong class="text-gray-dark"><a class='text-gray-dark' href="${elem.url}">Dribble URL</a></strong></li>
+                        </div>
+                        <div style="text-align: right;">
+                        <h4>${elem.details[0][0]} <i class="fa fa-solid fa-${elem.details[0][1]}"></i></h4>
+                        <h4>${elem.details[1][0]} <i class="fa fa-solid fa-${elem.details[1][1]}"></i></h4>
+                        </div>
+                    </div>
+                    <hr>
+                    `
+                    container.appendChild(dribbleCard);
+                });
+                data['coroflot'].forEach(elem => {
+                    console.log(elem);
+                    const dribbleCard = document.createElement('div');
+                    // brochureCard.classList.add('product-card');
+                    dribbleCard.innerHTML = `
+                    <div class="media m-3 text-muted">
+                        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{coroflot.image.url }}" data-holder-rendered="true">
+                        <div class="media-body">
+                        <h5 class="mt-0"><strong class="d-block text-gray-dark">@Coroflot</strong></h5>
+                        <li><strong class="text-gray-dark">${elem.title}</strong></li>
+                        <li><strong class="text-gray-dark"><a class='text-gray-dark' href="${elem.url}">Coroflot URL</a></strong></li>
+                        </div>
+                        <div style="text-align: right;">
+                            <h4>${elem.details[0][0]} <i class="fa fa-solid fa-${elem.details[0][1]}"></i></h4>
+                            <h4>${elem.details[1][0]} <i class="fa fa-solid fa-${elem.details[1][1]}"></i></h4>
+                        </div>
+                    </div>
+                    <hr>
+                    `
+                    container.appendChild(dribbleCard);
+                });
+                data['pinterest'].forEach(elem => {
+                    console.log(elem);
+                    const dribbleCard = document.createElement('div');
+                    // brochureCard.classList.add('product-card');
+                    dribbleCard.innerHTML = `
+                    <div class="media m-3 text-muted">
+                        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{coroflot.image.url }}" data-holder-rendered="true">
+                        <div class="media-body">
+                        <h5 class="mt-0"><strong class="d-block text-gray-dark">@Pinterest</strong></h5>
+                        <li><strong class="text-gray-dark">${elem.title}</strong></li>
+                        <li><strong class="text-gray-dark"><a class='text-gray-dark' href="${elem.url}">Coroflot URL</a></strong></li>
+                        </div>
+                    </div>
+                    <hr>
+                    `
+                    container.appendChild(dribbleCard);
+                });
+
+            },            
+            error: function (error) {
+                console.log('Error:', error);
+            },
+        })
+    };
 
     function displayProducts() {
-        const container = document.getElementById('add_to_me');
+        const container = document.getElementById('product_add_to_me');
         container.innerHTML = ''; // Clear previous content
         let value = products.forEach(elem => {
             elem.forEach(element => {
@@ -397,17 +607,17 @@ background-color: #f8f9fa;
                 productCard.classList.add('product-card');
                 productCard.innerHTML = `
           <div class="product-details">
-            <img src="https://media.licdn.com/dms/image/C4E12AQGjiSsUfLHO4g/article-cover_image-shrink_720_1280/0/1598606996302?e=2147483647&v=beta&t=n9RdJ-5y4HzAKNM212sLyGCknzQXaRDr11kc2NIUXsk" alt="">
+            <img src="${element.thumbnail}" alt="">
             <h2>${element.title}</h2>
           </div>
           <div class="product-card-right">
             <div class="buttons-container">
               <div class="sales">
                 <p>Sales:</p>
-                <h3>000</h3>
+                <h3>${element.total_sales}$</h3>
               </div>
               <div class="buttons">
-                <button class="button approve-btn">Approve</button>
+                <button class="button approve-btn">${element.status}</button>
                 <button class="button type-btn">${element.product_type}</button>
               </div>
             </div>
@@ -433,7 +643,8 @@ background-color: #f8f9fa;
                 container.appendChild(productCard);
             });
         })
-    }
+    };
+
     function toggleDropdown() {
         console.log("heree");
     }
@@ -441,12 +652,15 @@ background-color: #f8f9fa;
         const dropdownMenu = document.getElementById('dropdownMenu1');
         dropdownMenu.classList.toggle('show');
     }
-    function loadData() {
-        offset += 5;
+    function loadProductData () {
+        offset += 3;
         console.log(offset);
-        fetchData();
+        fetchProductData();
     }
-    fetchData();
+    fetchRecentOrderData();
+    fetchProductData();
+    fetchBrochureData();
+    fetchMarketData();
 </script>
 
 {% endblock js %}

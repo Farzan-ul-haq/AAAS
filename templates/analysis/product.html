@@ -1,0 +1,452 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}YourSite{% endblock title %}
+
+{% block css %}
+.seller-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  position: relative;
+  height: 100%;
+  }
+  .sidebar {
+  background: #fff;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  }
+  .sidebar .user {
+  display: flex;
+  align-items: center;
+  padding: 35px 20px;
+  flex-direction: column;
+  background: #fff;
+  }
+  .sidebar .user img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 100%;
+  background: #c2c2c2;
+  margin-bottom: 15px;
+  }
+  .sidebar .user .user-details h1 {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  }
+  .sidebar .user .user-details p {
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 0;
+  }
+  .sidebar ul {
+  padding: 20px 20px;
+  }
+  .sidebar ul li {
+  list-style: none;
+  margin: 10px 0;
+  color: black;
+  text-decoration: none;
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  }
+  .sidebar ul li p {
+  font-size: 14px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  }
+  .sidebar ul li h2 {
+  font-size: 20px;
+  margin-bottom: 0;
+  font-weight: bold;
+  }
+  
+  .sidebar ul li p img {
+  margin-right: 6px;
+  width: 20px;
+  }
+  <!-- .sidebar ul li a:hover {
+  background: black;
+  color: white;
+  font-weight: bold;
+  } -->
+  .sidebar-content {
+  padding-left: 40px;
+  margin-bottom: 30px;
+  }
+  .collapse-card {
+  margin: 30px 0;
+  }
+  .collapse-card .collapse-card-header {
+  background: #fff;
+  }
+  .collapse-card .collapse-card-header .btn {
+  width: 100%;
+  text-align: left;
+  padding: 20px 25px;
+  border: none;
+  font-size: 20px;
+  box-shadow: none;
+  outline: none;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  }
+  .collapse-card .collapse-card-body {
+  padding: 25px;
+  font-size: 16px;
+  background: #fff;
+  border-top: 2px solid #e6e6e6;
+  }
+  .collapse-card .load-more-btn {
+  display: none;
+  margin: 40px auto 20px;
+  padding: 10px 25px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background: #000;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 5px;
+  }
+  .product-card {
+  display: flex;
+  align-items: center;
+  background: #eee;
+  width: 100%;
+  justify-content: space-between;
+  padding: 20px;
+  margin-bottom: 20px;
+  }
+  .product-card:last-child {
+  margin-bottom: 0;
+  }
+  .product-card .product-details {
+  display: flex;
+  align-items: center;
+  
+  }
+  .product-card .product-details img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  }
+  .product-card .product-details h2 {
+  font-size: 20px;
+  margin-bottom: 0;
+  font-weight: bold;
+  margin-left: 20px;
+  }
+  .product-card .product-card-right {
+  display: flex;
+  align-items: center;
+  }
+  .product-card .product-card-right .buttons-container {
+  display: flex;
+  align-items: center;
+  }
+  .product-card .product-card-right .buttons-container .sales {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  background: #fff;
+  padding: 5px 15px;
+  border-radius: 4px;
+  margin-right: 20px;
+  
+  }
+  .product-card .product-card-right .buttons-container .sales p {
+  font-size: 18px;
+  margin-bottom: 0;
+  line-height: normal;
+  margin-right: 5px;
+  }
+  .product-card .product-card-right .buttons-container .sales h3 {
+  font-size: 18px;
+  margin-bottom: 0;
+  font-weight: bold;
+  line-height: normal;
+  
+  }
+  .product-card .product-card-right .buttons-container .buttons {
+  display: flex;
+  align-items: center;
+  }
+  .product-card .product-card-right .buttons-container .buttons .button {
+  border: none;
+  outline: none;
+  padding: 5px 10px;
+  box-shadow: none;
+  line-height: normal;
+  font-size: 12px;
+  color: black;
+  margin-left: 10px;
+  border-radius: 4px;
+  
+  }
+  .dropdown .btn::after{
+  content: none;
+  }
+  .dropdown .btn {
+  padding: 0;
+  border: none;
+  outline: none;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  }
+  .dropdown .btn i {
+  font-size: 20px;
+  line-height: normal;
+  }
+  .product-card .approve-btn {
+  background-color: #28a745;
+  color: #fff !important;
+  margin-left: 0 !important;
+  }
+  .product-card .type-btn {
+  background-color: #ffc107;
+  }
+  .sales-btn {
+  background-color: #f8f9fa;
+  }
+  .loader {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        position: relative;
+        animation: rotate 1s linear infinite
+      }
+      .loader::before {
+        content: "";
+        box-sizing: border-box;
+        position: absolute;
+        inset: 0px;
+        border-radius: 50%;
+        border: 5px solid #FFF;
+        animation: prixClipFix 2s linear infinite ;
+      }
+  
+      @keyframes rotate {
+        100%   {transform: rotate(360deg)}
+      }
+  
+      @keyframes prixClipFix {
+          0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+          25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+          50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+          75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
+          100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+      }
+{% endblock css %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12 text-center my-2">
+          <h1>{{product.title}}</h1>
+          <div class="col-12 text-right">
+          <a href='{% url "core:product-view" product.slug %}' class="btn btn-warning">View Public</a>
+          </div>
+          <hr>
+        </div>
+        <div class="col-3">
+            <div class="col-12 text-center bg-white rounded box-shadow">
+                <h2>Product Images</h2>
+                {%for thumbnail in product.thumbnail_metadata %}
+                <img src="{{thumbnail.data}}" alt="" width=200 height=200>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-9">
+          <div class="row">
+            <div class="col-4">
+              <div class="card bg-light mb-3 text-dark" style="max-width: 18rem;">
+                <div class="card-header"><h6>Total Orders</h6></div>
+                <div class="card-body text-center">
+                  <h1>20</h1>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="card bg-light mb-3 text-dark" style="max-width: 18rem;">
+                <div class="card-header"><h6>Amount Earned</h6></div>
+                <div class="card-body text-center font-weight-bold">
+                  <h1>20</h1>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="card bg-light mb-3 text-dark" style="max-width: 18rem;">
+                <div class="card-header"><h6>Average Rating</h6></div>
+                <div class="card-body text-center font-weight-bold">
+                  <h1>{{product.review_average}}</h1>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="my-3 p-3 bg-white rounded box-shadow">
+                <h3 class="border-bottom border-gray pb-2 mb-0">Orders</h3>
+              </small>
+              <div id="orders_add_to_me">
+              </div>
+              </div>
+              <!-- <div class="my-3 p-3 bg-white rounded box-shadow">
+                <h3 class="border-bottom border-gray pb-2 mb-0">Marketed On:</h3>
+              </small> -->
+              <!-- <div id="market_add_to_me">
+                {%for market in product.marketed_on.all %}
+                <div class="media text-muted pt-3">
+                  <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 32px; height: 32px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2232%22%20height%3D%2232%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_189a778d519%20text%20%7B%20fill%3A%23007bff%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A2pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_189a778d519%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%23007bff%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2211.541290283203125%22%20y%3D%2216.9%22%3E32x32%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
+                  <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                      <strong class="text-gray-dark">{{market.title}}</strong>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              </div> -->
+              <div class="my-3 p-3 bg-white rounded box-shadow">
+                <h3 class="border-bottom border-gray pb-2 mb-0">Marketing Results</h3>
+                  {% for market in product.marketed_on.all %}
+                    {% if market.title.lower == 'dribble' or market.title.lower == 'dribble-pro' %}
+                      {% for dribble in product.get_dribble_obj %}
+                      <div class="media m-3 text-muted">
+                        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{dribble.image.url }}" data-holder-rendered="true">
+                        <div class="media-body">
+                          <h5 class="mt-0"><strong class="d-block text-gray-dark">@{{market.title.title}}</strong></h5>
+                          <li><strong class="text-gray-dark">{{product.title}}</strong></li>
+                          <li><strong class="text-gray-dark"><a class='text-gray-dark' href="{{dribble.get_absolute_url}}">Dribble URL</a></strong></li>
+                        </div>
+                        <div style="text-align: right;">
+                          {% for data in dribble.get_details %}
+                          <h4>{{data.0}} <i class="fa fa-solid fa-{{data.1}}"></i></h4>
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <hr>
+                    {% endfor %}
+                    {% elif market.title.lower == 'pinterest' %}
+                      {% for pinterest in product.get_pinterest_obj %}
+                          <div class="media m-3 text-muted">
+                            <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{pinterest.image.url }}" data-holder-rendered="true">
+                            <div class="media-body">
+                              <h5 class="mt-0"><strong class="d-block text-gray-dark">@{{market.title.title}}</strong></h5>
+                              <li><strong class="text-gray-dark">{{product.title}}</strong></li>
+                              <li><strong class="text-gray-dark"><a class='text-gray-dark' href="{{pinterest.get_absolute_url}}">Pinterest URL</a></strong></li>
+                            </div>
+                          </div>
+                          <hr>
+                      {% endfor %}
+                    {% elif market.title.lower == 'coroflot' %}
+                      {% for coroflot in product.get_coroflot_obj %}
+                          <div class="media m-3 text-muted">
+                            <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{coroflot.image.url }}" data-holder-rendered="true">
+                            <div class="media-body">
+                              <h5 class="mt-0"><strong class="d-block text-gray-dark">@{{market.title.title}}</strong></h5>
+                              <li><strong class="text-gray-dark">{{product.title}}</strong></li>
+                              <li><strong class="text-gray-dark"><a class='text-gray-dark' href="{{coroflot.get_absolute_url}}">Coroflot URL</a></strong></li>
+                            </div>
+                            <div style="text-align: right;">
+                              {% for data in coroflot.get_details %}
+                              <h4>{{data.0}} <i class="fa fa-solid fa-{{data.1}}"></i></h4>
+                              {% endfor %}
+                            </div>
+                          </div>
+                          <hr>
+                      {% endfor %}
+                    {% endif %}
+                  {% endfor %}
+                <small class="d-block text-right mt-3">
+                  <!-- <a href="#">Design Brochure</a> -->
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block js %}
+
+<script>
+    function fetchProductOrderData() {
+      $.ajax({
+          type: 'GET',
+          url: `/api/v1/products/{{product.id}}/orders/`,
+          success: function (data) {
+              const container = document.getElementById('orders_add_to_me');
+              // container.innerHTML = "";
+              let value = data.forEach(elem => {
+                  console.log(elem);
+                  const orderCard = document.createElement('div');
+                  feedback = elem.feedback ? true : false;
+                  // orderCard.classList.add('product-card');
+                  // orderCard.classList.add('border');
+                  // orderCard.classList.add('border-warning');
+                  if (feedback) {
+                    orderCard.innerHTML = `
+                      <div class="media m-3 text-muted">
+                      <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.product_thumbnail}" data-holder-rendered="true">
+                      <div class="media-body">
+                        <h5 class="mt-0"><strong class="d-block text-dark">${elem.product_title}</strong></h5>
+                        <li><strong class="text-gray-dark">Bought By: ${elem.username}</strong></li>
+                        <li><strong class="text-dark">Feedback: ${elem.feedback.content} [⭐: ${elem.feedback.rating}]</strong></li>
+                      </div>
+                      <div style="text-align: center;" class='align-self-center text-dark'>
+                        <h6>Paid:</h6>
+                        <h3>${elem.amount_paid}$</h3>
+                        <hr>
+                        <h6>${elem.timestamp}</h6>
+                      </div>
+                    </div>
+                    <hr>
+                  `  
+                  } else {
+                    orderCard.innerHTML = `
+                  <div class="media m-3 text-muted">
+                  <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.product_thumbnail}" data-holder-rendered="true">
+                  <div class="media-body">
+                    <h5 class="mt-0"><strong class="d-block text-dark">${elem.product_title}</strong></h5>
+                    <li><strong class="text-gray-dark">Bought By: ${elem.username}</strong></li>
+
+                    <li><strong class="text-dark">Bought By: ${elem.username}</strong></li>
+                    <li><strong class="text-dark">Feedback: ❌</strong></li>
+                  </div>
+                  <div style="text-align: center;" class='align-self-center text-dark'>
+                        <h6>Paid:</h6>
+                        <h3>${elem.amount_paid}$</h3>
+                        <hr>
+                        <h6>${elem.timestamp}</h6>
+                  </div>
+                </div>
+                <hr>
+              `
+                  }
+
+          container.appendChild(orderCard);
+          })},
+          error: function (error) {
+              console.log('Error:', error);
+          },
+      });
+  }
+  
+  fetchProductOrderData();
+</script>
+{% endblock js %}
+

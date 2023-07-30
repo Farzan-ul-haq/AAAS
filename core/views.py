@@ -293,8 +293,16 @@ def product_analysis_view(request, product_id):
 
 def user_analysis_view(request, username):
     user = get_object_or_404(User, username=username)
+    total_sales = 0
+    total_orders_count = 0
+    total_products_count = 6
+    recent_orders_count = 0
     return render(request, 'analysis/user.html', {
-        'user': user
+        'user': user,
+        'total_sales': total_sales,
+        'total_orders_count': total_orders_count,
+        'total_products_count': total_products_count,
+        'recent_orders_count': recent_orders_count
     })
 
 

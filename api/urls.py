@@ -17,7 +17,7 @@ urlpatterns = [
     path('users/<str:username>/market/', views.UserMarketingResults.as_view(), name='user-market'), #
 
     path('products/<int:product_id>/orders/', views.ProductOrdersView.as_view(), name='product-orders'),
-    path('products/<int:product_id>/feedback/', views.UserProductFeedbackView.as_view(), name='product-feedback'),
+    # path('products/<int:product_id>/feedback/', views.UserProductFeedbackView.as_view(), name='product-feedback'),
     path('products/<int:product_id>/<str:activity_type>/', views.product_activity, name='product-activity'),
 
     path('products/', views.UserProductsView.as_view(), name='products'),
