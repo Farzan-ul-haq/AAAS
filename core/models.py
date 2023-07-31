@@ -1,11 +1,14 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-
+from datetime import datetime
+import base64
 from tinymce.models import HTMLField
 
 from django.utils.timezone import now
 from django.db import models
+from django.core.files.base import ContentFile
+from django.core.files.images import ImageFile
 from django.contrib.auth.models import AbstractBaseUser, \
                                         PermissionsMixin
 from django.contrib.auth import get_user_model
@@ -117,6 +120,15 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = f"{self.id}-{self.title.replace(' ', '-').lower()}"
+
+        ## SAVING IMAGE
+        selected_image = [i["data"] for i in self.thumbnail_metadata if i['isPrimary']][0]
+        format, imgstr = selected_image.split(';base64,')
+        ext = format.split('/')[-1]
+        c = ContentFile(base64.b64decode(imgstr))
+        filename = "product-"+datetime.now().strftime("%Y%m%d-%H%M%S")+"." + ext
+        self.thumbnail = ImageFile(c, name=filename)
+
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -283,7 +295,10 @@ class ClientPackages(models.Model):
         db_table = "ClientPackages"
 
     def __str__(self):
-        return f"{self.id} | {self.package.service.title} | {self.user.username}"
+        if self.package:
+            return f"{self.id} | {self.package.service.title} | {self.user.username}"
+        else:
+            return f"{self.id} | {self.package} | {self.user.username}"
 
 
 class Notification(models.Model):

@@ -1,4 +1,8 @@
 import json
+# from datetime import datetime
+# import base64
+# from django.core.files.base import ContentFile
+
 from core.models import Product, Endpoints, ProductPackage, \
     Tag
 
@@ -13,6 +17,14 @@ def update_product(product, request):
     product.description = request.POST.get('description')
     product.source_url = request.POST.get('source_url')
     product.thumbnail_metadata = json.loads(request.POST.get('images'))
+
+    # selected_image = [i["data"] for i in product.thumbnail_metadata if i['isPrimary']][0]
+    # format, imgstr = selected_image.split(';base64,')
+    # ext = format.split('/')[-1]
+    # c = ContentFile(base64.b64decode(imgstr))
+    # filename = "product-"+datetime.now().strftime("%Y%m%d-%H%M%S")+"." + ext
+    # product.thumbnail.save(filename, c, save=True)
+
     product.save()
     tags = [
         Tag.objects.get_or_create(
@@ -36,6 +48,14 @@ def create_product(request, request_type):
         source_url=request.POST.get('source_url'),
     )
     p.thumbnail_metadata = json.loads(request.POST.get('images'))
+    # SAVE IMAGE
+    # selected_image = [i["data"] for i in p.thumbnail_metadata if i['isPrimary']][0]
+    # format, imgstr = selected_image.split(';base64,')
+    # ext = format.split('/')[-1]
+    # c = ContentFile(base64.b64decode(imgstr))
+    # filename = "product-"+datetime.now().strftime("%Y%m%d-%H%M%S")+"." + ext
+    # p.thumbnail.save(filename, c, save=True)
+
     p.save()
     tags = [
         Tag.objects.get_or_create(

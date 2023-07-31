@@ -35,16 +35,17 @@ def complete_product_purchase(data):
         cp = ClientPackages.objects.create(
             package=product_package,
             user=buyer,
-            token=generate_buyer_token(buyer)
+            token=generate_buyer_token(buyer),
+            amount_paid=product_package.price
         )
-        print(cp)
         cp.normal_requests_left = cp.normal_requests_left + product_package.normal_requests
         cp.save()
     else:
         ClientPackages.objects.create(
             package=product_package,
             user=buyer,
-            token="LIFETIME-TOKEN"
+            token="LIFETIME-TOKEN",
+            amount_paid=product_package.price,
         )
     # SUBRACT AMOUNT FROM BUYER
     Transaction.objects.create(

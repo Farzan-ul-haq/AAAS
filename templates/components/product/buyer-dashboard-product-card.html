@@ -1,6 +1,6 @@
 <div class="col-12">
     <div class="media m-3 text-muted">
-        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{bought_product.package.service.thumbnail_metadata.0.data}}" data-holder-rendered="true">
+        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{bought_product.package.service.thumbnail.url}}" data-holder-rendered="true">
         <a style="text-decoration: none; color: black;" href="{% url 'core:product-view' bought_product.package.service.slug %}"><div class="media-body">
             <h5 class="mt-0"><strong class="d-block text-gray-dark">{{bought_product.package.service.title}}</strong></h5>
             <p class="mt-0">{{bought_product.package.service.get_description_text|truncatechars:200}}</p>

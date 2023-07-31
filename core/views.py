@@ -92,10 +92,14 @@ def search_product(request):
         'review_count'
     )
 
-    paginator = Paginator(products, per_page=1)
+    paginator = Paginator(products, per_page=15)
     page_number = int(request.GET.get('page', 1))
     paginated_products = paginator.get_page(page_number)
-    create_impresion_obj(paginated_products.object_list.values_list('id', flat=True)).delay()
+    create_impresion_obj.delay(list(
+        paginated_products.object_list.values_list(
+            'id', flat=True
+        )
+    ))
 
     if request.user.is_authenticated:
         add_client_activity.delay(
@@ -122,11 +126,10 @@ def view_product(request, slug):
     IF AUTHENTICATED: CREATE CLIENT ACTIVITY
     """
     product = get_object_or_404(Product, slug=slug)
-    product.clicks += 1
-    product.save()
     obj, template = get_product_object(product)
     package = ProductPackage.objects.filter(service=product)
     feedbacks = Feedback.objects.filter(package__service=product).order_by('-id')
+    create_click_obj.delay([product.id])
     if request.user.is_authenticated:
         is_packages_bought = [
             request.user.package_already_bought(p.id)
@@ -140,6 +143,7 @@ def view_product(request, slug):
                 'slug': product.slug
             })
         )
+        
     else:
         is_packages_bought = [False for p in package]
     packages_index = [i for i in range(len(is_packages_bought))]

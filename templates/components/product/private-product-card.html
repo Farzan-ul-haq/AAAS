@@ -1,6 +1,6 @@
 <div class="card col-3 px-1 bg-white rounded box-shadow" >
-    {% if product.thumbnail_metadata %}
-    <img class="card-img-top p-2" src="{{product.thumbnail_metadata.0.data}}" style='max-height: 325px;' alt="Card image cap">
+    {% if product.thumbnail %}
+    <img class="card-img-top p-2" src="{{product.thumbnail.url}}" style='max-height: 325px;' alt="Card image cap">
     {% else %}
     <img class="card-img-top p-2" src="" style='max-height: 325px;' alt="Image Not Found">
     {% endif %}
