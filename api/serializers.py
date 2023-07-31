@@ -55,6 +55,7 @@ class OrderSerializer(serializers.ModelSerializer):
     product_title = serializers.CharField(source='package.service.title')
     product_thumbnail = serializers.ImageField(source='package.service.thumbnail')
     username = serializers.CharField(source='user.username')
+    package_title = serializers.CharField(source='package.title')
 
     class Meta:
         model = ClientPackages
@@ -66,7 +67,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "feedback",
             "username",
             'product_title',
-            'product_thumbnail'
+            'product_thumbnail',
+            'package_title'
         ]
 
     def get_feedback(self, obj):

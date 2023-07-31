@@ -290,8 +290,10 @@ def stripe_webhook(request):
 
 def product_analysis_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+    packages = ProductPackage.objects.filter(service=product)
     return render(request, 'analysis/product.html', {
-        'product': product
+        'product': product,
+        "packages": packages
     })
 
 
