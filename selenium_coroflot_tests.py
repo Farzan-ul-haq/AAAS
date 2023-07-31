@@ -3,10 +3,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
-import chromedriver_autoinstaller
 import time, os
 
-options = webdriver.ChromeOptions()
+options = webdriver.FirefoxOptions()
 options.add_argument(' - incognito')
 # options.add_argument('--headless')
 options.add_argument('--disable-dev-shm-usage')
@@ -14,8 +13,7 @@ options.add_argument('--no-sandbox')
 options.add_argument("--start-maximized")
 options.add_argument("--window-size=1920,1080")
 
-
-driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), options=options)
+driver = webdriver.Firefox(options=options)
 try:
     
     actions = ActionChains(driver)

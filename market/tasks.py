@@ -60,7 +60,7 @@ def upload_product_to_dribble(dp, platform):
         driver.find_element(By.ID, "login").send_keys('farzanulhaq12@gmail.com') # add username
         driver.find_element(By.ID, "password").send_keys('faddy3143') # add password
         time.sleep(10)
-        driver.find_element(By.CLASS_NAME, "form-sub").click() # click on submit
+        driver.find_element(By.CSS_SELECTOR, f"[data-cypress='submit-sign-in-btn']").click() # click on submit
         print('2. LOGGED IN')
 
         time.sleep(10)
@@ -91,7 +91,7 @@ def upload_product_to_dribble(dp, platform):
         print('6. Continue Added')
         time.sleep(10)
 
-        driver.find_element(By.TAG_NAME, 'tags').find_element(By.CLASS_NAME, 'tagify__input').send_keys('a,b,c,d,') # ADD TAGS
+        driver.find_element(By.TAG_NAME, 'tags').find_element(By.CLASS_NAME, 'tagify__input').send_keys(dp.tags) # ADD TAGS
         print('7. Tags Added')
 
         publish_btn = driver.find_element(By.XPATH, """//button[normalize-space()="Publish now"]""") # PUBLISH BTM
@@ -113,7 +113,7 @@ def upload_product_to_dribble(dp, platform):
         )
 
         dp.product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))
-
+        driver.quit()
     except Exception as e:
         print(e)
         driver.save_screenshot('error.png')
@@ -211,6 +211,7 @@ def upload_product_to_pinterest(pp, platform):
         )
         pp.product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))
         print('13. PUBLISHED ON PINTEREST')
+        driver.quit()
     except Exception as e:
         print("ERROR: ",e)
         driver.save_screenshot('error.png')
@@ -293,7 +294,7 @@ def upload_product_to_coroflot(cp, platform):
             content="Your Product listed successfully on Coroflot.\n we will keep you updated.",
         )
         cp.product.marketed_on.add(MarketingPlatforms.objects.get(title=platform))
-
+        driver.quit()
     except Exception as e:
         print("ERROR: ",e)
         driver.save_screenshot('error.png')
