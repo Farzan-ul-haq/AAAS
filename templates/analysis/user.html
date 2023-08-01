@@ -255,6 +255,10 @@ background-color: #f8f9fa;
 <div class="main seller-container">
     <!-- Dashboard -->
     <div class="row">
+        <div class="col-12 my-3 text-center">
+            <h1>User Analytics</h1>
+            <hr>
+        </div>
         <div class="col-3">
             <div class="sidebar">
                 <div class="user">
@@ -608,7 +612,7 @@ background-color: #f8f9fa;
                 productCard.innerHTML = `
           <div class="product-details">
             <img src="${element.thumbnail}" alt="">
-            <h2>${element.title}</h2>
+            <a href='/analysis/product/${element.id}/'><h2>${element.title}</h2></a>
           </div>
           <div class="product-card-right">
             <div class="buttons-container">

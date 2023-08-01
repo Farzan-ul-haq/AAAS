@@ -13,9 +13,9 @@ from rest_framework.pagination import LimitOffsetPagination
 
 from core.models import Product, ProductPackage, BrochureTemplates, \
     ProductClick, ProductImpression, Feedback, ClientPackages, \
-    Brochure, DribbleProduct, CoroloftProduct, PinterestProduct
+    Brochure, DribbleProduct, CoroloftProduct, PinterestProduct, User
 from api.serializers import ProductSerializer, FeedbackSerializer, \
-    OrderSerializer, BrochureSerializer
+    OrderSerializer, BrochureSerializer, UserSerializer
 
 def statistical_analysis(request, product_type, title=""):
     """
@@ -218,4 +218,75 @@ class UserMarketingResults(APIView):
             } for obj in PinterestProduct.objects.filter(
             product__owner__username=username
         )]
+        return Response(output)
+
+
+class OrdersView(APIView):
+    serializer_class = OrderSerializer
+
+    def get(self, request):
+        orders = ClientPackages.objects.filter(
+        ).order_by('-timestamp')
+        serializer = self.serializer_class(orders, many=True)
+        return Response(serializer.data)
+
+
+class ProductListView(APIView):
+    serializer_class = ProductSerializer
+
+    def get(self, request):
+        products = Product.objects.all().order_by(
+            '-review_average',
+            '-review_count'
+        )
+        serializer = self.serializer_class(products, many=True)
+        return Response(serializer.data)
+
+
+class UserListView(APIView):
+    serializer_class = UserSerializer
+
+    def get(self, request):
+        users = User.objects.all().order_by('-wallet')
+        serializer = self.serializer_class(users, many=True)
+        return Response(serializer.data)
+ 
+
+class BrochureListView(APIView):
+    serializer_class = BrochureSerializer
+
+    def get(self, request):
+        brochure = Brochure.objects.all().order_by('-id')
+        serializer = self.serializer_class(brochure, many=True)
+        return Response(serializer.data)
+
+
+class MarketingResultsListView(APIView):
+
+    def get(self, request):
+        output = {}
+        output['dribble'] = [
+            {
+                "id": obj.id,
+                "title": obj.title,
+                "image": obj.image.url,
+                "details": obj.get_details(),
+                "url": obj.get_absolute_url()
+            } for obj in DribbleProduct.objects.filter(status='A')]
+        output['coroflot'] = [
+            {
+                "id": obj.id,
+                "title": obj.product.title,
+                "image": obj.image.url,
+                "details": obj.get_details(),
+                "url": obj.get_absolute_url()
+            } for obj in CoroloftProduct.objects.filter(status='A')]
+        output['pinterest'] = [
+            {
+                "id": obj.id,
+                "title": obj.title,
+                "image": obj.image.url,
+                "details": None,
+                "url": obj.get_absolute_url()
+            } for obj in PinterestProduct.objects.filter(status='A')]
         return Response(output)

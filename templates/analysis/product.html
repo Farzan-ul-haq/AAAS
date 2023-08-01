@@ -254,8 +254,9 @@
 {% block body %}
 <div class="container my-5">
     <div class="row">
+      
         <div class="col-12 text-center my-2">
-          <h1>{{product.title}}</h1>
+          <h1>Product Analytics: {{product.title}}</h1>
           <div class="col-12 text-right">
           <a href='{% url "core:product-view" product.slug %}' class="btn btn-warning">View Public</a>
           </div>

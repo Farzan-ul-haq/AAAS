@@ -3,16 +3,570 @@
 {% block title %}YourSite{% endblock title %}
 
 {% block css %}
-
+.seller-container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    position: relative;
+    height: 100%;
+    }
+    .sidebar {
+    background: #fff;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    }
+    .sidebar .user {
+    display: flex;
+    align-items: center;
+    padding: 35px 20px;
+    flex-direction: column;
+    background: #fff;
+    }
+    .sidebar .user img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 100%;
+    background: #c2c2c2;
+    margin-bottom: 15px;
+    }
+    .sidebar .user .user-details h1 {
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    }
+    .sidebar .user .user-details p {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 0;
+    }
+    .sidebar ul {
+    padding: 20px 20px;
+    }
+    .sidebar ul li {
+    list-style: none;
+    margin: 10px 0;
+    color: black;
+    text-decoration: none;
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    }
+    .sidebar ul li p {
+    font-size: 14px;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    }
+    .sidebar ul li h2 {
+    font-size: 20px;
+    margin-bottom: 0;
+    font-weight: bold;
+    }
+    
+    .sidebar ul li p img {
+    margin-right: 6px;
+    width: 20px;
+    }
+    <!-- .sidebar ul li a:hover {
+    background: black;
+    color: white;
+    font-weight: bold;
+    } -->
+    .sidebar-content {
+    padding-left: 40px;
+    margin-bottom: 30px;
+    }
+    .collapse-card {
+    margin: 30px 0;
+    margin-top: 0px;
+    }
+    .collapse-card .collapse-card-header {
+    background: #fff;
+    }
+    .collapse-card .collapse-card-header .btn {
+    width: 100%;
+    text-align: left;
+    padding: 20px 25px;
+    border: none;
+    font-size: 20px;
+    box-shadow: none;
+    outline: none;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    }
+    .collapse-card .collapse-card-body {
+    padding: 25px;
+    font-size: 16px;
+    background: #fff;
+    border-top: 2px solid #e6e6e6;
+    }
+    .collapse-card .load-more-btn {
+    display: none;
+    margin: 40px auto 20px;
+    padding: 10px 25px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    background: #000;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    }
+    .product-card {
+    display: flex;
+    align-items: center;
+    background: #eee;
+    width: 100%;
+    justify-content: space-between;
+    padding: 20px;
+    margin-bottom: 20px;
+    }
+    .product-card:last-child {
+    margin-bottom: 0;
+    }
+    .product-card .product-details {
+    display: flex;
+    align-items: center;
+    
+    }
+    .product-card .product-details img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    }
+    .product-card .product-details h2 {
+    font-size: 20px;
+    margin-bottom: 0;
+    font-weight: bold;
+    margin-left: 20px;
+    }
+    .product-card .product-card-right {
+    display: flex;
+    align-items: center;
+    }
+    .product-card .product-card-right .buttons-container {
+    display: flex;
+    align-items: center;
+    }
+    .product-card .product-card-right .buttons-container .sales {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    background: #fff;
+    padding: 5px 15px;
+    border-radius: 4px;
+    margin-right: 20px;
+    
+    }
+    .product-card .product-card-right .buttons-container .sales p {
+    font-size: 18px;
+    margin-bottom: 0;
+    line-height: normal;
+    margin-right: 5px;
+    }
+    .product-card .product-card-right .buttons-container .sales h3 {
+    font-size: 18px;
+    margin-bottom: 0;
+    font-weight: bold;
+    line-height: normal;
+    
+    }
+    .product-card .product-card-right .buttons-container .buttons {
+    display: flex;
+    align-items: center;
+    }
+    .product-card .product-card-right .buttons-container .buttons .button {
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    box-shadow: none;
+    line-height: normal;
+    font-size: 12px;
+    color: black;
+    margin-left: 10px;
+    border-radius: 4px;
+    
+    }
+    .dropdown .btn::after{
+    content: none;
+    }
+    .dropdown .btn {
+    padding: 0;
+    border: none;
+    outline: none;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    }
+    .dropdown .btn i {
+    font-size: 20px;
+    line-height: normal;
+    }
+    .product-card .approve-btn {
+    background-color: #28a745;
+    color: #fff !important;
+    margin-left: 0 !important;
+    }
+    .product-card .type-btn {
+    background-color: #ffc107;
+    }
+    .sales-btn {
+    background-color: #f8f9fa;
+    }
+    .loader {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          position: relative;
+          animation: rotate 1s linear infinite
+        }
+        .loader::before {
+          content: "";
+          box-sizing: border-box;
+          position: absolute;
+          inset: 0px;
+          border-radius: 50%;
+          border: 5px solid #FFF;
+          animation: prixClipFix 2s linear infinite ;
+        }
+    
+        @keyframes rotate {
+          100%   {transform: rotate(360deg)}
+        }
+    
+        @keyframes prixClipFix {
+            0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+            25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+            50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+            75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
+            100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+        }
 {% endblock css %}
 
 {% block body %}
 <div class="container">
-    <div ></div>
+    <div class="main seller-container">
+        <!-- Dashboard -->
+        <div class="row">
+            <div class="col-12 my-3 text-center">
+                <h1>Admin Dashboard</h1>
+                <hr>
+            </div>
+            <div class="col-3">
+                <div class="sidebar">
+                    <div class="user">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL5T9o5Jww6mim8gRRC9BhRqEcBLnRiU1UCA&usqp=CAU"
+                            alt="">
+                        <div class="user-details">
+                            <h1 class="mb-0">{{user.username.title}}</h1>
+                        </div>
+                    </div>
+                    <!-- <ul>
+                        <hr>
+                        <li class="mt-0">
+                            <p><img src="{% static 'assets/img/total-sales-icon.svg' %}" />Total Sales</p>
+                            <h2>{{total_sales}}</h2>
+                        </li>
+                        <li>
+                            <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Total Orders</p>
+                            <h2>{{total_orders}}</h2>
+                        </li>
+                        <hr>
+                        <li>
+                            <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Total Marketed Products</p>
+                            <h2>{{total_orders}}</h2>
+                        </li>
+                        <li>
+                            <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i></p>
+                            <h2>{{total_orders}}</h2>
+                        </li>
+                    </ul> -->
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="sidebar-content">
+                    <div id="accordion">
+                        <div class="collapse-card">
+                            <div class="collapse-card-header p-0" id="headingOne">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#orderCollapse"
+                                    aria-expanded="true" aria-controls="collapseOne">
+                                    Orders[{{total_orders_count}}]
+                                </button>
+                            </div>
+    
+                            <div id="orderCollapse" class="collapse show" aria-labelledby="headingOne">
+                                <div class="collapse-card-body">
+                                    <div id="orders_add_to_me"></div>
+                                    <!-- <button id='load-order-btn' onclick="fetchOrderData()" class="load-more-btn col-12">Load More</button> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapse-card">
+                            <div class="collapse-card-header p-0" id="headingTwo">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#productCollapse"
+                                    aria-expanded="true" aria-controls="collapseTwo">
+                                    Products[{{total_products_count}}]
+                                </button>
+                            </div>
+    
+                            <div id="productCollapse" class="collapse show" aria-labelledby="headingTwo">
+                                <div class="collapse-card-body">
+                                    <div id="products_add_to_me"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapse-card">
+                            <div class="collapse-card-header p-0" id="headingTwo">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#userCollapse"
+                                    aria-expanded="true" aria-controls="collapseTwo">
+                                    Users[{{total_users_count}}]
+                                </button>
+                            </div>
+    
+                            <div id="userCollapse" class="collapse show" aria-labelledby="headingTwo">
+                                <div class="collapse-card-body">
+                                    <div id="users_add_to_me"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapse-card">
+                            <div class="collapse-card-header p-0" id="headingFour">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#marketCollapse"
+                                    aria-expanded="true" aria-controls="collapseFour">
+                                    Marketing Results[{{total_market_results_count}}]
+                                </button>
+                            </div>
+    
+                            <div id="marketCollapse" class="collapse show" aria-labelledby="headingFour" data-parent="#accordion">
+                                <div class="collapse-card-body">
+                                    <div id="market_add_to_me">
+                                    </div>
+                                    <button id='load-market-btn' onclick="fetchMarketData()" class="btn btn-dark col-12">Load All</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock body %}
 
 {% block js %}
+<script>
+    function fetchOrderData() {
+    $.ajax({
+        type: 'GET',
+        url: `/api/v1/orders/`,
+        success: function (data) {
+            const container = document.getElementById('orders_add_to_me');
+            // container.innerHTML = "";
+            let value = data.forEach(elem => {
+                const orderCard = document.createElement('div');
+                feedback = elem.feedback ? true : false;
+                if (feedback) {
+                orderCard.innerHTML = `
+                    <div class="media m-3 text-muted">
+                    <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.product_thumbnail}" data-holder-rendered="true">
+                    <div class="media-body">
+                    <h5 class="mt-0"><strong class="d-block text-dark">${elem.product_title}</strong></h5>
+                    <li><strong class="text-gray-dark">Bought By: ${elem.username}</strong></li>
+                    <li><strong class="text-dark">Feedback: ${elem.feedback.content} [⭐: ${elem.feedback.rating}]</strong></li>
+                    </div>
+                    <div style="text-align: center;" class='align-self-center text-dark'>
+                    <h6>Paid:</h6>
+                    <h3>${elem.amount_paid}$</h3>
+                    <hr>
+                    <h6>${elem.timestamp}</h6>
+                    </div>
+                </div>
+                <hr>
+                `  
+                } else {
+                orderCard.innerHTML = `
+                <div class="media m-3 text-muted">
+                <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.product_thumbnail}" data-holder-rendered="true">
+                <div class="media-body">
+                <h5 class="mt-0"><strong class="d-block text-dark">${elem.product_title}</strong></h5>
+                <li><strong class="text-gray-dark">Bought By: ${elem.username}</strong></li>
+                <li><strong class="text-dark">Feedback: ❌</strong></li>
+                </div>
+                <div style="text-align: center;" class='align-self-center text-dark'>
+                    <h6>Paid:</h6>
+                    <h3>${elem.amount_paid}$</h3>
+                    <hr>
+                    <h6>${elem.timestamp}</h6>
+                </div>
+            </div>
+            <hr>
+            `
+                }
+                container.appendChild(orderCard);
+        })
+    },
+        error: function (error) {
+            console.log('Error:', error);
+        },
+    });
+};
 
+    function fetchProductData() {
+    $.ajax({
+        type: 'GET',
+        url: `/api/v1/products/`,
+        success: function (data) {
+            const container = document.getElementById('products_add_to_me');
+            // container.innerHTML = "";
+            let value = data.forEach(elem => {
+                const productCard = document.createElement('div');
+                    productCard.innerHTML = `
+                    <div class="media m-3 text-muted">
+                        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.thumbnail}" data-holder-rendered="true">
+                        <div class="media-body">
+                        <a href="/analysis/product/${elem.id}"> <h5 class="mt-0"><strong class="d-block text-dark">${elem.title}</strong></h5></a>
+                        <li><strong class="text-gray-dark">Owner: ${elem.owner.username}</strong></li>
+                        <li><strong class="text-gray-dark">Review Average: ${elem.review_average}</strong></li>
+                        <li><strong class="text-gray-dark">Review Count: ${elem.review_count}</strong></li>
+
+                        </div>
+                        <div style="text-align: center;" class='align-self-center text-dark'>
+                        <h6>Sales:</h6>
+                        <h3>${elem.total_sales}$</h3>
+                        <hr>
+                        <h6>${elem.recent_sales}$ in 7 days</h6>
+                        </div>
+                    </div>
+                    <hr>
+                    `
+                container.appendChild(productCard);
+        })
+    },
+        error: function (error) {
+            console.log('Error:', error);
+        },
+    });
+};
+    
+    function fetchUsersData() {
+        $.ajax({
+            type: 'GET',
+            url: `/api/v1/users/`,
+            success: function (data) {
+                const container = document.getElementById('users_add_to_me');
+                // container.innerHTML = "";
+                let value = data.forEach(elem => {
+                    const productCard = document.createElement('div');
+                        productCard.innerHTML = `
+                        <div class="media m-3 text-muted">
+                            <div class="media-body">
+                            <a href='/analysis/user/${elem.username}'><h3 class="mt-0"><strong class="d-block text-dark">${elem.username}</strong></h3></a>
+                            <li><strong class="text-gray-dark">Wallet: ${elem.wallet}$</strong></li>
+                            </div>
+                            <div style="text-align: center;" class='align-self-center text-dark'>
+                            <h6>Sales:</h6>
+                            <h3>${elem.total_sales}$</h3>
+                            <hr>
+                            <h6>${elem.recent_sales}$ in 7 days</h6>
+                            </div>
+                        </div>
+                        <hr>
+                        `
+                    container.appendChild(productCard);
+            })
+        },
+            error: function (error) {
+                console.log('Error:', error);
+            },
+        });
+    };
+
+    function fetchMarketData() {
+        $("#load-market-btn").remove();
+        $.ajax({
+            type: 'GET',
+            url: `/api/v1/market/`,
+            success: function (data) {
+                const container = document.getElementById('market_add_to_me');
+                // container.innerHTML = "";
+                data['dribble'].forEach(elem => {
+                    const dribbleCard = document.createElement('div');
+                    // brochureCard.classList.add('product-card');
+                    dribbleCard.innerHTML = `
+                    <div class="media m-3 text-muted">
+                        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="${elem.image}" data-holder-rendered="true">
+                        <div class="media-body">
+                        <h5 class="mt-0"><strong class="d-block text-gray-dark">@Dribble</strong></h5>
+                        <li><strong class="text-gray-dark">${elem.title}</strong></li>
+                        <li><strong class="text-gray-dark"><a class='text-gray-dark' href="${elem.url}">Dribble URL</a></strong></li>
+                        </div>
+                        <div style="text-align: right;">
+                        <h4>${elem.details[0][0]} <i class="fa fa-solid fa-${elem.details[0][1]}"></i></h4>
+                        <h4>${elem.details[1][0]} <i class="fa fa-solid fa-${elem.details[1][1]}"></i></h4>
+                        </div>
+                    </div>
+                    <hr>
+                    `
+                    container.appendChild(dribbleCard);
+                });
+                data['coroflot'].forEach(elem => {
+                    console.log(elem);
+                    const dribbleCard = document.createElement('div');
+                    // brochureCard.classList.add('product-card');
+                    dribbleCard.innerHTML = `
+                    <div class="media m-3 text-muted">
+                        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{coroflot.image.url }}" data-holder-rendered="true">
+                        <div class="media-body">
+                        <h5 class="mt-0"><strong class="d-block text-gray-dark">@Coroflot</strong></h5>
+                        <li><strong class="text-gray-dark">${elem.title}</strong></li>
+                        <li><strong class="text-gray-dark"><a class='text-gray-dark' href="${elem.url}">Coroflot URL</a></strong></li>
+                        </div>
+                        <div style="text-align: right;">
+                            <h4>${elem.details[0][0]} <i class="fa fa-solid fa-${elem.details[0][1]}"></i></h4>
+                            <h4>${elem.details[1][0]} <i class="fa fa-solid fa-${elem.details[1][1]}"></i></h4>
+                        </div>
+                    </div>
+                    <hr>
+                    `
+                    container.appendChild(dribbleCard);
+                });
+                data['pinterest'].forEach(elem => {
+                    console.log(elem);
+                    const dribbleCard = document.createElement('div');
+                    // brochureCard.classList.add('product-card');
+                    dribbleCard.innerHTML = `
+                    <div class="media m-3 text-muted">
+                        <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32" class="mr-2 rounded" style="width: 64px; height: 64px;" src="{{coroflot.image.url }}" data-holder-rendered="true">
+                        <div class="media-body">
+                        <h5 class="mt-0"><strong class="d-block text-gray-dark">@Pinterest</strong></h5>
+                        <li><strong class="text-gray-dark">${elem.title}</strong></li>
+                        <li><strong class="text-gray-dark"><a class='text-gray-dark' href="${elem.url}">Coroflot URL</a></strong></li>
+                        </div>
+                    </div>
+                    <hr>
+                    `
+                    container.appendChild(dribbleCard);
+                });
+
+            },            
+            error: function (error) {
+                console.log('Error:', error);
+            },
+        })
+    };
+
+    fetchOrderData();
+    fetchProductData();
+    fetchUsersData();
+    // fetchMarketData();
+</script>
 {% endblock js %}
 

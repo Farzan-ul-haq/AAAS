@@ -20,5 +20,9 @@ urlpatterns = [
     # path('products/<int:product_id>/feedback/', views.UserProductFeedbackView.as_view(), name='product-feedback'),
     path('products/<int:product_id>/<str:activity_type>/', views.product_activity, name='product-activity'),
 
-    path('products/', views.UserProductsView.as_view(), name='products'),
+    path('products/', views.ProductListView.as_view(), name='products'),
+    path('orders/', views.OrdersView.as_view(), name='orders'),
+    path('users/', views.UserListView.as_view(), name='users'),
+    path('brochures/', views.BrochureListView.as_view(), name='brochures'),
+    path('market/', views.MarketingResultsListView.as_view(), name='market-results'),
 ]

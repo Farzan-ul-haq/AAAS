@@ -4,13 +4,57 @@ from core.models import (
     Product, 
     Feedback, 
     ClientPackages,
-    Brochure
+    Brochure,
+    User,
+    MarketingPlatforms
 )
+
+class MarketingPlatformsListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MarketingPlatforms
+        fields = ['title']
+
+class UserSerializer(serializers.ModelSerializer):
+    total_sales = serializers.SerializerMethodField()
+    recent_sales = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+            'email',
+            'wallet',
+            
+            'total_sales',
+            'recent_sales'
+        ]
+
+    def get_total_sales(self, obj):
+        return 0
+    
+    def get_recent_sales(self, obj):
+        return 0
+
+class UserInfoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+            'email',
+        ]
+
 
 class ProductSerializer(serializers.ModelSerializer):
     total_sales = serializers.SerializerMethodField()
+    recent_sales = serializers.SerializerMethodField()
     status = serializers.CharField(source='get_status_display')
     product_type = serializers.CharField(source='get_product_type_display')
+    owner = UserInfoSerializer(read_only=True)
+    marketed_on = MarketingPlatformsListSerializer(read_only=True, many=True)
 
     class Meta:
         model = Product
@@ -30,11 +74,17 @@ class ProductSerializer(serializers.ModelSerializer):
             'status',
             'created_at',
             'thumbnail',
+            'owner',
+            'marketed_on',
 
-            'total_sales'
+            'total_sales',
+            'recent_sales',
         ]
     
     def get_total_sales(self, obj):
+        return 0
+    
+    def get_recent_sales(self, obj):
         return 0
 
 class FeedbackSerializer(serializers.ModelSerializer):
@@ -83,6 +133,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return None
 
 class BrochureSerializer(serializers.ModelSerializer):
+    product_title = serializers.CharField(source='product.title')
 
     class Meta:
         model = Brochure
@@ -90,6 +141,7 @@ class BrochureSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'image_data',
+            'product_title'
         ]
 
 
