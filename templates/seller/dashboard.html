@@ -271,11 +271,22 @@ background-color: #f8f9fa;
                 <ul>
                     <li class="mt-0">
                         <p><img src="{% static 'assets/img/total-sales-icon.svg' %}" />Total Sales</p>
-                        <h2>{{total_sales}}</h2>
+                        <h2>{{total_sales}}$</h2>
                     </li>
+                    <hr>
+
                     <li>
                         <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Total Orders</p>
-                        <h2>{{total_orders}}</h2>
+                        <h2>{{total_orders_count}}</h2>
+                    </li>
+                    <li>
+                        <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Orders in last 7 days</p>
+                        <h2>{{recent_orders_count}}</h2>
+                    </li>
+                    <hr>
+                    <li>
+                        <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Products</p>
+                        <h2>{{total_products_count}}</h2>
                     </li>
                 </ul>
             </div>
@@ -603,7 +614,43 @@ background-color: #f8f9fa;
             elem.forEach(element => {
                 const productCard = document.createElement('div');
                 productCard.classList.add('product-card');
-                productCard.innerHTML = `
+                console.log(element)
+                if (element.product_type == 'API'){
+                    productCard.innerHTML = `
+          <div class="product-details">
+            <img src="${element.thumbnail}" alt="">
+            <a href='/analysis/product/${element.id}/'><h2>${element.title}</h2></a>
+          </div>
+          <div class="product-card-right">
+            <div class="buttons-container">
+              <div class="sales">
+                <p>Sales:</p>
+                <h3>${element.total_sales}$</h3>
+              </div>
+              <div class="buttons">
+                <button class="button approve-btn">${element.status}</button>
+                <button class="button type-btn">${element.product_type}</button>
+              </div>
+            </div>
+            <div class="dropdown">
+            <button type="button" onclick="toggleDropdown(${element.id})" class="btn dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-ellipsis-v"></i>
+            </button>
+            <div id="${element.id}" class="dropdown-menu hideable-element">
+                <a class="dropdown-item" href="/product/update/${element.id}/${element.product_type.toLowerCase()}/">Update</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/product/delete/${element.id}/">Delete</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/analysis/product/${element.id}/">Analysis</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/product/${element.id}/market/">Market</a>
+            </div>
+            </div>
+
+          </div>
+        `;
+        } else {
+                    productCard.innerHTML = `
           <div class="product-details">
             <img src="${element.thumbnail}" alt="">
             <a href='/analysis/product/${element.id}/'><h2>${element.title}</h2></a>
@@ -632,12 +679,13 @@ background-color: #f8f9fa;
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/product/${element.id}/market/">Market</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/product/${element.id}/brochure/">Brochure</a>
+                <a class="dropdown-item" href="/product/${element.id}/brochure/1/">Brochure</a>
             </div>
             </div>
 
           </div>
         `;
+            }
                 container.appendChild(productCard);
             });
         })

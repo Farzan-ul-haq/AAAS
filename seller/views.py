@@ -1,11 +1,12 @@
 import json
-
+from datetime import datetime, timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
+from django.db.models import Sum
 
 from core.models import Product, DownloadSoftware, Logo, \
     HtmlTemplate, ProductPackage, ApiService, Endpoints, \
-    Brochure, DribbleProduct, Transaction, Tag
+    Brochure, DribbleProduct, Transaction, Tag, ClientPackages
 from seller.utils import create_endpoint_obj, \
     create_package_obj, update_product, create_product
 from core.utils import get_product_object
@@ -16,12 +17,30 @@ def seller_dashboard(request):
     GET USER PRODUCT
     GET USER BROCHURES
     """
-    products = Product.objects.filter(owner=request.user).exclude(status='D').order_by('-id')
-    brochures = Brochure.objects.filter(product__owner=request.user).order_by('-id')
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+    total_sales = ClientPackages.objects.filter(
+        package__service__owner=request.user,
+    ).aggregate(
+        total_sales=Sum('amount_paid')
+    )['total_sales']
+
+    total_orders_count = ClientPackages.objects.filter(
+        package__service__owner=request.user,
+    ).count()
+    recent_orders_count = ClientPackages.objects.filter(
+        package__service__owner=request.user,
+        timestamp__gte=datetime.today()-timedelta(days=7)
+    ).count()
+    total_products_count = Product.objects.filter(
+        status='A', owner=request.user
+    ).count()
 
     return render(request, 'seller/dashboard.html', context={
-        'products': products,
-        'brochures': brochures,
+        'total_sales': total_sales if total_sales else 0,
+        'total_orders_count': total_orders_count,
+        'total_products_count': total_products_count,
+        'recent_orders_count': recent_orders_count
     })
 
 
