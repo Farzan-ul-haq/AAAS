@@ -626,10 +626,10 @@ background-color: #f8f9fa;
               </div>
             </div>
             <div class="dropdown">
-            <button type="button" onclick="toggleDropdown()" class="btn dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+            <button type="button" onclick="toggleDropdown(${element.id})" class="btn dropdown-toggle" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-ellipsis-v"></i>
             </button>
-            <div id="dropdownMenu1" class="dropdown-menu hideable-element">
+            <div id="${element.id}" class="dropdown-menu hideable-element">
                 <a class="dropdown-item" href="#">Update</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Delete</a>
@@ -649,11 +649,8 @@ background-color: #f8f9fa;
         })
     };
 
-    function toggleDropdown() {
-        console.log("heree");
-    }
-    function toggleDropdown() {
-        const dropdownMenu = document.getElementById('dropdownMenu1');
+    function toggleDropdown(id) {
+        const dropdownMenu = document.getElementById(id);
         dropdownMenu.classList.toggle('show');
     }
     function loadProductData () {
