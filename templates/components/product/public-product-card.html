@@ -2,9 +2,9 @@
 <div class ="col-2 my-1 col-md-2 col-sm-6">
     <div class="card">
         {% if product.thumbnail %}
-        <img class="card-img-top p-2" src="{{product.thumbnail.url}}" style='max-height: 325px;' alt="Card image cap">
+        <img class="card-img-top card-image p-2" src="{{product.thumbnail.url}}" style='max-height: 325px;' alt="Card image cap">
         {% else %}
-        <img class="card-img-top p-2" src="" style='max-height: 325px;' alt="Image Not Found">
+        <img class="card-img-top card-image p-2" src="" style='max-height: 325px;' alt="Image Not Found">
         {% endif %}
         <div class="card-body col-12">
             <a href="{% url 'core:user-view' product.owner.username %}">

@@ -2,6 +2,25 @@
 {% load static %}
 {% block title %}YourSite{% endblock title %}
 
+{% block css %}
+.carousel-control-next, .carousel-control-prev {
+    height: fit-content;
+    width: fit-content;
+    top: 50%;
+    transform: translateY(-50%);
+    background: black;
+    padding: 10px;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+.carousel-control-next-icon, .carousel-control-prev-icon {
+    width: 15px;
+    height: 15px;
+}
+{% endblock css %}
 {% block body %}
 <div class="container mt-5 ">
     <div class="row">
@@ -21,14 +40,14 @@
                 {% for thumbnail in product.thumbnail_metadata %}
                 {% if thumbnail.isPrimary %}
                   <div class="carousel-item active">
-                    <img src="{{thumbnail.data}}" class="d-block w-100" style="max-height: 400px;" alt="...">
+                    <img src="{{thumbnail.data}}" class="d-block w-100" style="max-height: 400px; object-fit: contain; display: block !important; margin: 0 auto;" alt="...">
                 </div>
                 {% endif %}
                 {% endfor %}
                 {% for thumbnail in product.thumbnail_metadata %}
                     {% if not thumbnail.isPrimary %}
                   <div class="carousel-item">
-                    <img src="{{thumbnail.data}}" class="d-block w-100" style="max-height: 400px;" alt="...">
+                    <img src="{{thumbnail.data}}" class="d-block w-100" style="max-height: 400px; object-fit: contain; display: block !important; margin: 0 auto;" alt="...">
                   </div>
                 {% endif %}
                 {% endfor %}
