@@ -197,7 +197,7 @@ border-radius: 4px;
 content: none;
 }
 .dropdown .btn {
-padding: 0;
+padding: 0 5px;
 border: none;
 outline: none;
 margin-left: 20px;
@@ -384,7 +384,6 @@ background-color: #f8f9fa;
                 const container = document.getElementById('orders_add_to_me');
                 // container.innerHTML = "";
                 let value = data.forEach(elem => {
-                    console.log(elem);
                   const orderCard = document.createElement('div');
                   feedback = elem.feedback ? true : false;
                   // orderCard.classList.add('product-card');
@@ -446,7 +445,6 @@ background-color: #f8f9fa;
                 const container = document.getElementById('orders_add_to_me');
                 // container.innerHTML = "";
                 let value = data.forEach(elem => {
-                    console.log(elem);
                     const orderCard = document.createElement('div');
                     feedback = elem.feedback ? true : false;
                   // orderCard.classList.add('product-card');
@@ -506,7 +504,6 @@ background-color: #f8f9fa;
                 const container = document.getElementById('brochure_add_to_me');
                 // container.innerHTML = "";
                 let value = data.forEach(elem => {
-                    console.log(elem);
                     const brochureCard = document.createElement('div');
                     // brochureCard.classList.add('product-card');
                     brochureCard.innerHTML = `
@@ -536,7 +533,6 @@ background-color: #f8f9fa;
                 // container.innerHTML = "";
                 console.log(data)
                 data['dribble'].forEach(elem => {
-                    console.log(elem);
                     const dribbleCard = document.createElement('div');
                     // brochureCard.classList.add('product-card');
                     dribbleCard.innerHTML = `
@@ -557,7 +553,6 @@ background-color: #f8f9fa;
                     container.appendChild(dribbleCard);
                 });
                 data['coroflot'].forEach(elem => {
-                    console.log(elem);
                     const dribbleCard = document.createElement('div');
                     // brochureCard.classList.add('product-card');
                     dribbleCard.innerHTML = `
@@ -578,7 +573,6 @@ background-color: #f8f9fa;
                     container.appendChild(dribbleCard);
                 });
                 data['pinterest'].forEach(elem => {
-                    console.log(elem);
                     const dribbleCard = document.createElement('div');
                     // brochureCard.classList.add('product-card');
                     dribbleCard.innerHTML = `
@@ -651,11 +645,23 @@ background-color: #f8f9fa;
 
     function toggleDropdown(id) {
         const dropdownMenu = document.getElementById(id);
-        dropdownMenu.classList.toggle('show');
+
+        // Check if the dropdown is currently open
+        const isOpen = dropdownMenu.classList.contains('show');
+
+        // Close all dropdowns
+        const dropdownMenus = document.getElementsByClassName('dropdown-menu');
+        for (let i = 0; i < dropdownMenus.length; i++) {
+            dropdownMenus[i].classList.remove('show');
+        }
+
+        // Open or close the clicked dropdown based on its current state
+        if (!isOpen) {
+            dropdownMenu.classList.add('show');
+        }
     }
     function loadProductData () {
         offset += 3;
-        console.log(offset);
         fetchProductData();
     }
     fetchRecentOrderData();
