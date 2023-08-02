@@ -1,5 +1,7 @@
-from rest_framework import serializers
+from datetime import datetime, timedelta
 
+from rest_framework import serializers
+from django.db.models import Sum
 from core.models import (
     Product, 
     Feedback, 
@@ -32,10 +34,23 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
     def get_total_sales(self, obj):
-        return 0
+        total_sales = ClientPackages.objects.filter(
+            package__service__owner=obj,
+        ).aggregate(
+            total_sales=Sum('amount_paid')
+        )['total_sales']
+        return total_sales if total_sales else 0
+
     
     def get_recent_sales(self, obj):
-        return 0
+        total_sales = ClientPackages.objects.filter(
+            package__service__owner=obj,
+            timestamp__gte=datetime.today()-timedelta(days=3)
+        ).aggregate(
+            total_sales=Sum('amount_paid')
+        )['total_sales']
+        return total_sales if total_sales else 0
+
 
 class UserInfoSerializer(serializers.ModelSerializer):
 
@@ -82,10 +97,22 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
     
     def get_total_sales(self, obj):
-        return 0
+        total_sales = ClientPackages.objects.filter(
+            package__service=obj
+        ).aggregate(
+            total_sales=Sum('amount_paid')
+        )['total_sales']
+        return total_sales if total_sales else 0
+
     
     def get_recent_sales(self, obj):
-        return 0
+        total_sales = ClientPackages.objects.filter(
+            package__service=obj,
+            timestamp__gte=datetime.today()-timedelta(days=3)
+        ).aggregate(
+            total_sales=Sum('amount_paid')
+        )['total_sales']
+        return total_sales if total_sales else 0
 
 class FeedbackSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')

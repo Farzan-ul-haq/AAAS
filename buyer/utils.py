@@ -66,6 +66,21 @@ def complete_product_purchase(data):
         content=f'{buyer.username} purchased your product.',
         type=0
     )
+    # SERVICE FEE SUBRACTING
+    service_fee = product_package.price // 10
+    Transaction.objects.create(
+        coins=service_fee,
+        user=seller,
+        content=f'[SERVICE FEE] {buyer.username} purchased your product.',
+        type=1
+    )
+    # ADD SERVICE FEE TO ADMIN ACCOUNT
+    Transaction.objects.create(
+        coins=service_fee,
+        user=User.objects.get(username='admin'),
+        content=f'{buyer.username} purchased your product.',
+        type=0
+    )
     send_email.delay(
         seller.email,
         'Product Purchase',

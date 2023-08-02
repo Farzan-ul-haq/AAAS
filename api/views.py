@@ -109,12 +109,13 @@ class UserProductsView(generics.ListAPIView):
         if 'username' in self.kwargs.keys():
             products = Product.objects.filter(
                 owner__username=self.kwargs['username']
-            )
+            ).exclude(status='D')
         else:
-            products = Product.objects.all()
+            products = Product.objects.all().exclude(status='D')
         products = products.order_by(
             'review_average',
-            'review_count'
+            'review_count',
+            'status'
         )
         return products
 

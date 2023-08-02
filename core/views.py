@@ -1,4 +1,5 @@
 import stripe
+from datetime import datetime, timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.db.models import Q, F
@@ -9,10 +10,11 @@ from django.urls import reverse
 from django.contrib.postgres.search import SearchQuery, SearchRank, \
                                         SearchVector
 from django.core.paginator import Paginator
+from django.db.models import Sum
 
 from core.models import Product, ApiService, Logo,  \
     HtmlTemplate, DownloadSoftware, ProductPackage, \
-    Feedback, Endpoints, Transaction, User
+    Feedback, Endpoints, Transaction, User, ClientPackages
 from core.utils import get_product_object, fulfill_order
 from core.tasks import send_email, create_click_obj, create_impresion_obj
 from buyer.tasks import add_client_activity
@@ -291,21 +293,44 @@ def stripe_webhook(request):
 def product_analysis_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     packages = ProductPackage.objects.filter(service=product)
+    total_orders = ClientPackages.objects.filter(
+        package__service=product
+    ).count()
+    product_earnings= ClientPackages.objects.filter(
+        package__service=product,
+    ).aggregate(
+        total_sales=Sum('amount_paid')
+    )['total_sales']
+
     return render(request, 'analysis/product.html', {
         'product': product,
-        "packages": packages
+        "packages": packages,
+        'total_orders': total_orders,
+        "product_earnings": product_earnings if product_earnings else 0
     })
 
 
 def user_analysis_view(request, username):
     user = get_object_or_404(User, username=username)
-    total_sales = 0
-    total_orders_count = 0
-    total_products_count = 6
-    recent_orders_count = 0
+    total_sales = ClientPackages.objects.filter(
+        package__service__owner=user,
+    ).aggregate(
+        total_sales=Sum('amount_paid')
+    )['total_sales']
+
+    total_orders_count = ClientPackages.objects.filter(
+        package__service__owner=user,
+    ).count()
+    recent_orders_count = ClientPackages.objects.filter(
+        package__service__owner=user,
+        timestamp__gte=datetime.today()-timedelta(days=7)
+    ).count()
+    total_products_count = Product.objects.filter(
+        status='A', owner=user
+    ).count()
     return render(request, 'analysis/user.html', {
         'user': user,
-        'total_sales': total_sales,
+        'total_sales': total_sales if total_sales else 0,
         'total_orders_count': total_orders_count,
         'total_products_count': total_products_count,
         'recent_orders_count': recent_orders_count
@@ -313,5 +338,38 @@ def user_analysis_view(request, username):
 
 
 def admin_dashboard_view(request):
+    recent_date = datetime.today()-timedelta(days=7)
+
+    products = Product.objects.filter(status="A")
+    total_products = products.count()
+    recent_products = products.filter(created_at__gte=recent_date).count()
+
+    orders = ClientPackages.objects.all()
+    total_orders = orders.count()
+    recent_orders = orders.filter(timestamp__gte=recent_date).count()
+
+    users = User.objects.all()
+    total_users = users.count()
+    recent_users = users.filter(joining_date__gte=recent_date).count()
+
+    total_earnings = User.objects.get(username='admin').wallet
+    pending_products = Product.objects.filter(status='P').count()
+
     return render(request, 'core/admin-dashboard.html', {
+        "products": {
+            "total": total_products,
+            "recent": recent_products,
+            "pending": pending_products
+        },
+        "users": {
+            "total": total_users,
+            "recent": recent_users
+        },
+        "orders": {
+            "total": total_orders,
+            "recent": recent_orders
+        },
+        "earnings": {
+            "total": total_earnings
+        }
     })

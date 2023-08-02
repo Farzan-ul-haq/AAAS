@@ -260,6 +260,57 @@
                 <h1>Admin Dashboard</h1>
                 <hr>
             </div>
+            <div class="col-12">
+                <div class="row text-center">
+                    <div class="col-2">
+                        <div class="card bg-light mb-3 text-dark" style="max-width: 18rem;">
+                            <div class="card-header"><h6>Earnings</h6></div>
+                            <div class="card-body text-center">
+                              <h3>{{earnings.total}}$</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="card bg-light mb-3 text-dark" style="max-width: 18rem;">
+                            <div class="card-header"><h6>Orders</h6></div>
+                            <div class="card-body text-center">
+                              <h3>{{orders.total}}</h3>
+                              <hr>
+                              <h5>{{orders.recent}} in 7 days</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="card bg-light mb-3 text-dark" style="max-width: 18rem;">
+                            <div class="card-header"><h6>Users</h6></div>
+                            <div class="card-body text-center">
+                                <h3>{{users.total}}</h3>
+                                <hr>
+                                <h5>{{users.recent}} in 7 days</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="card bg-light mb-3 text-dark" style="max-width: 18rem;">
+                            <div class="card-header"><h6>Products</h6></div>
+                            <div class="card-body text-center">
+                                <h3>{{products.total}}</h3>
+                                <hr>
+                                <h5>{{products.recent}} in 7 days</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card bg-light mb-3 text-dark">
+                            <div class="card-header"><h6>Pending Products</h6></div>
+                            <div class="card-body text-center">
+                                <a class="btn btn-warning col-12" href="{% url 'core:admin-product-review' %}"><h5>{{products.pending}}<hr>Action Required</h5></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
             <div class="col-3">
                 <div class="sidebar">
                     <div class="user">
@@ -269,26 +320,7 @@
                             <h1 class="mb-0">{{user.username.title}}</h1>
                         </div>
                     </div>
-                    <!-- <ul>
-                        <hr>
-                        <li class="mt-0">
-                            <p><img src="{% static 'assets/img/total-sales-icon.svg' %}" />Total Sales</p>
-                            <h2>{{total_sales}}</h2>
-                        </li>
-                        <li>
-                            <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Total Orders</p>
-                            <h2>{{total_orders}}</h2>
-                        </li>
-                        <hr>
-                        <li>
-                            <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Total Marketed Products</p>
-                            <h2>{{total_orders}}</h2>
-                        </li>
-                        <li>
-                            <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i></p>
-                            <h2>{{total_orders}}</h2>
-                        </li>
-                    </ul> -->
+
                 </div>
             </div>
             <div class="col-9">
@@ -298,7 +330,7 @@
                             <div class="collapse-card-header p-0" id="headingOne">
                                 <button class="btn btn-link" data-toggle="collapse" data-target="#orderCollapse"
                                     aria-expanded="true" aria-controls="collapseOne">
-                                    Orders[{{total_orders_count}}]
+                                    Orders
                                 </button>
                             </div>
     
@@ -313,7 +345,7 @@
                             <div class="collapse-card-header p-0" id="headingTwo">
                                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#productCollapse"
                                     aria-expanded="true" aria-controls="collapseTwo">
-                                    Products[{{total_products_count}}]
+                                    Products
                                 </button>
                             </div>
     
@@ -327,7 +359,7 @@
                             <div class="collapse-card-header p-0" id="headingTwo">
                                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#userCollapse"
                                     aria-expanded="true" aria-controls="collapseTwo">
-                                    Users[{{total_users_count}}]
+                                    Users
                                 </button>
                             </div>
     
@@ -341,7 +373,7 @@
                             <div class="collapse-card-header p-0" id="headingFour">
                                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#marketCollapse"
                                     aria-expanded="true" aria-controls="collapseFour">
-                                    Marketing Results[{{total_market_results_count}}]
+                                    Marketing Results
                                 </button>
                             </div>
     

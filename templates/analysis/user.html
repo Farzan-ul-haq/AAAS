@@ -271,11 +271,22 @@ background-color: #f8f9fa;
                 <ul>
                     <li class="mt-0">
                         <p><img src="{% static 'assets/img/total-sales-icon.svg' %}" />Total Sales</p>
-                        <h2>{{total_sales}}</h2>
+                        <h2>{{total_sales}}$</h2>
                     </li>
+                    <hr>
+
                     <li>
                         <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Total Orders</p>
-                        <h2>{{total_orders}}</h2>
+                        <h2>{{total_orders_count}}</h2>
+                    </li>
+                    <li>
+                        <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Orders in last 7 days</p>
+                        <h2>{{recent_orders_count}}</h2>
+                    </li>
+                    <hr>
+                    <li>
+                        <p><img src="{% static 'assets/img/total-order-icon.svg' %}" /></i>Products</p>
+                        <h2>{{total_products_count}}</h2>
                     </li>
                 </ul>
             </div>
@@ -294,7 +305,7 @@ background-color: #f8f9fa;
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
                             <div class="collapse-card-body">
                                 <div id="orders_add_to_me"></div>
-                                <button id='load-order-btn' onclick="fetchOrderData()" class="load-more-btn col-12">Load More</button>
+                                <button id='load-order-btn' onclick="fetchOrderData()" class="btn btn-dark col-12">Load More</button>
                             </div>
                         </div>
                     </div>
@@ -302,7 +313,7 @@ background-color: #f8f9fa;
                         <div class="collapse-card-header p-0" id="headingTwo">
                             <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
                                 aria-expanded="true" aria-controls="collapseTwo">
-                                Products[{{total_products_count}}]
+                                Products
                             </button>
                         </div>
 
@@ -619,23 +630,6 @@ background-color: #f8f9fa;
                 <button class="button type-btn">${element.product_type}</button>
               </div>
             </div>
-            <div class="dropdown">
-            <button type="button" onclick="toggleDropdown(${element.id})" class="btn dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-ellipsis-v"></i>
-            </button>
-            <div id="${element.id}" class="dropdown-menu hideable-element">
-                <a class="dropdown-item" href="#">Update</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Delete</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Analysis</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Market</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Brochure</a>
-            </div>
-            </div>
-
           </div>
         `;
                 container.appendChild(productCard);

@@ -70,7 +70,7 @@
         <div class="form-inline my-2 my-lg-0">
           {% if request.user.is_staff %}
           <div class="btn-group mr-2">
-            <a class="nav-link btn btn-danger" href="{% url 'core:admin-product-review' %}">ADMIN</a>
+            <a class="nav-link btn btn-danger" href="{% url 'core:admin-dashboard' %}">ADMIN</a>
           </div>
           {% endif %}
           {% if request.user.is_authenticated %}
