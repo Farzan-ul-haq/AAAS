@@ -46,8 +46,8 @@ def create_product(request, request_type):
         description=request.POST.get('description'),
         product_type=request_type,
         source_url=request.POST.get('source_url'),
+        thumbnail_metadata=json.loads(request.POST.get('images')),
     )
-    p.thumbnail_metadata = json.loads(request.POST.get('images'))
     # SAVE IMAGE
     # selected_image = [i["data"] for i in p.thumbnail_metadata if i['isPrimary']][0]
     # format, imgstr = selected_image.split(';base64,')

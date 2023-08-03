@@ -15,7 +15,11 @@
             {% if bought_product.package.service.product_type == 'A' %}
             <a href="{% url 'buyer:buy-product' bought_product.package.id %}" type="button" class="btn btn-warning font-weight-bold"><b>RE-BUY<br>Package</b></a>
             {% else %}
-            <a href="{{bought_product.package.service.get_product_obj.source_file.url}}" type="button" class="btn btn-warning font-weight-bold"><b>DOWNLOAD<br>PRODUCT</b></a>
+            {% if bought_product.package.service.get_product_obj.source_file %}
+                <a href="{{bought_product.package.service.get_product_obj.source_file.url}}" type="button" class="btn btn-warning font-weight-bold"><b>DOWNLOAD<br>PRODUCT</b></a>
+                {% else %}
+                <a href="" type="button" class="btn btn-warning font-weight-bold"><b>DOWNLOAD<br>PRODUCT</b></a>
+            {% endif %}
             {% endif %}
             <br><br>
             {% if not bought_product.is_feedback_given %}
